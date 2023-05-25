@@ -141,6 +141,54 @@ def construct_trap_int_mat(node_coords, quad_coords, refine=False):
     return x_traps, int_mat_trap
 
 
+def gram_schmidt(Klocal, local_phi, local_eigs, ordering=[0,1,2]):
+    """
+    Update the local eigenvectors to be orthogonal w.r.t. the local stiffness matrix
+    In addition, phi^T K phi = diag(local_eigs) for normalizing new vectors
+    Doing this step guarantees that when the mass matrix is constructed, 
+    the eigenvectors and eigenvalues will exactly match those used in construction
+
+    Inputs:
+      Klocal - 3 x 3 stiffness matrix for the 3 DOF model
+      local_phi - desired mode shapes (not orthogonal)
+      local_eigs - desired eigenvalues (frequency in rad/s squared)
+      ordering - order that eigenvectors should be made orthogonal
+                  the first eigenvector in the order is exactly preserved
+                  the third eigenvector will likely have the most change
+
+    Outputs:
+      ortho_phi - eigenvectors that are based on local_phi, but are 
+                  orthogonal w.r.t. Klocal
+    """
+    
+    ortho_phi = np.copy(local_phi)
+    local_eigs = np.copy(local_eigs)
+
+    # reorder columns and eigenvalues
+    ortho_phi = ortho_phi[:, ordering]
+    local_eigs = local_eigs[ordering]
+    ordering_reset = np.array(range(3))[ordering]
+
+
+    for i in range(1,3):
+        for j in range(i):
+
+            proj = (ortho_phi[:, i:i+1].T @ Klocal @ ortho_phi[:, j:j+1])\
+                    / (ortho_phi[:, j:j+1].T @ Klocal @ ortho_phi[:, j:j+1])\
+                    * ortho_phi[:, j:j+1]
+
+            ortho_phi[:, i:i+1] -= proj
+
+    # Rescale modes to have correct normalization
+    local_scale = np.diag(ortho_phi.T @ Klocal @ ortho_phi)
+    ortho_phi = ortho_phi * np.sqrt(local_eigs/local_scale)
+
+    # Reset ordering
+    ortho_phi[:, ordering] = ortho_phi # [:, ordering_reset]
+
+    return ortho_phi
+
+
 def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Position'):
     """
     Construct a plot of some nodal value over
