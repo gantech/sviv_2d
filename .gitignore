@@ -1,10 +1,14 @@
-*.sum.yaml
 *.npz
 *.out
 *.png
 *.dat
+*.sh
 
 # Python gitignores
 __pycache__/
 *.py[cod]
 *$py.class
+
+# BeamDyn Files
+*.BD.ech
+*.sum.yaml
