@@ -12,7 +12,7 @@ import construct_utils as cutils
 
 ##### Get Node Positions from BeamDyn
 
-Mmat,Kmat,node_coords,quad_coords = cutils.load_M_K_nodes('bd_driver.BD.sum.yaml')
+Mmat,Kmat,node_coords,quad_coords = cutils.load_M_K_nodes('./beam_dyn_res/bd_driver.BD.sum.yaml')
 
 
 nodes = node_coords[:, 2]
