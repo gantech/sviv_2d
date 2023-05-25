@@ -1,0 +1,10 @@
+*.sum.yaml
+*.npz
+*.out
+*.png
+*.dat
+
+# Python gitignores
+__pycache__/
+*.py[cod]
+*$py.class
