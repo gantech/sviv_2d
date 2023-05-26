@@ -11,6 +11,9 @@ from numpy.polynomial import Polynomial as Poly
 import yaml
 from yaml.loader import SafeLoader 
 
+
+from scipy.linalg import eigh
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -43,7 +46,6 @@ def load_M_K_nodes(yamlfile):
     quad_coords = np.array(dict_data['Init_QP_E1'])
 
     return Mmat, Kmat, node_coords, quad_coords
-
 
 
 def construct_shape_funs(nodes):
@@ -183,10 +185,152 @@ def gram_schmidt(Klocal, local_phi, local_eigs, ordering=[0,1,2]):
     local_scale = np.diag(ortho_phi.T @ Klocal @ ortho_phi)
     ortho_phi = ortho_phi * np.sqrt(local_eigs/local_scale)
 
+    print('Presorting ortho phi')
+    print(ortho_phi)
+    print(ordering)
+
     # Reset ordering
-    ortho_phi[:, ordering] = ortho_phi # [:, ordering_reset]
+    # ortho_phi[:, ordering] = ortho_phi # [:, ordering_reset]
+    
+    ordering_reset = [None]*len(ordering)
+    for ind in range(len(ordering)):
+        ordering_reset[ordering[ind]] = ind
+    
+    ortho_phi = ortho_phi[:, ordering_reset]
 
     return ortho_phi
+
+
+def modal_analysis(Kmat, Mmat):
+    """
+
+    """
+
+    subset_by_index = [0, Mmat.shape[0]-1] # first and last index of interest
+
+    eigvals, eigvecs = eigh(Kmat, Mmat, subset_by_index=subset_by_index)
+
+    return eigvals,eigvecs
+
+
+def extract_local_subset_modes(Kmat, Mmat, mode_indices, node_interest, load_directions):
+    """
+    Conducts a global eigen analysis of the K and M matrices
+    Then reduces on only the node and directions that are of interest for the 3 DOF model
+
+    Inputs:
+      Kmat - global stiffness matrix (with boundary conditions applied)
+      Mmat - global mass matrix (with boundary conditions applied)
+      mode_indices - indices for the modes to preserve
+      node_interest - node of interest, global numbering [0-10]. 
+                      This script assumes boundary conditions applied eliminating node 0.
+      load_directions - directions for loads / displacements of interest.
+
+    Outputs: 
+      subset_eigvals - eigenvalues for the selected modes
+      subset_eigvecs - eigenvector values for selected modes and for selected DOFs
+    """
+
+    ##### Global Modal Analysis
+    subset_by_index = [0, Mmat.shape[0]-1] # first and last index of interest
+
+    eigvals, eigvecs = eigh(Kmat, Mmat, subset_by_index=subset_by_index)
+
+    ##### Extract Local Properties
+    subset_eigvals = np.zeros(len(mode_indices))
+    subset_eigvecs = np.zeros((len(load_directions),len(mode_indices)))
+    
+    for mind in range(len(mode_indices)):
+
+        subset_eigvals[mind] = eigvals[mode_indices[mind]]
+
+        for dind in range(len(load_directions)): 
+            subset_eigvecs[dind, mind] = eigvecs[(node_interest-1)*6+load_directions[dind], mode_indices[mind]]
+
+    return subset_eigvals, subset_eigvecs
+
+
+def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_interest, load_directions, refine=False):
+    """
+    Calculate a local stiffness for the node and applied distributed load.
+
+    Inputs:
+      Kbc
+
+    Outputs:
+      Klocal
+    """
+
+    ###################
+    # Make the load distribution into an array with columns corresponding to load directions
+    load_val = np.atleast_2d(load_val)
+
+    if not (load_val.shape[0] == load_span.shape[0]):
+        load_val = load_val.T
+
+    if load_val.shape[1] == 1:
+        load_val = load_val @ np.ones((1,3))
+   
+    ###################
+    # Scale load distribution at node to 1.0 
+
+    span_loc = node_coords[node_interest, 2]
+
+    print('Span location coordinate')
+    print(span_loc)
+
+    for dir_ind in range(len(load_directions)):
+
+        loc_val = np.interp(span_loc, load_span, load_val[:, dir_ind])
+
+        load_val[:, dir_ind] = load_val[:, dir_ind] / loc_val 
+
+    ###################
+    # Create integration matrix for the load
+    x_traps, int_mat_trap = construct_trap_int_mat(node_coords, quad_coords, refine=True)
+
+    # Apply boundary conditions to the integration matrix (eliminate 1st node
+    int_mat_trap = int_mat_trap[1:, :]
+
+    ###################
+    # Loop over loading directions to create a flexibility matrix
+    
+    flexibility = np.zeros((len(load_directions),len(load_directions)))
+
+    for dir_ind in range(len(load_directions)):
+        
+        # Global direction index
+        gdir_ind = load_directions[dir_ind]
+
+        # Interpolate load distribution to quadrature points
+        quad_load = np.interp(x_traps, load_span, load_val[:, dir_ind])
+
+        # Integrate load distribution
+        nodal_dir_load = int_mat_trap @ quad_load
+
+        # Expand the nodal forces in this direction to a full nodal force vector
+        dof_vec = np.zeros(6)
+        dof_vec[gdir_ind] = 1.0
+        load_vec = np.kron(nodal_dir_load, dof_vec) 
+
+        # Calculate the displacement field
+        disp = np.linalg.solve(Kbc, load_vec)
+        
+        # Displacement just at the node of interest
+        disp_node = disp[(node_interest-1)*6:node_interest*6]
+
+        # Insert into flexibility matrix
+        for disp_ind in range(len(load_directions)):
+            
+            flexibility[disp_ind, dir_ind] = disp_node[load_directions[disp_ind]]
+
+
+    ###################
+    # Invert flexibility matrix to get stiffness matrix
+    Klocal = np.linalg.inv(flexibility)
+
+    return Klocal
+
 
 
 def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Position'):
