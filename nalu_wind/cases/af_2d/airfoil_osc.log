@@ -1,0 +1,2022 @@
+===============================================================================
+                                  Nalu-Wind                                    
+       An incompressible, turbulent computational fluid dynamics solver        
+                  for wind turbine and wind farm simulations                   
+===============================================================================
+
+   Nalu-Wind Version: v1.2.0
+   Nalu-Wind GIT Commit SHA: 0053811e30c8b0bbb0a3aeae7c40bb0483dfd0f2-DIRTY
+   Trilinos Version: 13.5
+
+   TPLs: Boost, HDF5, netCDF, STK, Trilinos, yaml-cpp and zlib   
+   Optional TPLs enabled: Hypre
+   Copyright 2017 National Technology & Engineering Solutions of Sandia, LLC   
+   (NTESS), National Renewable Energy Laboratory, University of Texas Austin,  
+    Northwest Research Associates. Under the terms of Contract DE-NA0003525    
+    with NTESS, the U.S. Government retains certain rights in this software.   
+                                                                               
+           This software is released under the BSD 3-clause license.           
+   See LICENSE file at https://github.com/exawind/nalu-wind for more details.  
+-------------------------------------------------------------------------------
+
+
+Realm Options Review: realm_1
+===========================
+Edge-based scheme will be activated
+Warning: When using automatic_decomposition_type, one must have a serial file
+Nalu will deactivate aura ghosting
+
+Turbulence Model Review:   
+===========================
+Turbulence Model is: sst 1
+No Transition Model
+
+PPE review:   
+===========================
+Realm::create_mesh(): Begin
+Realm::create_mesh() End
+
+Boundary Condition Review: 
+===========================
+Wall BC name:        bc_wall on airfoil
+Inflow BC name:        bc_inflow on inflow
+Open BC name:        bc_open on outflow
+
+Initial Condition Review:  
+===========================
+Initial Is Type constant 
+
+Material Prop Review:      
+===========================
+density is a constant property: 1.225
+viscosity is a constant property: 1e-05
+
+EqSys/options Review:      
+===========================
+Edge projected nodal gradient for minimum distance to wall: 1
+Edge projected nodal gradient for velocity: 0
+Edge projected nodal gradient for pressure: 0
+Edge projected nodal gradient for turbulent_ke: 0
+Edge projected nodal gradient for specific_dissipation_rate: 0
+
+Realm memory Review:       realm_1
+===========================
+Node count from meta data = 39699
+Total memory estimate for Matrix solve (per core)= 0.191666 GB.
+Total memory estimate (per core) = 0.191666 GB.
+
+Time Integrator Review:  
+=========================
+StandardTimeIntegrator 
+ name=              ti_1
+ second order =     1
+ maxTimeStepCount = 10000
+ fixed time step is active   with time step: 0.666667
+StandardTimeIntegrator realm_name[0]= realm_1
+
+Transfer Review:         
+=========================
+Realm::initialize() Begin 
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_geometry
+Created algorithm = Alg0000_edge_nodal_grad
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_courant_reynolds
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_momentum_nodal_grad
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_continuity_nodal_grad
+Created algorithm = Alg0000_edge_mdot_edge_interior
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_tke_nodal_grad
+Created algorithm = Alg0000_elem_QUADRILATERAL_4_2D_sdr_nodal_grad
+register sdr interior: 
+Created algorithm = Alg0001_face_LINE_2_geometry
+Created algorithm = Alg0003_face_LINE_2_nodal_grad
+MomentumEquationSystem::register_wall_bc(): Mesh motion active! Velocity definition under wall_user_data will be ignored
+Created algorithm = Alg0003_face_LINE_2_momentum_nodal_grad
+Created algorithm = Alg0003_face_LINE_2_continuity_nodal_grad
+Created algorithm = Alg0003_face_LINE_2_QUADRILATERAL_4_2D_sst_geometry_wall
+Created algorithm = Alg0003_face_LINE_2_tke_nodal_grad
+Created algorithm = Alg0003_face_LINE_2_QUADRILATERAL_4_2D_sdr_wall_func
+Created algorithm = Alg0003_face_LINE_2_sdr_nodal_grad
+Created algorithm = Alg0002_face_LINE_2_nodal_grad
+Created algorithm = Alg0002_face_LINE_2_momentum_nodal_grad
+Created algorithm = Alg0002_face_LINE_2_continuity_nodal_grad
+Created algorithm = Alg0002_face_LINE_2_mdot_inflow
+Created the following bc face alg: ContinuityEQS_inflow_AssembleElemSolverAlg_LINE_2
+Created algorithm = Alg0002_face_LINE_2_tke_nodal_grad
+Created algorithm = Alg0002_face_LINE_2_sdr_nodal_grad
+Created algorithm = Alg0005_face_LINE_2_nodal_grad
+Created algorithm = Alg0005_face_LINE_2_momentum_nodal_grad
+Created the following bc face/elem alg: MomentumEQS_open_AssembleFaceElemSolverAlg_LINE_2_QUADRILATERAL_4_2D
+Created algorithm = Alg0005_face_LINE_2_QUADRILATERAL_4_2D_continuity_nodal_grad
+Created algorithm = Alg0005_face_LINE_2_QUADRILATERAL_4_2D_mdot_open_edge
+Created the following bc face/elem alg: ContinuityEQS_open_edge_AssembleFaceElemSolverAlg_LINE_2_QUADRILATERAL_4_2D
+Created algorithm = Alg0005_face_LINE_2_tke_nodal_grad
+Created the following bc face alg: TurbKineticEnergyEQS_open_AssembleElemSolverAlg_LINE_2
+Created algorithm = Alg0005_face_LINE_2_sdr_nodal_grad
+Created the following bc face alg: SpecDissRateEQS_open_AssembleElemSolverAlg_LINE_2
+the post processing type is surface
+the post processing file name: results/forces.dat
+the post processing physics name: surface_force_and_moment
+Target name(s): airfoil
+Parameters used are: 0.25
+Parameters used are: 0
+Realm::ioBroker_->populate_mesh() Begin
+Realm::ioBroker_->populate_mesh() End
+Realm::create_edges(): Nalu Realm: realm_1 requires edge creation: Begin
+Realm::create_edges(): Nalu Realm: realm_1 requires edge creation: End
+Realm::ioBroker_->populate_field_data() Begin
+Realm::ioBroker_->populate_field_data() End
+Realm::create_output_mesh(): Begin
+Realm::create_output_mesh() End
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+EquationSystems::initialize(): Begin 
+EquationSystems::initialize(): End 
+
+Realm memory Review:       realm_1
+===========================
+Total memory estimate for Matrix solve (per core)= 0.191666 GB.
+Total memory estimate for Fields (per core)= 0.0404502 GB.
+Total memory estimate (per core) = 0.232116 GB.
+Realm::initialize() End 
+
+*******************************************************
+Simulation Shall Commence: number of processors = 1
+*******************************************************
+ 1/1         myNDTW
+        WallDistEQS           19       0.000855821       0.831099             1
+Realm shall provide output files at : currentTime/timeStepCount: 0/0 (realm_1)
+*******************************************************
+Time Step Count: 1 Current Time: 0.666667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1 -1 0
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 1 0.666667
+WallClockTime: 1 Pre: 1.59554 NLI: 0.00421596 Post: 0.0361381 Total: 1.63589
+*******************************************************
+Time Step Count: 2 Current Time: 1.33333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 2 1.33333
+WallClockTime: 2 Pre: 1.59493 NLI: 0.00422502 Post: 0.0361948 Total: 1.63534
+*******************************************************
+Time Step Count: 3 Current Time: 2
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 3 2
+WallClockTime: 3 Pre: 1.59824 NLI: 0.0042038 Post: 0.0360482 Total: 1.6385
+*******************************************************
+Time Step Count: 4 Current Time: 2.66667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 4 2.66667
+WallClockTime: 4 Pre: 1.5924 NLI: 0.00421095 Post: 0.0362389 Total: 1.63285
+*******************************************************
+Time Step Count: 5 Current Time: 3.33333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 3.333333333333334/5 (realm_1)
+Mean System Norm: 0 5 3.33333
+WallClockTime: 5 Pre: 1.59331 NLI: 0.00423408 Post: 0.0518889 Total: 1.64944
+*******************************************************
+Time Step Count: 6 Current Time: 4
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 6 4
+WallClockTime: 6 Pre: 1.59826 NLI: 0.00421381 Post: 0.036077 Total: 1.63855
+*******************************************************
+Time Step Count: 7 Current Time: 4.66667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 7 4.66667
+WallClockTime: 7 Pre: 1.59653 NLI: 0.00422192 Post: 0.036078 Total: 1.63683
+*******************************************************
+Time Step Count: 8 Current Time: 5.33333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 8 5.33333
+WallClockTime: 8 Pre: 1.59374 NLI: 0.00422096 Post: 0.036207 Total: 1.63417
+*******************************************************
+Time Step Count: 9 Current Time: 6
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 9 6
+WallClockTime: 9 Pre: 1.59819 NLI: 0.00422716 Post: 0.0360129 Total: 1.63843
+*******************************************************
+Time Step Count: 10 Current Time: 6.66667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 6.666666666666669/10 (realm_1)
+Mean System Norm: 0 10 6.66667
+WallClockTime: 10 Pre: 1.59913 NLI: 0.00421596 Post: 0.044117 Total: 1.64746
+*******************************************************
+Time Step Count: 11 Current Time: 7.33333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 11 7.33333
+WallClockTime: 11 Pre: 1.59664 NLI: 0.0042181 Post: 0.0361731 Total: 1.63703
+*******************************************************
+Time Step Count: 12 Current Time: 8
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 12 8
+WallClockTime: 12 Pre: 1.59658 NLI: 0.00421596 Post: 0.036186 Total: 1.63698
+*******************************************************
+Time Step Count: 13 Current Time: 8.66667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 13 8.66667
+WallClockTime: 13 Pre: 1.59725 NLI: 0.00423312 Post: 0.0361149 Total: 1.6376
+*******************************************************
+Time Step Count: 14 Current Time: 9.33333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 14 9.33333
+WallClockTime: 14 Pre: 1.59302 NLI: 0.00429106 Post: 0.0360348 Total: 1.63335
+*******************************************************
+Time Step Count: 15 Current Time: 10
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 10/15 (realm_1)
+Mean System Norm: 0 15 10
+WallClockTime: 15 Pre: 1.60206 NLI: 0.00421619 Post: 0.0516629 Total: 1.65794
+*******************************************************
+Time Step Count: 16 Current Time: 10.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 16 10.6667
+WallClockTime: 16 Pre: 1.59438 NLI: 0.00424314 Post: 0.0402088 Total: 1.63884
+*******************************************************
+Time Step Count: 17 Current Time: 11.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 17 11.3333
+WallClockTime: 17 Pre: 1.59728 NLI: 0.00422287 Post: 0.040247 Total: 1.64175
+*******************************************************
+Time Step Count: 18 Current Time: 12
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 18 12
+WallClockTime: 18 Pre: 1.60065 NLI: 0.00422215 Post: 0.0400839 Total: 1.64496
+*******************************************************
+Time Step Count: 19 Current Time: 12.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 19 12.6667
+WallClockTime: 19 Pre: 1.5961 NLI: 0.00423002 Post: 0.0401909 Total: 1.64052
+*******************************************************
+Time Step Count: 20 Current Time: 13.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 13.33333333333333/20 (realm_1)
+Mean System Norm: 0 20 13.3333
+WallClockTime: 20 Pre: 1.59679 NLI: 0.00421 Post: 0.0486159 Total: 1.64961
+*******************************************************
+Time Step Count: 21 Current Time: 14
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 21 14
+WallClockTime: 21 Pre: 1.59928 NLI: 0.00420308 Post: 0.0399671 Total: 1.64346
+*******************************************************
+Time Step Count: 22 Current Time: 14.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 22 14.6667
+WallClockTime: 22 Pre: 1.59834 NLI: 0.00425386 Post: 0.0359881 Total: 1.63858
+*******************************************************
+Time Step Count: 23 Current Time: 15.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 23 15.3333
+WallClockTime: 23 Pre: 1.59974 NLI: 0.004215 Post: 0.037313 Total: 1.64127
+*******************************************************
+Time Step Count: 24 Current Time: 16
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 24 16
+WallClockTime: 24 Pre: 1.5983 NLI: 0.00425911 Post: 0.0361109 Total: 1.63867
+*******************************************************
+Time Step Count: 25 Current Time: 16.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 16.66666666666666/25 (realm_1)
+Mean System Norm: 0 25 16.6667
+WallClockTime: 25 Pre: 1.60006 NLI: 0.00423908 Post: 0.054399 Total: 1.6587
+*******************************************************
+Time Step Count: 26 Current Time: 17.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 26 17.3333
+WallClockTime: 26 Pre: 1.59719 NLI: 0.00424123 Post: 0.03651 Total: 1.63794
+*******************************************************
+Time Step Count: 27 Current Time: 18
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 27 18
+WallClockTime: 27 Pre: 1.5966 NLI: 0.00422311 Post: 0.036068 Total: 1.63689
+*******************************************************
+Time Step Count: 28 Current Time: 18.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 28 18.6667
+WallClockTime: 28 Pre: 1.59204 NLI: 0.0042491 Post: 0.037967 Total: 1.63426
+*******************************************************
+Time Step Count: 29 Current Time: 19.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 29 19.3333
+WallClockTime: 29 Pre: 1.59542 NLI: 0.00423598 Post: 0.0375609 Total: 1.63721
+*******************************************************
+Time Step Count: 30 Current Time: 20
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 20/30 (realm_1)
+Mean System Norm: 0 30 20
+WallClockTime: 30 Pre: 1.5975 NLI: 0.00424504 Post: 0.0457001 Total: 1.64745
+*******************************************************
+Time Step Count: 31 Current Time: 20.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 31 20.6667
+WallClockTime: 31 Pre: 1.59594 NLI: 0.00421 Post: 0.037961 Total: 1.63811
+*******************************************************
+Time Step Count: 32 Current Time: 21.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 32 21.3333
+WallClockTime: 32 Pre: 1.59537 NLI: 0.00422692 Post: 0.035743 Total: 1.63534
+*******************************************************
+Time Step Count: 33 Current Time: 22
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 33 22
+WallClockTime: 33 Pre: 1.59534 NLI: 0.00422621 Post: 0.0357778 Total: 1.63535
+*******************************************************
+Time Step Count: 34 Current Time: 22.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 34 22.6667
+WallClockTime: 34 Pre: 3.15221 NLI: 0.00427699 Post: 0.0365891 Total: 3.19308
+*******************************************************
+Time Step Count: 35 Current Time: 23.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 23.33333333333334/35 (realm_1)
+Mean System Norm: 0 35 23.3333
+WallClockTime: 35 Pre: 1.59584 NLI: 0.004215 Post: 0.0541 Total: 1.65415
+*******************************************************
+Time Step Count: 36 Current Time: 24
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 36 24
+WallClockTime: 36 Pre: 1.60193 NLI: 0.00423503 Post: 0.0363801 Total: 1.64254
+*******************************************************
+Time Step Count: 37 Current Time: 24.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 37 24.6667
+WallClockTime: 37 Pre: 1.59429 NLI: 0.00421691 Post: 0.036231 Total: 1.63474
+*******************************************************
+Time Step Count: 38 Current Time: 25.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 38 25.3333
+WallClockTime: 38 Pre: 1.59685 NLI: 0.00423408 Post: 0.036459 Total: 1.63754
+*******************************************************
+Time Step Count: 39 Current Time: 26
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 39 26
+WallClockTime: 39 Pre: 1.59158 NLI: 0.00422788 Post: 0.0360281 Total: 1.63184
+*******************************************************
+Time Step Count: 40 Current Time: 26.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 26.66666666666668/40 (realm_1)
+Mean System Norm: 0 40 26.6667
+WallClockTime: 40 Pre: 1.5966 NLI: 0.00423598 Post: 0.047266 Total: 1.6481
+*******************************************************
+Time Step Count: 41 Current Time: 27.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 41 27.3333
+WallClockTime: 41 Pre: 1.59266 NLI: 0.00420284 Post: 0.0360641 Total: 1.63293
+*******************************************************
+Time Step Count: 42 Current Time: 28
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 42 28
+WallClockTime: 42 Pre: 1.59204 NLI: 0.00422192 Post: 0.035727 Total: 1.63199
+*******************************************************
+Time Step Count: 43 Current Time: 28.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 43 28.6667
+WallClockTime: 43 Pre: 1.59227 NLI: 0.00423789 Post: 0.0358932 Total: 1.63241
+*******************************************************
+Time Step Count: 44 Current Time: 29.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 44 29.3333
+WallClockTime: 44 Pre: 1.59319 NLI: 0.00422215 Post: 0.0358489 Total: 1.63326
+*******************************************************
+Time Step Count: 45 Current Time: 30
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 30.00000000000002/45 (realm_1)
+Mean System Norm: 0 45 30
+WallClockTime: 45 Pre: 1.59563 NLI: 0.00423884 Post: 0.0545602 Total: 1.65443
+*******************************************************
+Time Step Count: 46 Current Time: 30.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 46 30.6667
+WallClockTime: 46 Pre: 1.59426 NLI: 0.00423694 Post: 0.0360351 Total: 1.63454
+*******************************************************
+Time Step Count: 47 Current Time: 31.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 47 31.3333
+WallClockTime: 47 Pre: 1.59106 NLI: 0.00421691 Post: 0.0359771 Total: 1.63126
+*******************************************************
+Time Step Count: 48 Current Time: 32
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 48 32
+WallClockTime: 48 Pre: 1.59474 NLI: 0.00422502 Post: 0.0358229 Total: 1.63479
+*******************************************************
+Time Step Count: 49 Current Time: 32.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 49 32.6667
+WallClockTime: 49 Pre: 1.59106 NLI: 0.00420499 Post: 0.036272 Total: 1.63154
+*******************************************************
+Time Step Count: 50 Current Time: 33.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 33.33333333333335/50 (realm_1)
+Mean System Norm: 0 50 33.3333
+WallClockTime: 50 Pre: 1.59174 NLI: 0.00423598 Post: 0.04617 Total: 1.64215
+*******************************************************
+Time Step Count: 51 Current Time: 34
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 51 34
+WallClockTime: 51 Pre: 1.59419 NLI: 0.00422597 Post: 0.0361121 Total: 1.63453
+*******************************************************
+Time Step Count: 52 Current Time: 34.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 52 34.6667
+WallClockTime: 52 Pre: 1.59709 NLI: 0.00420594 Post: 0.0371931 Total: 1.63849
+*******************************************************
+Time Step Count: 53 Current Time: 35.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 53 35.3333
+WallClockTime: 53 Pre: 1.59323 NLI: 0.00423908 Post: 0.036062 Total: 1.63353
+*******************************************************
+Time Step Count: 54 Current Time: 36
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 54 36
+WallClockTime: 54 Pre: 1.59005 NLI: 0.0042119 Post: 0.036634 Total: 1.6309
+*******************************************************
+Time Step Count: 55 Current Time: 36.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 36.66666666666667/55 (realm_1)
+Mean System Norm: 0 55 36.6667
+WallClockTime: 55 Pre: 1.59792 NLI: 0.00424099 Post: 0.0539761 Total: 1.65614
+*******************************************************
+Time Step Count: 56 Current Time: 37.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 56 37.3333
+WallClockTime: 56 Pre: 1.59584 NLI: 0.00423312 Post: 0.0362968 Total: 1.63637
+*******************************************************
+Time Step Count: 57 Current Time: 38
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 57 38
+WallClockTime: 57 Pre: 1.59518 NLI: 0.00422192 Post: 0.0357502 Total: 1.63515
+*******************************************************
+Time Step Count: 58 Current Time: 38.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 58 38.6667
+WallClockTime: 58 Pre: 1.59407 NLI: 0.00423288 Post: 0.0360451 Total: 1.63435
+*******************************************************
+Time Step Count: 59 Current Time: 39.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 59 39.3333
+WallClockTime: 59 Pre: 1.59392 NLI: 0.00422788 Post: 0.036052 Total: 1.6342
+*******************************************************
+Time Step Count: 60 Current Time: 40
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 39.99999999999999/60 (realm_1)
+Mean System Norm: 0 60 40
+WallClockTime: 60 Pre: 1.59388 NLI: 0.00419712 Post: 0.046979 Total: 1.64506
+*******************************************************
+Time Step Count: 61 Current Time: 40.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 61 40.6667
+WallClockTime: 61 Pre: 1.59324 NLI: 0.00424004 Post: 0.03596 Total: 1.63344
+*******************************************************
+Time Step Count: 62 Current Time: 41.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 62 41.3333
+WallClockTime: 62 Pre: 1.59188 NLI: 0.00422883 Post: 0.0358481 Total: 1.63196
+*******************************************************
+Time Step Count: 63 Current Time: 42
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 63 42
+WallClockTime: 63 Pre: 1.58944 NLI: 0.00419688 Post: 0.0358222 Total: 1.62946
+*******************************************************
+Time Step Count: 64 Current Time: 42.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 64 42.6667
+WallClockTime: 64 Pre: 1.59264 NLI: 0.00423193 Post: 0.0357101 Total: 1.63258
+*******************************************************
+Time Step Count: 65 Current Time: 43.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 43.33333333333331/65 (realm_1)
+Mean System Norm: 0 65 43.3333
+WallClockTime: 65 Pre: 1.59273 NLI: 0.00422502 Post: 0.0539939 Total: 1.65095
+*******************************************************
+Time Step Count: 66 Current Time: 44
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 66 44
+WallClockTime: 66 Pre: 1.59395 NLI: 0.00427508 Post: 0.040143 Total: 1.63837
+*******************************************************
+Time Step Count: 67 Current Time: 44.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 67 44.6667
+WallClockTime: 67 Pre: 1.59385 NLI: 0.00423813 Post: 0.040169 Total: 1.63826
+*******************************************************
+Time Step Count: 68 Current Time: 45.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 68 45.3333
+WallClockTime: 68 Pre: 1.59229 NLI: 0.00423098 Post: 0.0394199 Total: 1.63594
+*******************************************************
+Time Step Count: 69 Current Time: 46
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 69 46
+WallClockTime: 69 Pre: 1.59517 NLI: 0.00425386 Post: 0.039427 Total: 1.63885
+*******************************************************
+Time Step Count: 70 Current Time: 46.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 46.66666666666664/70 (realm_1)
+Mean System Norm: 0 70 46.6667
+WallClockTime: 70 Pre: 1.59291 NLI: 0.00424004 Post: 0.0502219 Total: 1.64737
+*******************************************************
+Time Step Count: 71 Current Time: 47.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 71 47.3333
+WallClockTime: 71 Pre: 1.59091 NLI: 0.00421381 Post: 0.042248 Total: 1.63737
+*******************************************************
+Time Step Count: 72 Current Time: 48
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 72 48
+WallClockTime: 72 Pre: 1.59057 NLI: 0.00424695 Post: 0.0417812 Total: 1.6366
+*******************************************************
+Time Step Count: 73 Current Time: 48.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 73 48.6667
+WallClockTime: 73 Pre: 1.59378 NLI: 0.00422287 Post: 0.0401351 Total: 1.63814
+*******************************************************
+Time Step Count: 74 Current Time: 49.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 74 49.3333
+WallClockTime: 74 Pre: 1.59016 NLI: 0.00420809 Post: 0.0390449 Total: 1.63341
+*******************************************************
+Time Step Count: 75 Current Time: 50
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 49.99999999999996/75 (realm_1)
+Mean System Norm: 0 75 50
+WallClockTime: 75 Pre: 1.59085 NLI: 0.00423193 Post: 0.0578141 Total: 1.6529
+*******************************************************
+Time Step Count: 76 Current Time: 50.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 76 50.6667
+WallClockTime: 76 Pre: 1.59179 NLI: 0.00423408 Post: 0.0359271 Total: 1.63195
+*******************************************************
+Time Step Count: 77 Current Time: 51.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 77 51.3333
+WallClockTime: 77 Pre: 1.59327 NLI: 0.00422907 Post: 0.035996 Total: 1.6335
+*******************************************************
+Time Step Count: 78 Current Time: 52
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 78 52
+WallClockTime: 78 Pre: 1.59479 NLI: 0.00421786 Post: 0.0359561 Total: 1.63496
+*******************************************************
+Time Step Count: 79 Current Time: 52.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 79 52.6667
+WallClockTime: 79 Pre: 1.59279 NLI: 0.00422883 Post: 0.0358322 Total: 1.63285
+*******************************************************
+Time Step Count: 80 Current Time: 53.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 53.33333333333328/80 (realm_1)
+Mean System Norm: 0 80 53.3333
+WallClockTime: 80 Pre: 1.59005 NLI: 0.00421405 Post: 0.046406 Total: 1.64067
+*******************************************************
+Time Step Count: 81 Current Time: 54
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 81 54
+WallClockTime: 81 Pre: 1.59455 NLI: 0.00426912 Post: 0.0357919 Total: 1.63461
+*******************************************************
+Time Step Count: 82 Current Time: 54.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 82 54.6667
+WallClockTime: 82 Pre: 1.59274 NLI: 0.00419402 Post: 0.035836 Total: 1.63277
+*******************************************************
+Time Step Count: 83 Current Time: 55.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 83 55.3333
+WallClockTime: 83 Pre: 1.5935 NLI: 0.00423193 Post: 0.035666 Total: 1.63339
+*******************************************************
+Time Step Count: 84 Current Time: 56
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 84 56
+WallClockTime: 84 Pre: 1.59206 NLI: 0.00422287 Post: 0.0356109 Total: 1.63189
+*******************************************************
+Time Step Count: 85 Current Time: 56.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 56.6666666666666/85 (realm_1)
+Mean System Norm: 0 85 56.6667
+WallClockTime: 85 Pre: 1.59026 NLI: 0.00421906 Post: 0.0550048 Total: 1.64948
+*******************************************************
+Time Step Count: 86 Current Time: 57.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 86 57.3333
+WallClockTime: 86 Pre: 1.59312 NLI: 0.0042088 Post: 0.035691 Total: 1.63302
+*******************************************************
+Time Step Count: 87 Current Time: 58
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 87 58
+WallClockTime: 87 Pre: 1.59205 NLI: 0.00422001 Post: 0.0356069 Total: 1.63187
+*******************************************************
+Time Step Count: 88 Current Time: 58.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 88 58.6667
+WallClockTime: 88 Pre: 1.59467 NLI: 0.00423002 Post: 0.0355759 Total: 1.63447
+*******************************************************
+Time Step Count: 89 Current Time: 59.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 89 59.3333
+WallClockTime: 89 Pre: 1.59612 NLI: 0.0042398 Post: 0.0356302 Total: 1.63599
+*******************************************************
+Time Step Count: 90 Current Time: 60
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 59.99999999999992/90 (realm_1)
+Mean System Norm: 0 90 60
+WallClockTime: 90 Pre: 1.59209 NLI: 0.00425601 Post: 0.0499878 Total: 1.64633
+*******************************************************
+Time Step Count: 91 Current Time: 60.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 91 60.6667
+WallClockTime: 91 Pre: 1.59188 NLI: 0.0042541 Post: 0.0401371 Total: 1.63627
+*******************************************************
+Time Step Count: 92 Current Time: 61.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 92 61.3333
+WallClockTime: 92 Pre: 1.58865 NLI: 0.00422788 Post: 0.0401421 Total: 1.63302
+*******************************************************
+Time Step Count: 93 Current Time: 62
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 93 62
+WallClockTime: 93 Pre: 1.59206 NLI: 0.00418687 Post: 0.0400951 Total: 1.63634
+*******************************************************
+Time Step Count: 94 Current Time: 62.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 94 62.6667
+WallClockTime: 94 Pre: 1.59282 NLI: 0.00422597 Post: 0.0358019 Total: 1.63285
+*******************************************************
+Time Step Count: 95 Current Time: 63.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 63.33333333333324/95 (realm_1)
+Mean System Norm: 0 95 63.3333
+WallClockTime: 95 Pre: 1.59384 NLI: 0.00422311 Post: 0.0549569 Total: 1.65302
+*******************************************************
+Time Step Count: 96 Current Time: 64
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 96 64
+WallClockTime: 96 Pre: 1.59057 NLI: 0.00420284 Post: 0.035742 Total: 1.63051
+*******************************************************
+Time Step Count: 97 Current Time: 64.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 97 64.6667
+WallClockTime: 97 Pre: 1.59416 NLI: 0.00423503 Post: 0.0357499 Total: 1.63415
+*******************************************************
+Time Step Count: 98 Current Time: 65.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 98 65.3333
+WallClockTime: 98 Pre: 1.59559 NLI: 0.00422621 Post: 0.0357049 Total: 1.63552
+*******************************************************
+Time Step Count: 99 Current Time: 66
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 99 66
+WallClockTime: 99 Pre: 1.59196 NLI: 0.00422692 Post: 0.035681 Total: 1.63187
+*******************************************************
+Time Step Count: 100 Current Time: 66.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 66.66666666666659/100 (realm_1)
+Mean System Norm: 0 100 66.6667
+WallClockTime: 100 Pre: 1.59352 NLI: 0.00421 Post: 0.0461521 Total: 1.64389
+*******************************************************
+Time Step Count: 101 Current Time: 67.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 101 67.3333
+WallClockTime: 101 Pre: 1.5916 NLI: 0.00420904 Post: 0.0361171 Total: 1.63192
+*******************************************************
+Time Step Count: 102 Current Time: 68
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 102 68
+WallClockTime: 102 Pre: 1.59217 NLI: 0.00422692 Post: 0.0358851 Total: 1.63228
+*******************************************************
+Time Step Count: 103 Current Time: 68.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 103 68.6667
+WallClockTime: 103 Pre: 1.58911 NLI: 0.00422406 Post: 0.035815 Total: 1.62915
+*******************************************************
+Time Step Count: 104 Current Time: 69.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 104 69.3333
+WallClockTime: 104 Pre: 1.59279 NLI: 0.00420809 Post: 0.0355871 Total: 1.63259
+*******************************************************
+Time Step Count: 105 Current Time: 70
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Realm shall provide output files at : currentTime/timeStepCount: 69.99999999999994/105 (realm_1)
+Mean System Norm: 0 105 70
+WallClockTime: 105 Pre: 1.59436 NLI: 0.00422406 Post: 0.0542529 Total: 1.65284
+*******************************************************
+Time Step Count: 106 Current Time: 70.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 106 70.6667
+WallClockTime: 106 Pre: 1.59395 NLI: 0.00421715 Post: 0.0356538 Total: 1.63382
+*******************************************************
+Time Step Count: 107 Current Time: 71.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 107 71.3333
+WallClockTime: 107 Pre: 1.59347 NLI: 0.00421715 Post: 0.035573 Total: 1.63326
+*******************************************************
+Time Step Count: 108 Current Time: 72
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 108 72
+WallClockTime: 108 Pre: 1.59042 NLI: 0.00422883 Post: 0.0355952 Total: 1.63024
+*******************************************************
+Time Step Count: 109 Current Time: 72.6667
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
+ DualNodalVolume min: 5.23055e-09 max: 5.03631 total: 9541.85
+ Max Courant: 866864 Max Reynolds: 2.10746e+06 (realm_1)
+   Realm Nonlinear Iteration: 1/1
+
+realm_1::advance_time_step() 
+NLI    Name           Linear Iter      Linear Res     NLinear Res    Scaled NLR
+---    ----           -----------      ----------     -----------    ----------
+Mass Balance Review:
+Density accumulation: 0
+Integrated inflow:    0
+Integrated open:      0
+Total mass closure:   0
+Mean System Norm: 0 109 72.6667
+WallClockTime: 109 Pre: 1.5975 NLI: 0.00424099 Post: 0.035609 Total: 1.63735
+*******************************************************
+Time Step Count: 110 Current Time: 73.3333
+ dtN: 0.666667 dtNm1: 0.666667 gammas: 1.5 -2 0.5
