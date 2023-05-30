@@ -7,6 +7,18 @@
 
 ### Python Scripts
 
+Python scripts use the following packages:
+- numpy
+- scipy
+- pyyaml
+
+
+#### python/ConstructModel
+
+Run the script "python/ConstructModel/chord_prop_model.py" to generate a yaml file describing a 3 DOF model for the aerodynamic loads being proportional to the chord.
+
+This script generates the yaml file "chord_3dof.yaml" with the mass, stiffness, and damping matrices.
+
 #### python/DistributedLoad
 
 Used for verifying extracted properties against BeamDyn simulations.

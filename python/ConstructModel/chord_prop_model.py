@@ -12,6 +12,10 @@ Damping factors are set at the top to match IEA-15 MW
 
 
 import numpy as np
+import yaml
+
+from ruamel.yaml import YAML as R_YAML
+import ruamel.yaml
 
 import sys
 sys.path.append('..')
@@ -68,7 +72,7 @@ load_val  = np.array([5.2, 5.208839941579524, 5.237887092263203, 5.2933253133836
 
 
 ###########################################
-##### Load Mass and Stiffness
+##### Load Mass and Stiffness from BeamDyn
 
 Mmat, Kmat, node_coords, quad_coords = cutils.load_M_K_nodes(bd_yaml)
 
@@ -98,16 +102,19 @@ ortho_phi = cutils.gram_schmidt(Klocal, subset_eigvecs, subset_eigvals, ordering
 
 
 # Construct the mass matrix
-
-
-
+phi_inv = np.linalg.inv(ortho_phi)
+Mlocal = phi_inv.T @ phi_inv
 
 # Repeat Eigenanalysis for verification
-
+eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(Klocal, Mlocal) 
 
 
 # Construct damping matrix
+omega_3dof = np.sqrt(eigvals_3dof)
 
+modal_damp = np.diag(2*omega_3dof*zeta_3dof)
+
+Clocal = phi_inv.T @ modal_damp @ phi_inv
 
 
 
@@ -119,17 +126,54 @@ print('Global Modal Properties')
 print('Frequencies [Hz]:')
 print(np.sqrt(subset_eigvals)/2/np.pi)
 
-print('Mode Shapes at DOFs:')
-print(subset_eigvecs)
+print('Mode Shapes at DOFs (renormalized to Mlocal):')
+norm_vals = np.sqrt(np.diag(subset_eigvecs.T @ Mlocal @ subset_eigvecs))
+subset_phi_renorm = subset_eigvecs / (np.ones((3,1)) * norm_vals.reshape(1,-1) )
+# print(subset_eigvecs) # Not normalized to the mass matrix, so have to rescale to compare.
+print(subset_phi_renorm)
 
 
 print('\nKlocal:')
 print(Klocal)
 
+print('\nLocal Modal Properties')
+print('Frequencies [Hz]:')
+print(np.sqrt(eigvals_3dof)/2/np.pi)
+
+print('Mode Shapes at DOFs:')
+print(eigvecs_3dof)
+
+print('\nOrtho Checks:')
+print('Mass:')
+print(ortho_phi.T @ Mlocal @ ortho_phi)
+
+print('Stiffness:')
+print(ortho_phi.T @ Klocal @ ortho_phi)
+
+print('Damping:')
+print(ortho_phi.T @ Clocal @ ortho_phi)
+
+print('Frequencies from Klocal Check')
+omega_klocal = np.sqrt(np.diag(ortho_phi.T @ Klocal @ ortho_phi))
+print(omega_klocal / 2 /np.pi)
+
+print('Damping factors from Clocal Check')
+zeta_clocal = np.diag(ortho_phi.T @ Clocal @ ortho_phi)/omega_klocal/2
+print(zeta_clocal)
+
 ###########################################
 ##### Save results to a file for nalu-wind inputs
 
+print('\nWriting Mass, Stiffness, and Damping Matrices to:')
+print(out_3dof)
 
+
+with open(out_3dof, 'w') as f:
+    f.write('mass_matrix : ' + str(Mlocal.reshape(-1).tolist()) + '\n')
+    f.write('stiffness_matrix : ' + str(Klocal.reshape(-1).tolist()) + '\n')
+    f.write('damping_matrix : ' + str(Clocal.reshape(-1).tolist()) + '\n')
+
+print('Finished writing output')
 
 
 

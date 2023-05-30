@@ -185,9 +185,9 @@ def gram_schmidt(Klocal, local_phi, local_eigs, ordering=[0,1,2]):
     local_scale = np.diag(ortho_phi.T @ Klocal @ ortho_phi)
     ortho_phi = ortho_phi * np.sqrt(local_eigs/local_scale)
 
-    print('Presorting ortho phi')
-    print(ortho_phi)
-    print(ordering)
+    # print('Presorting ortho phi')
+    # print(ortho_phi)
+    # print(ordering)
 
     # Reset ordering
     # ortho_phi[:, ordering] = ortho_phi # [:, ordering_reset]
@@ -328,6 +328,9 @@ def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_intere
     ###################
     # Invert flexibility matrix to get stiffness matrix
     Klocal = np.linalg.inv(flexibility)
+
+    # Make Klocal symmetric 
+    Klocal = (Klocal + Klocal.T)/2
 
     return Klocal
 
