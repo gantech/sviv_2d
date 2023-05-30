@@ -71,6 +71,29 @@ load_span = np.array([0.0, 0.02040816326530612, 0.04081632653061224, 0.061224489
 load_val  = np.array([5.2, 5.208839941579524, 5.237887092263203, 5.293325313383697, 5.3673398548149205, 5.452092684226667, 5.5400317285038465, 5.621824261194381, 5.692531175149338, 5.74261089072697, 5.764836827022541, 5.756119529852528, 5.70309851275065, 5.604676021602162, 5.471559126660524, 5.322778014171772, 5.16648228816705, 5.019421327310202, 4.885807888739599, 4.767959675121795, 4.654566079625438, 4.54103105171191, 4.42817557762473, 4.316958876583997, 4.207880735790049, 4.101646187027423, 3.9987123353123564, 3.8994086760515647, 3.803172543681295, 3.7093894536544263, 3.6171117415725322, 3.525634918177657, 3.434082670567315, 3.341933111457596, 3.2486784477614132, 3.156109679927359, 3.0645800048338336, 2.9729926470824872, 2.8807051066906166, 2.786969376686517, 2.6910309386270574, 2.591965555977676, 2.4893236475052167, 2.383917231097341, 2.2759238162069977, 2.165466732053696, 2.0526250825584818, 1.9377533268191636, 1.819662967336163, 1.7799216728668075, 1.7077871948468315, 1.472482673397968, 0.5000000000000001])
 
 
+# Angle of Attack Definition
+# Initial Twist from BeamDyn at the spanwise location
+#    Initial twist from beamdyn is applied to rotate from the IEC reference
+#    coordinate system to align the system matrices with the airfoil coordinates
+#    Here initial twist is linearly interpolated between two spanwise points 
+#    from the BeamDyn input file for the IEA 15MW
+#    The initial twist is about the negative z-axis
+#
+# NOTE: The spanwise position that twist is calculated here is done 
+#  independently of the node number selected. They should be done consistently.
+span_loc = 9.15663E+01 
+initial_twist = np.interp(span_loc, [9.07347e+01, 9.31224e+01],
+                           [-1.62330e+00, -1.88437e+00 ])
+
+print('The initial twist of the blade section is')
+print(initial_twist)
+
+# Angle of Attack of the airfoil (relative to chord)
+angle_attack = 50 # Degrees
+print('Angle of attack is:')
+print(angle_attack)
+
+
 ###########################################
 ##### Load Mass and Stiffness from BeamDyn
 
@@ -117,12 +140,20 @@ modal_damp = np.diag(2*omega_3dof*zeta_3dof)
 Clocal = phi_inv.T @ modal_damp @ phi_inv
 
 
+###########################################
+##### Transform to the CFD coordinate system
 
+# Coordinate transform
+Mlocal, Klocal, Clocal = cutils.transform_mats(Mlocal, Klocal, Clocal,
+                                         initial_twist, angle_attack)
+
+# Redo Eigenanalysis for the output checks
+eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(Klocal, Mlocal) 
 
 ###########################################
 ##### Print results for sanity check
 
-print('Global Modal Properties')
+print('\nGlobal Modal Properties')
 print('Frequencies [Hz]:')
 print(np.sqrt(subset_eigvals)/2/np.pi)
 
@@ -145,20 +176,20 @@ print(eigvecs_3dof)
 
 print('\nOrtho Checks:')
 print('Mass:')
-print(ortho_phi.T @ Mlocal @ ortho_phi)
+print(eigvecs_3dof.T @ Mlocal @ eigvecs_3dof)
 
 print('Stiffness:')
-print(ortho_phi.T @ Klocal @ ortho_phi)
+print(eigvecs_3dof.T @ Klocal @ eigvecs_3dof)
 
 print('Damping:')
-print(ortho_phi.T @ Clocal @ ortho_phi)
+print(eigvecs_3dof.T @ Clocal @ eigvecs_3dof)
 
 print('Frequencies from Klocal Check')
-omega_klocal = np.sqrt(np.diag(ortho_phi.T @ Klocal @ ortho_phi))
+omega_klocal = np.sqrt(np.diag(eigvecs_3dof.T @ Klocal @ eigvecs_3dof))
 print(omega_klocal / 2 /np.pi)
 
 print('Damping factors from Clocal Check')
-zeta_clocal = np.diag(ortho_phi.T @ Clocal @ ortho_phi)/omega_klocal/2
+zeta_clocal = np.diag(eigvecs_3dof.T @ Clocal @ eigvecs_3dof)/omega_klocal/2
 print(zeta_clocal)
 
 ###########################################
@@ -174,14 +205,5 @@ with open(out_3dof, 'w') as f:
     f.write('damping_matrix : ' + str(Clocal.reshape(-1).tolist()) + '\n')
 
 print('Finished writing output')
-
-
-
-
-
-
-
-
-
 
 

@@ -371,3 +371,37 @@ def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Po
 
     return
 
+def transform_mats(Mlocal, Klocal, Clocal, initial_twist, angle_attack):
+    """
+    Rotates Mlocal, Klocal, Clocal to the coordinate system for CFD
+    Initially in the BeamDyn Coordinate system
+    initial_twist is about negative z to rotate to a blade section coordinate system
+    Blade Section coordinate system has y pointing along the chord to the 
+      trailing edge
+    Then angle_attack is used to convert to a CFD coordinate system
+      CFD coordinate system has inflow going in the positive x direction
+
+    Inputs:
+      Mlocal - local mass matrix in beamdyn coords
+      Klocal - local stiffness matrix in beamdyn coords
+      Clocal - local damping matrix in beamdyn coords
+      initial_twist - from BeamDyn rotation of blade section around axis (degrees)
+      angle_attack - angle of attack between blade and inflow (degrees)
+    """
+
+    init_twist_rad = initial_twist*np.pi/180
+    ang_att_rad = angle_attack*np.pi/180
+
+    Qtwist = np.array([[np.cos(init_twist_rad), -np.sin(init_twist_rad), 0],
+                       [np.sin(init_twist_rad),  np.cos(init_twist_rad), 0],
+                       [0,                       0,                      1]])
+
+    Qattack = np.array([[np.sin(ang_att_rad),  np.cos(ang_att_rad), 0],
+                        [np.cos(ang_att_rad), -np.sin(ang_att_rad), 0],
+                        [0,                    0,                   1]])
+
+    Mlocal = Qattack @ (Qtwist @ Mlocal @ Qtwist.T) @ Qattack.T
+    Klocal = Qattack @ (Qtwist @ Klocal @ Qtwist.T) @ Qattack.T
+    Clocal = Qattack @ (Qtwist @ Clocal @ Qtwist.T) @ Qattack.T
+
+    return Mlocal, Klocal, Clocal
