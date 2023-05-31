@@ -58,6 +58,21 @@ source ./copy_results.sh
 python verify_dist_loads.py
 ```
 
+#### Rotation Values
+
+1. Navigate to and run the BeamDyn files for the rotation cases:
+```
+cd OpenFAST/BeamDyn/rotation_center
+source axis_runs.sh
+```
+
+2. Navigate to the python script folder and copy the BeamDyn outputs:
+```
+cd ../../../python/RotationChecks/
+source copy_bd_outs.sh
+```
+
+3. Run the python script "python/RotationChecks/rot_compare.py". This script indicates that displaying the top section and applying an identical moment at the half span results in translation of the tip. Therefore, should not need to add any translation due to rotation about an offset axis to the Nalu wind simulations. Some error in the comparisons here, likely because moving the top cross section changes the lower stiffness properties due to the global shape functions. 
 
 ## Nalu Wind Runs
 
