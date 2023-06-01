@@ -213,6 +213,9 @@ print('Damping factors from Clocal Check')
 zeta_clocal = np.diag(eigvecs_3dof.T @ C3dof @ eigvecs_3dof)/omega_klocal/2
 print(zeta_clocal)
 
+print('\nForce Transform Matrix:')
+print(T3dof)
+
 ###########################################
 ##### Save results to a file for nalu-wind inputs
 
