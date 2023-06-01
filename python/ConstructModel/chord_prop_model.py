@@ -94,6 +94,10 @@ print('Angle of attack is:')
 print(angle_attack)
 
 
+# print('Setting rotations to zero for initial check')
+# angle_attack = 0
+# initial_twist = 0
+
 ###########################################
 ##### Load Mass and Stiffness from BeamDyn
 
@@ -104,51 +108,68 @@ Mbc = Mmat[6:, 6:]
 Kbc = Kmat[6:, 6:]
 
 ###########################################
-##### Construct Local Stiffness Matrix
+##### Calculate the Load Distribution Function
 
-Klocal = cutils.calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, 
-                              node_interest, load_directions, refine=False)
+# Size of Ndofs x 3
+# Columns correspond to the 3 directions of loading
 
+Psi = cutils.calc_load_dis(node_coords, quad_coords, load_span, load_val,
+                           node_interest, load_directions, refine = False)
 
 ###########################################
 ##### Extract Desired Modal Properties from the global model
 
-subset_eigvals, subset_eigvecs = cutils.extract_local_subset_modes(Kbc, Mbc, 
+subset_eigvals, Phi_L, Phi_G = cutils.extract_local_subset_modes(Kbc, Mbc, 
                                          mode_indices, node_interest,
                                          load_directions)
+
+print('Initial Extracted Phi_L')
+print(Phi_L)
+
+Lambda = np.diag(subset_eigvals)
 
 ###########################################
 ##### Construct the 3 DOF to match global properties
 
-# Scale the subset_eigvecs to the local stiffness and make orthogonal
-ortho_phi = cutils.gram_schmidt(Klocal, subset_eigvecs, subset_eigvals, ordering=mode_ortho_order)
+Phi_L_inv = np.linalg.inv(Phi_L)
 
-
-# Construct the mass matrix
-phi_inv = np.linalg.inv(ortho_phi)
-Mlocal = phi_inv.T @ phi_inv
-
-# Repeat Eigenanalysis for verification
-eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(Klocal, Mlocal) 
-
+# Construct matrices
+Mlocal = Phi_L_inv.T @ Phi_L_inv
+Klocal = Phi_L_inv.T @ Lambda @ Phi_L_inv
+Tcfd_local = Phi_L_inv.T @ (Phi_G.T @ Psi)
 
 # Construct damping matrix
-omega_3dof = np.sqrt(eigvals_3dof)
+modal_damp = np.sqrt(Lambda) * np.diag(2*zeta_3dof)
+Clocal = Phi_L_inv.T @ modal_damp @ Phi_L_inv
 
-modal_damp = np.diag(2*omega_3dof*zeta_3dof)
 
-Clocal = phi_inv.T @ modal_damp @ phi_inv
+print('\nOrtho Checks with initially constructed matrices and Phi_L')
+
+print('\nOrtho Checks:')
+print('Mass:')
+print(Phi_L.T @ Mlocal @ Phi_L)
+
+print('Stiffness:')
+print(Phi_L.T @ Klocal @ Phi_L)
+
+print('Damping:')
+print(Phi_L.T @ Clocal @ Phi_L)
+
+
+###########################################
+# Repeat Eigenanalysis for verification
+eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(Klocal, Mlocal) 
 
 
 ###########################################
 ##### Transform to the CFD coordinate system
 
 # Coordinate transform
-Mlocal, Klocal, Clocal = cutils.transform_mats(Mlocal, Klocal, Clocal,
+M3dof, K3dof, C3dof, T3dof = cutils.transform_mats(Mlocal, Klocal, Clocal, Tcfd_local,
                                          initial_twist, angle_attack)
 
 # Redo Eigenanalysis for the output checks
-eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(Klocal, Mlocal) 
+eigvals_3dof,eigvecs_3dof = cutils.modal_analysis(K3dof, M3dof) 
 
 ###########################################
 ##### Print results for sanity check
@@ -158,9 +179,9 @@ print('Frequencies [Hz]:')
 print(np.sqrt(subset_eigvals)/2/np.pi)
 
 print('Mode Shapes at DOFs (renormalized to Mlocal):')
-norm_vals = np.sqrt(np.diag(subset_eigvecs.T @ Mlocal @ subset_eigvecs))
-subset_phi_renorm = subset_eigvecs / (np.ones((3,1)) * norm_vals.reshape(1,-1) )
-# print(subset_eigvecs) # Not normalized to the mass matrix, so have to rescale to compare.
+norm_vals = np.sqrt(np.diag(Phi_L.T @ Mlocal @ Phi_L))
+subset_phi_renorm = Phi_L / (np.ones((3,1)) * norm_vals.reshape(1,-1) )
+# print(Phi_L) # Not normalized to the mass matrix, so have to rescale to compare.
 print(subset_phi_renorm)
 
 
@@ -176,20 +197,20 @@ print(eigvecs_3dof)
 
 print('\nOrtho Checks:')
 print('Mass:')
-print(eigvecs_3dof.T @ Mlocal @ eigvecs_3dof)
+print(eigvecs_3dof.T @ M3dof @ eigvecs_3dof)
 
 print('Stiffness:')
-print(eigvecs_3dof.T @ Klocal @ eigvecs_3dof)
+print(eigvecs_3dof.T @ K3dof @ eigvecs_3dof)
 
 print('Damping:')
-print(eigvecs_3dof.T @ Clocal @ eigvecs_3dof)
+print(eigvecs_3dof.T @ C3dof @ eigvecs_3dof)
 
 print('Frequencies from Klocal Check')
-omega_klocal = np.sqrt(np.diag(eigvecs_3dof.T @ Klocal @ eigvecs_3dof))
+omega_klocal = np.sqrt(np.diag(eigvecs_3dof.T @ K3dof @ eigvecs_3dof))
 print(omega_klocal / 2 /np.pi)
 
 print('Damping factors from Clocal Check')
-zeta_clocal = np.diag(eigvecs_3dof.T @ Clocal @ eigvecs_3dof)/omega_klocal/2
+zeta_clocal = np.diag(eigvecs_3dof.T @ C3dof @ eigvecs_3dof)/omega_klocal/2
 print(zeta_clocal)
 
 ###########################################
@@ -200,9 +221,10 @@ print(out_3dof)
 
 
 with open(out_3dof, 'w') as f:
-    f.write('mass_matrix : ' + str(Mlocal.reshape(-1).tolist()) + '\n')
-    f.write('stiffness_matrix : ' + str(Klocal.reshape(-1).tolist()) + '\n')
-    f.write('damping_matrix : ' + str(Clocal.reshape(-1).tolist()) + '\n')
+    f.write('mass_matrix : ' + str(M3dof.reshape(-1).tolist()) + '\n')
+    f.write('stiffness_matrix : ' + str(K3dof.reshape(-1).tolist()) + '\n')
+    f.write('damping_matrix : ' + str(C3dof.reshape(-1).tolist()) + '\n')
+    f.write('force_transform_matrix : ' + str(T3dof.reshape(-1).tolist()) + '\n')
 
 print('Finished writing output')
 

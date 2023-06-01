@@ -17,7 +17,7 @@ Python scripts use the following packages:
 
 Run the script "python/ConstructModel/chord_prop_model.py" to generate a yaml file describing a 3 DOF model for the aerodynamic loads being proportional to the chord.
 
-This script generates the yaml file "chord_3dof.yaml" with the mass, stiffness, and damping matrices.
+This script generates the yaml file "chord_3dof.yaml" with the mass, stiffness, damping, and force transformation matrices.
 
 #### python/DistributedLoad
 

@@ -229,6 +229,7 @@ def extract_local_subset_modes(Kmat, Mmat, mode_indices, node_interest, load_dir
     Outputs: 
       subset_eigvals - eigenvalues for the selected modes
       subset_eigvecs - eigenvector values for selected modes and for selected DOFs
+      subset_global_eigvecs - full eigenvectors for global nodes, only for selected modes
     """
 
     ##### Global Modal Analysis
@@ -239,15 +240,18 @@ def extract_local_subset_modes(Kmat, Mmat, mode_indices, node_interest, load_dir
     ##### Extract Local Properties
     subset_eigvals = np.zeros(len(mode_indices))
     subset_eigvecs = np.zeros((len(load_directions),len(mode_indices)))
-    
+    subset_global_eigvecs = np.zeros((Kmat.shape[0], len(mode_indices))) 
+
+ 
     for mind in range(len(mode_indices)):
 
         subset_eigvals[mind] = eigvals[mode_indices[mind]]
+        subset_global_eigvecs[:, mind] = eigvecs[:, mode_indices[mind]]
 
         for dind in range(len(load_directions)): 
             subset_eigvecs[dind, mind] = eigvecs[(node_interest-1)*6+load_directions[dind], mode_indices[mind]]
 
-    return subset_eigvals, subset_eigvecs
+    return subset_eigvals, subset_eigvecs,subset_global_eigvecs
 
 
 def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_interest, load_directions, refine=False):
@@ -287,7 +291,7 @@ def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_intere
 
     ###################
     # Create integration matrix for the load
-    x_traps, int_mat_trap = construct_trap_int_mat(node_coords, quad_coords, refine=True)
+    x_traps, int_mat_trap = construct_trap_int_mat(node_coords, quad_coords, refine=refine)
 
     # Apply boundary conditions to the integration matrix (eliminate 1st node
     int_mat_trap = int_mat_trap[1:, :]
@@ -334,6 +338,73 @@ def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_intere
 
     return Klocal
 
+def calc_load_dis(node_coords, quad_coords, load_span, load_val,
+                           node_interest, load_directions, refine = False):
+    """
+    Calculates the load distribution mapping from 3 CFD forces to all global DOFs
+    Automatically removes the boundary condition DOFs
+
+    Outputs:
+      Psi - Matrix with each column describing the resulting global nodal forces
+            being generated based on the CFD force for that direction. 
+    """
+
+    ###################
+    # Make the load distribution into an array with columns corresponding to load directions
+    load_val = np.atleast_2d(load_val)
+
+    if not (load_val.shape[0] == load_span.shape[0]):
+        load_val = load_val.T
+
+    if load_val.shape[1] == 1:
+        load_val = load_val @ np.ones((1,3))
+   
+    ###################
+    # Scale load distribution at node to 1.0 
+
+    span_loc = node_coords[node_interest, 2]
+
+    print('Span location coordinate')
+    print(span_loc)
+
+    for dir_ind in range(len(load_directions)):
+
+        loc_val = np.interp(span_loc, load_span, load_val[:, dir_ind])
+
+        load_val[:, dir_ind] = load_val[:, dir_ind] / loc_val 
+
+    ###################
+    # Create integration matrix for the load
+    x_traps, int_mat_trap = construct_trap_int_mat(node_coords, quad_coords, refine=refine)
+
+    # Apply boundary conditions to the integration matrix (eliminate 1st node
+    int_mat_trap = int_mat_trap[1:, :]
+
+    ###################
+    # Loop over directions creating a load distribution vector for each
+
+    Psi = np.zeros((6*int_mat_trap.shape[0], len(load_directions)))
+
+    for dir_ind in range(len(load_directions)):
+        
+        # Global direction index
+        gdir_ind = load_directions[dir_ind]
+
+        # Interpolate load distribution to quadrature points
+        quad_load = np.interp(x_traps, load_span, load_val[:, dir_ind])
+
+        # Integrate load distribution
+        nodal_dir_load = int_mat_trap @ quad_load
+
+        # Expand the nodal forces in this direction to a full nodal force vector
+        dof_vec = np.zeros(6)
+        dof_vec[gdir_ind] = 1.0
+        load_vec = np.kron(nodal_dir_load, dof_vec) 
+
+        Psi[:, dir_ind] = load_vec
+
+    return Psi
+
 
 
 def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Position'):
@@ -371,7 +442,7 @@ def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Po
 
     return
 
-def transform_mats(Mlocal, Klocal, Clocal, initial_twist, angle_attack):
+def transform_mats(Mlocal, Klocal, Clocal, TlocalCFD, initial_twist, angle_attack):
     """
     Rotates Mlocal, Klocal, Clocal to the coordinate system for CFD
     Initially in the BeamDyn Coordinate system
@@ -385,8 +456,12 @@ def transform_mats(Mlocal, Klocal, Clocal, initial_twist, angle_attack):
       Mlocal - local mass matrix in beamdyn coords
       Klocal - local stiffness matrix in beamdyn coords
       Clocal - local damping matrix in beamdyn coords
+      TlocalCFD - transform from CFD in BeamDyn coords to forces on DOFs
       initial_twist - from BeamDyn rotation of blade section around axis (degrees)
       angle_attack - angle of attack between blade and inflow (degrees)
+
+    Outputs:
+      Matrices in the CFD coordinate system
     """
 
     init_twist_rad = initial_twist*np.pi/180
@@ -396,12 +471,13 @@ def transform_mats(Mlocal, Klocal, Clocal, initial_twist, angle_attack):
                        [np.sin(init_twist_rad),  np.cos(init_twist_rad), 0],
                        [0,                       0,                      1]])
 
-    Qattack = np.array([[np.sin(ang_att_rad),  np.cos(ang_att_rad), 0],
-                        [np.cos(ang_att_rad), -np.sin(ang_att_rad), 0],
-                        [0,                    0,                   1]])
+    Qattack = np.array([[np.sin(ang_att_rad),  np.cos(ang_att_rad),  0],
+                        [np.cos(ang_att_rad), -np.sin(ang_att_rad),  0],
+                        [0,                    0,                   -1]])
 
-    Mlocal = Qattack @ (Qtwist @ Mlocal @ Qtwist.T) @ Qattack.T
-    Klocal = Qattack @ (Qtwist @ Klocal @ Qtwist.T) @ Qattack.T
-    Clocal = Qattack @ (Qtwist @ Clocal @ Qtwist.T) @ Qattack.T
+    M3dof = Qattack @ (Qtwist @ Mlocal @ Qtwist.T) @ Qattack.T
+    K3dof = Qattack @ (Qtwist @ Klocal @ Qtwist.T) @ Qattack.T
+    C3dof = Qattack @ (Qtwist @ Clocal @ Qtwist.T) @ Qattack.T
+    T3dof = Qattack @ (Qtwist @ TlocalCFD @ Qtwist.T) @ Qattack.T
 
-    return Mlocal, Klocal, Clocal
+    return M3dof, K3dof, C3dof, T3dof
