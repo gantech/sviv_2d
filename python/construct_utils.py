@@ -311,6 +311,9 @@ def calc_local_K(Kbc, node_coords, quad_coords, load_span, load_val, node_intere
     print('Span location coordinate')
     print(span_loc)
 
+    print('Spanwise Fraction:')
+    print(span_loc / node_coords[-1, 2])
+
     for dir_ind in range(len(load_directions)):
 
         loc_val = np.interp(span_loc, load_span, load_val[:, dir_ind])
@@ -394,6 +397,9 @@ def calc_load_dis(node_coords, quad_coords, load_span, load_val,
 
     print('Span location coordinate')
     print(span_loc)
+
+    print('Spanwise Fraction:')
+    print(span_loc / node_coords[-1, 2])
 
     for dir_ind in range(len(load_directions)):
 
