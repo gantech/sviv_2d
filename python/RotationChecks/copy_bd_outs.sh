@@ -1,4 +1,4 @@
-# mkdir bd_outputs
+mkdir bd_outputs
 
 # Off Axis
 cp ../../OpenFAST/BeamDyn/rotation_center/off_axis/bd_dyn_off_axis.BD.sum.yaml ./bd_outputs/.

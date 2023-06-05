@@ -47,6 +47,34 @@ def load_M_K_nodes(yamlfile):
 
     return Mmat, Kmat, node_coords, quad_coords
 
+def load3dof(yamlfile):
+    """
+    Load the Mass, Stiffness, and nodal coordinates
+
+    Inputs:
+      yamlfile - filename of .yaml file that contains the fields
+    Outputs:
+      M3dof - Mass matrix
+      C3dof - Damping matrix
+      K3dof - Stiffness matrix
+      T3dof - Force transformation matrix for 3 DOF model
+    """
+
+    # Load YAML file
+    with open(yamlfile) as f:
+        data = list(yaml.load_all(f, Loader=SafeLoader))
+    
+    dict_data = data[-1]
+    
+    # print(dict_data.keys())
+    
+    M3dof = np.array(dict_data['mass_matrix']).reshape(3,3)
+    C3dof = np.array(dict_data['damping_matrix']).reshape(3,3)
+    K3dof = np.array(dict_data['stiffness_matrix']).reshape(3,3)
+    T3dof = np.array(dict_data['force_transform_matrix']).reshape(3,3)
+
+    return M3dof, C3dof, K3dof, T3dof
+
 
 def construct_shape_funs(nodes):
     """

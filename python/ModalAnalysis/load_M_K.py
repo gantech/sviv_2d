@@ -11,7 +11,7 @@ from yaml.loader import SafeLoader
 
 from scipy.linalg import eigh
 
-with open('bd_driver.BD.sum.yaml') as f:
+with open('../bd_driver.BD.sum.yaml') as f:
     data = list(yaml.load_all(f, Loader=SafeLoader))
 
 dict_data = data[-1]
