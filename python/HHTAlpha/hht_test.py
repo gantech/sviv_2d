@@ -3,15 +3,19 @@ import numpy as np
 
 from hht_alpha_fun import hht_alpha_integrate
 
+import sys
+sys.path.append('..')
+import construct_utils as cutils
+
 ##### Load Previously Constructed 3 DOF Matrices
 
-mats_3dof = np.load('./local_mats.npz')
+mats_yaml = 'chord_3dof.yaml'
 
-M3dof = mats_3dof['M3dof']
-C3dof = mats_3dof['C3dof']
-K3dof = mats_3dof['K3dof']
+M3dof, C3dof, K3dof, T3dof = cutils.load3dof(mats_yaml)
 
 ##### Construct Problem Inputs
+
+load_scale = 1.0
 
 alpha = -0.05
 
@@ -30,7 +34,8 @@ Fextfun = lambda t,x,v : Famp*np.cos(freq*2*np.pi*t)
 
 ##### Perform time integration
 
-thist, xhist, vhist, ahist = hht_alpha_integrate(x0, v0, M3dof, C3dof, K3dof, alpha, dt, Fextfun, t0, t1)
+thist, xhist, vhist, ahist = hht_alpha_integrate(x0, v0, M3dof, C3dof, K3dof, alpha, dt, Fextfun, 
+                                                 t0, t1, load_scale=load_scale, T=T3dof)
 
 ##### Visualize Results
 import matplotlib.pyplot as plt

@@ -14,7 +14,10 @@ from scipy.linalg import eigh
 
 ##### Loading M and K
 
-with open('bd_driver.BD.sum.yaml') as f:
+print('DO NOT USE THIS CONSTRUCTION SCRIPT. THIS IS THE OLD ONE THAT IS MORE AD HOC. STILL CLEANING UP TO REMOVE THIS.')
+
+
+with open('../bd_driver.BD.sum.yaml') as f:
     data = list(yaml.load_all(f, Loader=SafeLoader))
 
 dict_data = data[-1]
@@ -216,3 +219,4 @@ print(eigvecs_3dof.T @ Clocal @ eigvecs_3dof)
 ##### Save the Local Matrices
 np.savez('./local_mats.npz', M3dof=Mlocal, K3dof=Klocal, C3dof=Clocal)
 
+print('DO NOT USE THIS CONSTRUCTION SCRIPT. THIS IS THE OLD ONE THAT IS MORE AD HOC. STILL CLEANING UP TO REMOVE THIS.')

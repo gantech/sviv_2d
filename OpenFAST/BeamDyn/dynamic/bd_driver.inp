@@ -41,7 +41,7 @@ Non-dim blade-span eta   Fx          Fy            Fz           Mx           My 
 (-)                      (N)         (N)           (N)          (N-m)        (N-m)        (N-m)
 0.0                      0.0         0.0           0.0          0.0           0.0          0.0
 ---------------------- PRIMARY INPUT FILE --------------------------------------
-"IEA-15-240-RWT_BeamDyn.dat"    InputFile - Name of the primary BeamDyn input file
+"../IEA-15-240-RWT_BeamDyn.dat"    InputFile - Name of the primary BeamDyn input file
 ----- Output Settings -------------------------------------------------------------------
           0   WrVTK         - VTK visualization data output: (switch) {0=none; 1=init; 2=animation}
          15   VTK_fps       - Frame rate for VTK output (frames per second) {will use closest integer multiple of DT} [used only if WrVTK=2]
