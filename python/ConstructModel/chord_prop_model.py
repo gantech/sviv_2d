@@ -14,9 +14,6 @@ Damping factors are set at the top to match IEA-15 MW
 import numpy as np
 import yaml
 
-from ruamel.yaml import YAML as R_YAML
-import ruamel.yaml
-
 import sys
 sys.path.append('..')
 import construct_utils as cutils
