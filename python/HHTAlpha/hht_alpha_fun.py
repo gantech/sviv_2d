@@ -55,9 +55,14 @@ def hht_alpha_update(xn, vn, an, Mmat, Cmat, Kmat, alpha, tn, dt, Fn, Fnp1,
 
     Fext = T @ (load_scale * Fext)
 
-    right_vec = -Cmat @ (vn + (1+alpha)*dt*(1-gamma)*an) \
+    right_vec = -Cmat @ (vn + (1+alpha)*dt*(1-gamma)*an)  \
                 -Kmat @ (xn + (1+alpha)*dt*vn + (1+alpha)*(dt**2)/2*(1-2*beta)*an) \
                 + Fext
+
+    # print(left_mat)
+    # print(right_vec)
+    # print('Fext: ')
+    # print(Fext)
 
     # Solve for time n+1 accel
     anp1 = np.linalg.solve(left_mat, right_vec)
