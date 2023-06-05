@@ -23,7 +23,7 @@ import construct_utils as cutils
 ##### Define Input Parameters
 
 # BeamDyn yaml file results from a dynamic analysis 
-bd_yaml = 'bd_driver.BD.sum.yaml'
+bd_yaml = '../bd_driver.BD.sum.yaml'
 
 # BeamDyn node of interest for section used to construct the 3DOF model
 #   Note that node 0 corresponds to the root and the fixed boundary condition.
