@@ -5,12 +5,22 @@
 
 ### OpenFast
 
+The main outputs needed from OpenFast for model construction are the Mass and Stiffness matrices from a dynamic BeamDyn analysis. 
+```
+cd OpenFAST/BeamDyn/dynamic
+beamdyn_driver bd_driver.inp 
+```
+The results file "bd_driver.BD.sum.yaml" is used to load the mass and stiffness matrices. Copy this file to the top level python directory. 
+
 ### Python Scripts
 
 Python scripts use the following packages:
 - numpy
 - scipy
 - pyyaml
+- netCDF4
+
+BeamDyn summary file from the dynamic simulation (with no loads or displacements) should be put at the top level python directory to be loaded by several scripts.
 
 
 #### python/ConstructModel
@@ -34,7 +44,9 @@ The script "load_M_K.py" does an eigenvalue analysis of the BeamDyn matrices and
 
 #### python/HHTAlpha
 
-Misc. scripts for checking HHT Alpha-method implementation for time integration. These do not serve any important purpose other than scratch work. 
+Misc. scripts for checking HHT Alpha-method implementation for time integration. 
+
+"hht_test.py" is used for verification of the nalu-wind simulation against known lift/drag values. This file requires the .yaml file produced by constructing a model. It currently uses "chord_3dof.yaml".
 
 
 
