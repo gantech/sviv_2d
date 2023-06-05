@@ -272,7 +272,7 @@ realms:
         mesh_parts: [ fluid-HEX ]
         motion:
          - type: translation
-           displacement: [-0.3105707390751098, 0.0, 0.0]
+           displacement: [-0.3109720214696021, 0.0, 0.0]
            
       - name: angle_of_attack
         mesh_parts: [ fluid-HEX ]
