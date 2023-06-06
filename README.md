@@ -92,4 +92,12 @@ To generate inputs:
 ```
 cd nalu-wind
 python utilities/gen_naluwind_inp_files.py
+cd nalu_runs
+mkdir job_list
+cd job_list
+find .. -name freq_* | sort -n > list_of_cases
+sbatch job_submit.slurm
 ```
+
+
+
