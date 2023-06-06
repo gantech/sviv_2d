@@ -11,7 +11,7 @@ strouhal_range = [0.13, 0.20] # Looks like exepected is 0.15-0.18
 strouhal_plot = 0.165 #0.165 # Plot FRF assuming this is the true value
 npoints_st = 30
 
-cord = 1 # m
+chord = 1 # m
 
 angle_of_attack = 60 # deg
 
@@ -28,8 +28,8 @@ strouhal_vec = np.linspace(strouhal_range[0], strouhal_range[1], npoints_st)
 
 # calculate u_inf for the bounds
 
-u_inf_lower = modal_freq * cord * np.sin(angle_of_attack*np.pi/180) / strouhal_range[1]
-u_inf_upper = modal_freq * cord * np.sin(angle_of_attack*np.pi/180) / strouhal_range[0]
+u_inf_lower = modal_freq * chord * np.sin(angle_of_attack*np.pi/180) / strouhal_range[1]
+u_inf_upper = modal_freq * chord * np.sin(angle_of_attack*np.pi/180) / strouhal_range[0]
 
 if u_inf_upper[0] > u_inf_lower[1]:
 
@@ -52,7 +52,7 @@ else:
 # u_inf = np.zeros((modal_freq.shape[0], strouhal_vec.shape[0]))
 # 
 # for freq_ind in range(modal_freq.shape[0]):
-#     u_inf[freq_ind, :] = modal_freq[freq_ind] * cord * np.sin(angle_of_attack*np.pi/180) / strouhal_vec
+#     u_inf[freq_ind, :] = modal_freq[freq_ind] * chord * np.sin(angle_of_attack*np.pi/180) / strouhal_vec
 # 
 # print(u_inf)
 # 
@@ -65,6 +65,15 @@ u_inf.sort()
 print('u_inf [m/s]:')
 print(u_inf)
 
+
+# Calculate Reynolds Number
+rho = 1.225 # Density
+viscosity = 1.0e-5
+
+Re = rho * u_inf * chord / viscosity
+
+print('Re:')
+print(Re)
 
 #####
 # Assuming some true Strouhal number, discretely
@@ -80,10 +89,10 @@ import matplotlib.pyplot as plt
 # Reference points for the plot
 u_inf_ref = np.linspace(u_inf.min(), u_inf.max(), 1000)
 
-freq_forced_ref = strouhal_plot * u_inf_ref / cord / np.sin(angle_of_attack*np.pi/180)
+freq_forced_ref = strouhal_plot * u_inf_ref / chord / np.sin(angle_of_attack*np.pi/180)
 
 # sampled forcing frequencies:
-freq_forced = strouhal_plot * u_inf / cord / np.sin(angle_of_attack*np.pi/180)
+freq_forced = strouhal_plot * u_inf / chord / np.sin(angle_of_attack*np.pi/180)
 
 # Loop and make plots
 for freq_ind in range(modal_freq.shape[0]):
