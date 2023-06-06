@@ -283,6 +283,7 @@ with open(out_3dof, 'w') as f:
     f.write('# Misc Values for preparing runs.\n')
     f.write('chord_length: {}\n'.format(chord_length))
     f.write('span_fraction: {}\n'.format(span_frac))
+    f.write('phi_matrix : ' + str(eigvecs_3dof.reshape(-1).tolist()) + '# mode shape matrix for reference \n')
 
 print('Finished writing output')
 

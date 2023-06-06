@@ -11,42 +11,133 @@ Simulations:
     optimizer: opt1
 
 linear_solvers:
-
-  - name: solve_scalar
-    type: tpetra
-    method: gmres
-    preconditioner: mt_sgs
-    tolerance: 1e-12
-    max_iterations: 200
-    kspace: 75
-    output_level: 0
-    write_matrix_files: no
-
-  - name: solve_cont
-    type: tpetra
-    method: gmres
-    preconditioner: muelu
-    tolerance: 1e-12
-    max_iterations: 200
-    kspace: 75
-    output_level: 0
-    muelu_xml_file_name: milestone_aspect_ratio_gs.xml
-    write_matrix_files: no
-
   - name: solve_mom
-    type: tpetra
-    method: gmres
-    preconditioner: mt_sgs
-    tolerance: 1e-12
-    max_iterations: 200
-    kspace: 75
-    output_level: 0
+    type: hypre
+    method: hypre_gmres
+    preconditioner: boomerAMG
+    tolerance: 1e-5
+    max_iterations: 100
+    kspace: 20
+    segregated_solver: yes
     write_matrix_files: no
+    #write_preassembly_matrix_files: yes
+    recompute_preconditioner_frequency: 1
+    reuse_linear_system: yes
+    simple_hypre_matrix_assemble: yes
+    dump_hypre_matrix_stats: no
+
+    bamg_max_levels: 1
+    bamg_relax_type: 12
+    bamg_num_sweeps: 2
+    bamg_cycle_type: 1
+    bamg_relax_order: 0
+
+    bamg_output_level: 0
+    bamg_debug: 0
+    output_level: 0
+
+  # solver for the scalars TKE, SDR
+  - name: solve_scalar
+    type: hypre
+    method: hypre_gmres
+    preconditioner: boomerAMG
+    tolerance: 1e-5
+    max_iterations: 100
+    kspace: 20
+    write_matrix_files: no
+    #write_preassembly_matrix_files: yes
+    recompute_preconditioner_frequency: 1
+    reuse_linear_system: yes
+    simple_hypre_matrix_assemble: yes
+    dump_hypre_matrix_stats: no
+
+    bamg_max_levels: 1
+    bamg_relax_type: 12
+    bamg_num_sweeps: 2
+    bamg_cycle_type: 1
+    bamg_relax_order: 0
+
+    bamg_output_level: 0
+    bamg_debug: 0
+    output_level: 0
+
+  # solver for the pressure
+  - name: solve_elliptic
+    type: hypre
+    method: hypre_gmres
+    preconditioner: boomerAMG
+    tolerance: 1e-5
+    max_iterations: 100
+    kspace: 40
+    write_matrix_files:  no
+    #write_preassembly_matrix_files: yes
+    recompute_preconditioner_frequency: 1
+    reuse_linear_system: yes
+    simple_hypre_matrix_assemble: yes
+    dump_hypre_matrix_stats: no
+
+    #bamg_max_levels: 7
+    bamg_coarsen_type: 8
+    bamg_interp_type: 6
+    bamg_relax_type: 11
+    bamg_cycle_type: 1
+    bamg_relax_order: 0
+    bamg_keep_transpose: 1
+
+    bamg_num_sweeps: 2
+    #bamg_num_down_sweeps: 2
+    #bamg_num_up_sweeps: 2
+    #bamg_num_coarse_sweeps: 1
+
+    bamg_strong_threshold: 0.3243198904981685
+    bamg_trunc_factor: 0.4227143073461007
+    bamg_pmax_elmts: 3
+
+    bamg_agg_num_levels: 1
+    bamg_agg_interp_type: 7
+    bamg_agg_pmax_elmts: 3
+
+    bamg_output_level: 0
+    bamg_debug: 0
+    output_level: 0
+
+  # solver for the wall
+  - name: solve_wall
+    type: hypre
+    method: hypre_gmres
+    preconditioner: boomerAMG
+    tolerance: 1e-5
+    max_iterations: 100
+    kspace: 40
+    write_matrix_files:  no
+    #write_preassembly_matrix_files: yes
+    recompute_preconditioner_frequency: 1
+    reuse_linear_system: yes
+    simple_hypre_matrix_assemble: yes
+    dump_hypre_matrix_stats: no
+
+    bamg_max_levels: 7
+    bamg_coarsen_type: 8
+    bamg_interp_type: 6
+    bamg_relax_type: 11
+    bamg_num_sweeps: 2
+    bamg_cycle_type: 1
+    bamg_relax_order: 0
+    bamg_trunc_factor: 0.1
+    bamg_agg_num_levels: 2
+    bamg_agg_interp_type: 5
+    bamg_agg_pmax_elmts: 3
+    bamg_pmax_elmts: 3
+    bamg_strong_threshold: 0.25
+
+    bamg_output_level: 0
+    bamg_debug: 0
+    output_level: 0
 
 realms:
 
   - name: realm_1
-    mesh: du91w2_airfoil.exo
+    mesh: ffaw3211_3d.exo
     automatic_decomposition_type: rcb
     use_edges: yes
 
@@ -62,8 +153,8 @@ realms:
         velocity: solve_mom
         turbulent_ke: solve_scalar
         specific_dissipation_rate: solve_scalar
-        pressure: solve_cont
-        ndtw: solve_cont
+        pressure: solve_elliptic
+        ndtw: solve_wall
 
       systems:
 
@@ -84,7 +175,7 @@ realms:
 
     initial_conditions:
       - constant: ic_1
-        target_name: [Flow-QUAD]
+        target_name: [fluid-HEX]
         value:
           pressure: 0
           velocity: [15.0, 0.0]
@@ -92,7 +183,7 @@ realms:
           specific_dissipation_rate: 2266.4
 
     material_properties:
-      target_name: [Flow-QUAD]
+      target_name: [fluid-HEX]
       specifications:
         - name: density
           type: constant
@@ -110,13 +201,16 @@ realms:
         use_wall_function: no
         turbulent_ke: 0.0
 
-
     - inflow_boundary_condition: bc_inflow
       target_name: inflow
       inflow_user_data:
         velocity: [15.0, 0.0]
         turbulent_ke: 0.095118
         specific_dissipation_rate: 2266.4
+
+    - symmetry_boundary_condition: bc_sym
+      target_name: sides
+      symmetry_user_data:
 
     - open_boundary_condition: bc_open
       target_name: outflow
@@ -132,6 +226,9 @@ realms:
       projected_timescale_type: momentum_diag_inv #### Use 1/diagA formulation
 
       options:
+        - source_terms:
+            continuity: density_time_derivative
+        
         - hybrid_factor:
             velocity: 1.0
             turbulent_ke: 1.0
@@ -170,27 +267,41 @@ realms:
 
     #Use this to set the mean angle of attack
     mesh_transformation:
-      - name: interior
-        mesh_parts: [ Flow-QUAD ]
+      #The order of stuff here matters
+      - name: move_to_pitch_axis
+        mesh_parts: [ fluid-HEX ]
+        motion:
+         - type: translation
+           displacement: [-0.3109720214696021, 0.0, 0.0]
+           
+      - name: angle_of_attack
+        mesh_parts: [ fluid-HEX ]
         motion:
          - type: rotation
-           angle: 10.0
+           angle: 50.0
            axis: [0.0, 0.0, -1.0]
-           centroid: [0.25, 0.0, 0.0]
+           centroid: [0.0, 0.0, 0.0]
 
     #This sets the oscillating angle of attack
     mesh_motion:
       - name: interior
-        mesh_parts: [ Flow-QUAD ]
+        mesh_parts: [ fluid-HEX ]
+        mesh_parts_bc: [ airfoil ]
+        enable_smd: True
         motion:
-         - type: sin_rotation
+         - type: airfoil_smd
            amplitude: 10.0
            omega: 0.3
-           axis: [0.0, 0.0, -1.0]
+           axis: [0.0, 0.0, 1.0]
            centroid: [0.25, 0.0, 0.0]
-
-
-
+           mass_matrix : [6487.884235790796, -249.84540342727587, 1352.5882303412882, -249.84540342727587, 6728.125824479837, 1124.9901881654846, 1352.5882303412882, 1124.9901881654846, 7756.205425052474]
+           stiffness_matrix : [102418.08215923404, -33471.75212066975, -88169.30343426364, -33471.75212066975, 94702.03257332282, 51824.63741507368, -88169.30343426365, 51824.63741507369, 4765590.7772734575]
+           damping_matrix : [243.70772125537488, -46.51565171474964, -32.72689433093248, -46.51565171474965, 239.16181268094945, 62.94049138376673, -32.726894330932474, 62.94049138376673, 3723.699772866018]
+           force_transform_matrix : [61.329231681484316, -0.9182350265386212, 0.04766767512259737, -0.827371302033491, 61.727855565983496, -0.06892881104583945, -4.209361470708504, -4.7111524807778755, 60.07582310034999]
+           x_init: [0.0, 0.0, 2.0]
+           loads_scale: 0.7120147186785986 
+           
+           
     post_processing:
     - type: surface
       physics: surface_force_and_moment
@@ -210,6 +321,7 @@ realms:
        - specific_dissipation_rate
        - turbulent_viscosity
        - minimum_distance_to_wall
+       - mesh_displacement
 
 Time_Integrators:
   - StandardTimeIntegrator:

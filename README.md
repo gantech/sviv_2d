@@ -88,4 +88,8 @@ source copy_bd_outs.sh
 
 ## Nalu Wind Runs
 
-
+To generate inputs:
+```
+cd nalu-wind
+python utilities/gen_naluwind_inp_files.py
+```
