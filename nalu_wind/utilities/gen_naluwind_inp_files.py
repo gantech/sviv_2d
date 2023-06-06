@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/template/chord_3dof.yaml', run_folder='nalu_runs', 
-                 template="nalu_inputs/template/airfoil_osc.yaml", nominalSt=0.16, nominal_visc=1e-5):
+                 template="nalu_inputs/template/airfoil_osc.yaml", nominal_St=0.16, nominal_visc=1e-5):
     """Generate a nalu input file for simulation of flow past an airfoil
     using k-w-SST turbulence model
 
@@ -49,7 +49,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     ###### Create folder and modify template
 
-    Path(run_folder+'/{}/structure_{:d}/freq_{}'.format(af_name, mech_ind, freq )).mkdir(
+    Path(run_folder+'/{}/structure_{:d}/freq_{:.5f}'.format(af_name, mech_ind, freq )).mkdir(
         parents=True, exist_ok=True)
 
     # Copy the mechanical model to the structure level folder for future reference
@@ -91,7 +91,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     ## calculate velocity based on Strouhal
     nominal_vel = freq * chord_nominal * np.sin(aoa*np.pi/180) / nominal_St
 
-    sim_vel = freq * 1.0 * np.sin(aoa*np.pi/180) / nominal_St
+    sim_vel = float(freq * 1.0 * np.sin(aoa*np.pi/180) / nominal_St)
 
     if( tfile['realms'][0]['material_properties']['specifications'][0]['name'] == 'density' ):
         nominal_density = float(tfile['realms'][0]['material_properties']['specifications'][0]['value'])
@@ -99,7 +99,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
         print("Property density is not in the expected place.")
         sys.exit()
 
-    if not ( tfile['realms'][0]['material_properties']['specifications'][1]['name'] == 'viscosity')
+    if not ( tfile['realms'][0]['material_properties']['specifications'][1]['name'] == 'viscosity'):
         print("Property viscosity is not in the expected place.")
         sys.exit()
 
@@ -110,8 +110,8 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     sim_visc = float(nominal_density * sim_vel * 1.0 / nominal_Re)
 
     # set velocity
-    tfile['realms'][0]['initial_conditions'][0]['value']['velocity'] = str([sim_vel, 0])
-    tfile['realms'][0]['boundary_conditions'][1]['inflow_user_data']['velocity'] = str([sim_vel, 0])
+    tfile['realms'][0]['initial_conditions'][0]['value']['velocity'] = [float(sim_vel), 0.0]
+    tfile['realms'][0]['boundary_conditions'][1]['inflow_user_data']['velocity'] = [float(sim_vel), 0.0]
 
     # set viscosity
     tfile['realms'][0]['material_properties']['specifications'][1]['value'] = sim_visc
@@ -126,10 +126,10 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     ### Output file
 
-    yaml.dump(tfile, open(run_folder+'/{}/structure_{:d}/freq_{}/{}_freq_{}.yaml'.format(
+    yaml.dump(tfile, open(run_folder+'/{}/structure_{:d}/freq_{:.5f}/{}_freq_{}.yaml'.format(
               af_name, mech_ind, freq, af_name, freq),'w'), default_flow_style=False)
 
-def gen_ffaw3211_cases(freq=[0.50652718 0.69345461 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', template="nalu_inputs/template/airfoil_osc.yaml"):
+def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', template="nalu_inputs/template/airfoil_osc.yaml"):
     """Generate FSI cases for the FFAW3211 airfoil
 
     Args:
@@ -150,5 +150,5 @@ def gen_ffaw3211_cases(freq=[0.50652718 0.69345461 4.08731274], mech_model=['nal
 
 if __name__=="__main__":
 
-    gen_ffaw3211_cases(freq=[0.50652718 0.69345461 4.08731274]) # At natural frequencies run simulations
+    gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274]) # At natural frequencies run simulations
     # gen_ffaw3211_cases(rey=[4.5e6,10.5e6], aoa_range=np.linspace(-20,25,46), run_folder='nalu_runs_2', template="nalu_inputs/template/airfoil_osc.yaml")
