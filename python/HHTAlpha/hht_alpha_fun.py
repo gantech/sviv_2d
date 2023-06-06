@@ -112,7 +112,8 @@ def hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha, dt, Fextfun, t0, t1, lo
     #   M a + C v + K x = Fext
     right_vec_0 = Fextfun(t0, x0, v0) - Cmat @ v0 - Kmat @ x0
 
-    a0 = np.linalg.solve(Mmat, right_vec_0)
+    # a0 = np.linalg.solve(Mmat, right_vec_0)
+    a0 = np.zeros_like(x0) # consistent with nalu-wind implementation.
 
     # Store initial states
     xhist[:, 0] = x0
