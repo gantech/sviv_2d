@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --nodes=1
+#SBATCH --nodes=11
 #SBATCH --time=4:00:00
 #SBATCH --account=sviv
 #SBATCH --job-name=af_smd
@@ -16,6 +16,8 @@ spack load nalu-wind
 line_str=$(printf '%dp' ${SLURM_ARRAY_TASK_ID})
 directory=$(sed -n $line_str list_of_cases)
 
+printf "%s\n" $directory
+
 cd $directory
 
-srun -n 4 naluX -i *.yaml &> log 
+srun -n 406 naluX -i *.yaml &> log 

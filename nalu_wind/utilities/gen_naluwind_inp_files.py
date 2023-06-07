@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/template/chord_3dof.yaml', run_folder='nalu_runs', 
-                 template="nalu_inputs/template/airfoil_osc.yaml", nominal_St=0.16, nominal_visc=1e-5):
+                 template="nalu_inputs/template/airfoil_osc.yaml", nominal_St=0.16, nominal_visc=1e-5, nflow_throughs=160, dtflowthrough=0.01):
     """Generate a nalu input file for simulation of flow past an airfoil
     using k-w-SST turbulence model
 
@@ -22,6 +22,9 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
         template (string): Path to template nalu input file in yaml format
         nominal_St (double): Nominal value of the Strouhal number to use in calculating the excitation freq
         nominal_visc (double): Nominal viscosity for the real airfoil that is scaled to match Reynolds number for simulations
+
+        nflow_throughs - number of flow throughs for the velocity over the simulated airfoil
+        dtflowthrough - fraction of flow through time to use for the time step (varies with inflow velocity)
 
     Returns:
         None
@@ -86,12 +89,13 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     # nominal = desired simulation parameters
     # sim = simulation parameters (1m chord length)
 
+    chord_sim = 1.0 # may not have been fully checked if this changes.
     chord_nominal = mechfile['chord_length']
     
     ## calculate velocity based on Strouhal
     nominal_vel = freq * chord_nominal * np.sin(aoa*np.pi/180) / nominal_St
 
-    sim_vel = float(freq * 1.0 * np.sin(aoa*np.pi/180) / nominal_St)
+    sim_vel = float(freq * chord_sim * np.sin(aoa*np.pi/180) / nominal_St)
 
     if( tfile['realms'][0]['material_properties']['specifications'][0]['name'] == 'density' ):
         nominal_density = float(tfile['realms'][0]['material_properties']['specifications'][0]['value'])
@@ -107,7 +111,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     nominal_Re = nominal_density * nominal_vel * chord_nominal / nominal_visc
 
-    sim_visc = float(nominal_density * sim_vel * 1.0 / nominal_Re)
+    sim_visc = float(nominal_density * sim_vel * chord_sim / nominal_Re)
 
     # set velocity
     tfile['realms'][0]['initial_conditions'][0]['value']['velocity'] = [float(sim_vel), 0.0]
@@ -115,6 +119,13 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     # set viscosity
     tfile['realms'][0]['material_properties']['specifications'][1]['value'] = sim_visc
+
+    ### Set time step information based on velocity.
+
+    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['termination_step_count'] = int(nflow_throughs/dtflowthrough)
+
+    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['time_step'] = float(chord_sim/sim_vel * dtflowthrough)
+
 
     ### More general settings
     tfile['realms'][0]['mesh'] = str(Path(mesh_file).absolute())
