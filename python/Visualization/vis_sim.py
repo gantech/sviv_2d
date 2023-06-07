@@ -103,14 +103,14 @@ plt.close(fig)
 
 fig, axs = plt.subplots(2)
 
-axs[0].plot(time, qhist[:, 0], label='Fx')
-axs[0].plot(time, qhist[:, 1], label='Fy')
+axs[0].plot(time, qhist[:, 0], label='Flap')
+axs[0].plot(time, qhist[:, 1], label='Edge')
 axs[0].set_xlim((time[0], time[-1]))
 axs[0].set_ylabel('Modal Disp')
 
 axs[0].legend()
 
-axs[1].plot(time, qhist[:, 2], label='Moment')
+axs[1].plot(time, qhist[:, 2], label='Torsion')
 axs[1].set_xlim((time[0], time[-1]))
 axs[1].set_ylabel('Model Disp')
 

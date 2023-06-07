@@ -47,13 +47,6 @@ zeta_3dof = np.array([0.48e-2, 0.48e-2, 1e-2])
 #   Output file will contain: mass, stiffness, damping matrices
 out_3dof = 'chord_3dof.yaml'
 
-# Mode Shape Importance Order
-#   Local indices of which mode shapes are most important of the first 3
-#   The more important mode shapes will be better preserved in the final 
-#   3DOF model. The least important mode shapes will need to be altered
-#   so that all modes are orthogonal (by definition)
-mode_ortho_order = [0, 1, 2]
-
 # Load Distribution Definition
 #   load_span - defines the spanwise locations that distributed load is defined at 
 #   load_val  - distributed load value at defined coordinates
