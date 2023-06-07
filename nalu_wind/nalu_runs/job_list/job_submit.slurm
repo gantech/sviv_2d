@@ -20,4 +20,4 @@ printf "%s\n" $directory
 
 cd $directory
 
-srun -n 406 naluX -i *.yaml &> log 
+srun -n 396 naluX -i *.yaml &> log 
