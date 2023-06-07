@@ -45,14 +45,20 @@ def modal_time_series(Mmat, Kmat, Cmat, x0, thist):
     modal_q0 = eigvecs.T @ Mmat @ x0
 
     qhist = np.zeros((x0.shape[0], thist.shape[0]))
+    qdothist = np.zeros((x0.shape[0], thist.shape[0]))
 
     # Evaluate sdof response
     for i in range(x0.shape[0]):
         qhist[i, :] += np.exp(-zeta[i]*omega[i]*thist)*modal_q0[i]*np.cos(omega_d[i]*thist)
+
+        qdothist[i, :] += np.exp(-zeta[i]*omega[i]*thist)*modal_q0[i] \
+                           *(-np.cos(omega_d[i]*thist)*omega[i]*zeta[i] \
+                             -omega_d[i]*np.sin(omega_d[i]*thist) )
     
     xhist = eigvecs @ qhist
+    vhist = eigvecs @ qdothist
 
-    return xhist
+    return xhist,vhist
 
 
 
