@@ -307,7 +307,7 @@ realms:
       physics: surface_force_and_moment
       output_file_name: results/forces.dat
       frequency: 1
-      parameters: [0.0 0]
+      parameters: [0.0, 0]
       target_name: airfoil
 
     output:
