@@ -75,7 +75,7 @@ def hht_alpha_update(xn, vn, an, Mmat, Cmat, Kmat, alpha, tn, dt, Fn, Fnp1,
     return xnp1, vnp1, anp1
 
 
-def hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha, dt, Fextfun, t0, t1, load_scale=1.0, T=np.eye(3)):
+def hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha, dt, Fextfun, t0, t1, load_scale=1.0, T=np.eye(3), a0_pred=False):
     """
     Run HHT-Alpha integration problem
     
@@ -90,6 +90,7 @@ def hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha, dt, Fextfun, t0, t1, lo
         Fextfun - external force function of time
         t0 - initial time
         t1 - final time
+        a0_pred - calculate the acceleration for time 0 flag. nalu-wind implementation does not.
     
     Outputs:
         thist - list of times for the history
@@ -112,8 +113,10 @@ def hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha, dt, Fextfun, t0, t1, lo
     #   M a + C v + K x = Fext
     right_vec_0 = Fextfun(t0, x0, v0) - Cmat @ v0 - Kmat @ x0
 
-    # a0 = np.linalg.solve(Mmat, right_vec_0)
-    a0 = np.zeros_like(x0) # consistent with nalu-wind implementation.
+    if a0_pred:
+        a0 = np.linalg.solve(Mmat, right_vec_0)
+    else:
+        a0 = np.zeros_like(x0) # consistent with nalu-wind implementation.
 
     # Store initial states
     xhist[:, 0] = x0

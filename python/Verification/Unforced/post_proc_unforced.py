@@ -98,7 +98,7 @@ plt.close()
 #########################
 # Analytically calculate the solution with modal analysis.
 
-xhist_a = vutils.modal_time_series(Mmat, Kmat, Cmat, x0, thist)
+xhist_a,vhist_a = vutils.modal_time_series(Mmat, Kmat, Cmat, x0, thist)
 
 
 rms_py_hht = np.sqrt(np.sum((xhist - xhist_a)**2, axis=1) / xhist_a.shape[1])
