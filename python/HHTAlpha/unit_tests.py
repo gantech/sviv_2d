@@ -69,7 +69,7 @@ Fnp1 = np.array([250.0, 350.0, 500.0])
 load_scale = 1.0 # 1 for the tests since not scaled here in naluwind.
 
 tn = 0.0
-dt = 0.01
+dt = 0.05
 alpha = -0.05
 
 xnp1, vnp1, anp1 = hhta.hht_alpha_update(xn, vn, an, M, C, K2, alpha, tn, dt, 

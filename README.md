@@ -99,5 +99,5 @@ find .. -name freq_* | sort -n > list_of_cases
 sbatch job_submit.slurm
 ```
 
-
+Note that in job_submit.slurm, the array of inputs is indexed from 1 to the number of lines in the file job_list.
 
