@@ -61,9 +61,16 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     ### Copy mechanical model details from YAML
 
+    # Chord sizes - simulated and nominal. Setting to be same.
+    chord_sim = mechfile['chord_length'] # simulating true size now.
+    chord_nominal = mechfile['chord_length']
+    
     # Pitch axis translation
+    pitch_trans = np.array(mechfile['displacement'])
+    pitch_trans = chord_sim * pitch_trans
+
     tfile['realms'][0]['mesh_transformation'][0]['motion'][0]['displacement'] = \
-                 mechfile['displacement']
+                 pitch_trans.tolist()
 
     # Angle of Attack
     aoa = float(mechfile['angle'])
@@ -87,11 +94,8 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     ### Set Strouhal and Reynolds Numbers
     # nominal = desired simulation parameters
-    # sim = simulation parameters (1m chord length)
+    # sim = simulation parameters - simulated chord size as real.
 
-    chord_sim = mechfile['chord_length'] # simulating true size now.
-    chord_nominal = mechfile['chord_length']
-    
     ## calculate velocity based on Strouhal
     nominal_vel = freq * chord_nominal * np.sin(aoa*np.pi/180) / nominal_St
 

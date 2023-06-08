@@ -90,7 +90,7 @@ source copy_bd_outs.sh
 
 To generate inputs:
 ```
-cd nalu-wind
+cd nalu_wind
 python utilities/gen_naluwind_inp_files.py
 cd nalu_runs
 mkdir job_list
