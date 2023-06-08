@@ -149,7 +149,7 @@ Kbc = Kmat[6:, 6:]
 # Columns correspond to the 3 directions of loading
 
 Psi = cutils.calc_load_dis(node_coords, quad_coords, load_span, load_val,
-                           node_interest, load_directions, refine = False)
+                           node_interest, load_directions, refine = False)[0]
 
 ###########################################
 ##### Extract Desired Modal Properties from the global model

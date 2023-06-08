@@ -394,12 +394,13 @@ def calc_load_dis(node_coords, quad_coords, load_span, load_val,
     # Scale load distribution at node to 1.0 
 
     span_loc = node_coords[node_interest, 2]
+    span_frac = span_loc / node_coords[-1, 2]
 
-    print('Span location coordinate')
-    print(span_loc)
+    # print('Span location coordinate')
+    # print(span_loc)
 
-    print('Spanwise Fraction:')
-    print(span_loc / node_coords[-1, 2])
+    # print('Spanwise Fraction:')
+    # print(span_frac)
 
     for dir_ind in range(len(load_directions)):
 
@@ -437,7 +438,7 @@ def calc_load_dis(node_coords, quad_coords, load_span, load_val,
 
         Psi[:, dir_ind] = load_vec
 
-    return Psi
+    return Psi,span_loc,span_frac
 
 
 
