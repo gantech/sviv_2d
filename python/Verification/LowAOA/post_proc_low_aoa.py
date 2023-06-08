@@ -72,7 +72,7 @@ ref_file = 'FFA-W3-211_rey05000000.yaml'
 
 initial_aoa_deg = 2 # deg
 chord = 1.0 # m
-uinf = 15.0 # m/s
+uinf = 70.0 # m/s
 rho = 1.225 # kg/m^3
 
 show_nalu = False
@@ -81,7 +81,7 @@ load_scale = 1.0
 print('Need to match load scale to nalu-wind')
 
 t0 = 0.0
-t1 = 20
+t1 = 20*20
 
 reynolds = 5.0e6 
 
