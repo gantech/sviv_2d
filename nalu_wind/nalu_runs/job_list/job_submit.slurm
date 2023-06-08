@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --nodes=11
-#SBATCH --time=4:00:00
+#SBATCH --time=48:00:00
 #SBATCH --account=sviv
 #SBATCH --job-name=af_smd
 #SBATCH --output=out.%x_%j

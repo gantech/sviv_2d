@@ -89,7 +89,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     # nominal = desired simulation parameters
     # sim = simulation parameters (1m chord length)
 
-    chord_sim = 1.0 # may not have been fully checked if this changes.
+    chord_sim = mechfile['chord_length'] # simulating true size now.
     chord_nominal = mechfile['chord_length']
     
     ## calculate velocity based on Strouhal
@@ -154,9 +154,11 @@ def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['n
 
     """
 
+    mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled.exo' 
+
     for fre in freq:
         for mech_ind in range(len(mech_model)):
-            gen_fsi_case('ffaw3211', 'nalu_inputs/grids/ffaw3211_3d.exo', fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St=0.16, nominal_visc=1e-5)
+            gen_fsi_case('ffaw3211', mesh_name, fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St=0.16, nominal_visc=1e-5)
 
 
 if __name__=="__main__":
