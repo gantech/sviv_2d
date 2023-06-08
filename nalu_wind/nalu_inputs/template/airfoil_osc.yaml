@@ -223,7 +223,7 @@ realms:
 
     solution_options:
       name: myOptions
-      turbulence_model: sst
+      turbulence_model: sst_iddes
       projected_timescale_type: momentum_diag_inv #### Use 1/diagA formulation
 
       options:
