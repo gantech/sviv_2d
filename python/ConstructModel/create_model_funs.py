@@ -39,7 +39,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
       mode_indices - modes that represent primary motions of interest 1st of flap,edge,torsion indices
       zeta_3dof - damping factors for the three modes of interest. Taken from IEA 15 MW for default. 
                    Fraction of critical damping.
-      extrude_length - The length that the airfoil is extruded perpendicular to the section for CFD simulations. 
+      extrude_length - The length that the airfoil is extruded perpendicular to the section for CFD simulations. Number of chord lengths
 
     Output: 
       None - Results saved in out_3dof yaml file.
@@ -76,8 +76,8 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
     chord_length = np.interp(span_frac, chord_grid, chord_val)
     # print(chord_length)
 
-    # chord_length / [1 m simulated chord length] / [4 m extruded length]
-    loads_scale = chord_length / extrude_length
+    # Dimensional airfoil with depth of 4 * chord_length
+    loads_scale = 1.0 / (extrude_length * chord_length)
 
     ########
     # Extract Desired Modal Properties from Global

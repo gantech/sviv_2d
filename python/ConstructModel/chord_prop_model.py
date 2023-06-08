@@ -87,7 +87,7 @@ print(angle_attack)
 
 # Depth of 3D simulations of the 2D airfoil. Airfoil is extruded for 4 m to achieve
 # 4x chord length for the simulated airfoil.
-extrude_length = 4 # m
+extrude_length = 4 # chord lengths
 
 
 # print('Setting rotations to zero for initial check')
@@ -122,8 +122,8 @@ print(chord_length)
 
 ######
 
-# chord_length / [1 m simulated chord length] / [4 m extruded length]
-loads_scale = chord_length / extrude_length
+# Dimensional airfoil with depth of 4 * chord_length
+loads_scale = 1.0 / (extrude_length * chord_length)
 
 print('load scaling factor based on chord length: {}'.format(loads_scale))
 
