@@ -50,7 +50,7 @@ def aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho):
     # Aero forces ignoring velocity of airfoil
     lift   = 0.5 * rho * uinf * uinf * cl * chord
     drag   = 0.5 * rho * uinf * uinf * cd * chord
-    moment = 0.5 * rho * uinf * uinf * cm * chord * chord
+    moment = -0.5 * rho * uinf * uinf * cm * chord * chord
 
     loads = np.array([drag, lift, moment])
 
@@ -70,7 +70,7 @@ alpha = 0.0
 ref_file = 'FFA-W3-211_rey05000000.yaml'
 
 
-initial_aoa_deg = 2 # deg
+initial_aoa_deg = 5 # deg
 chord = 1.0 # m
 uinf = 70.0 # m/s
 rho = 1.225 # kg/m^3
