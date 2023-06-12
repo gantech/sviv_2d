@@ -65,16 +65,9 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     chord_sim = mechfile['chord_length'] # simulating true size now.
     chord_nominal = mechfile['chord_length']
     
-    # Pitch axis translation
-    pitch_trans = np.array(mechfile['displacement'])
-    pitch_trans = chord_sim * pitch_trans
-
-    tfile['realms'][0]['mesh_transformation'][0]['motion'][0]['displacement'] = \
-                 pitch_trans.tolist()
 
     # Angle of Attack
     aoa = float(mechfile['angle'])
-    tfile['realms'][0]['mesh_transformation'][1]['motion'][0]['angle'] = aoa
 
     # mass, stiffness, damping, force transform matrices
     tfile['realms'][0]['mesh_motion'][0]['motion'][0]['mass_matrix'] = \
@@ -158,7 +151,8 @@ def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['n
 
     """
 
-    mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled.exo' 
+    # mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled.exo'  # This mesh is improperly rotated B.C.
+    mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled_aoa50.exo' # 50 deg AOA mesh
 
     for fre in freq:
         for mech_ind in range(len(mech_model)):
@@ -167,5 +161,11 @@ def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['n
 
 if __name__=="__main__":
 
-    gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274]) # At natural frequencies run simulations
-    # gen_ffaw3211_cases(rey=[4.5e6,10.5e6], aoa_range=np.linspace(-20,25,46), run_folder='nalu_runs_2', template="nalu_inputs/template/airfoil_osc.yaml")
+    # First two cases for reference while building processing scripts.
+    # gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274]) # At natural frequencies run simulations
+    # At +/- 5% and 10% of natural frequencies
+    # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.723555, 0.75801, 3.6792, 3.8836, 4.2924, 4.4968], run_folder='nalu_runs_2') 
+
+    # Corrected B.C. for AOA rotation.
+    gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801, 3.6792, 3.8836, 4.08731274, 4.2924, 4.4968], run_folder='nalu_runs_3') 
+
