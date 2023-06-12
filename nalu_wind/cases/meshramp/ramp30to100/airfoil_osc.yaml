@@ -137,7 +137,7 @@ linear_solvers:
 realms:
 
   - name: realm_1
-    mesh: /projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled_aoa50.exo
+    mesh: /projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3360_3d.exo
     automatic_decomposition_type: rcb
     use_edges: yes
 
@@ -266,6 +266,23 @@ realms:
             turbulent_ke: 0.7
             specific_dissipation_rate: 0.7
 
+    #Use this to set the mean angle of attack
+    mesh_transformation:
+      #The order of stuff here matters
+      - name: move_to_pitch_axis
+        mesh_parts: [ fluid-HEX ]
+        motion:
+         - type: translation
+           displacement: [-0.3109720214696021, 0.0, 0.0]
+           
+      - name: angle_of_attack
+        mesh_parts: [ fluid-HEX ]
+        motion:
+         - type: rotation
+           angle: 50.0
+           axis: [0.0, 0.0, -1.0]
+           centroid: [0.0, 0.0, 0.0]
+
     #This sets the oscillating angle of attack
     mesh_motion:
       - name: interior
@@ -280,11 +297,11 @@ realms:
            stiffness_matrix : [102418.08215923404, -33471.75212066975, -88169.30343426364, -33471.75212066975, 94702.03257332282, 51824.63741507368, -88169.30343426365, 51824.63741507369, 4765590.7772734575]
            damping_matrix : [243.70772125537488, -46.51565171474964, -32.72689433093248, -46.51565171474965, 239.16181268094945, 62.94049138376673, -32.726894330932474, 62.94049138376673, 3723.699772866018]
            force_transform_matrix : [61.329231681484316, -0.9182350265386212, 0.04766767512259737, -0.827371302033491, 61.727855565983496, -0.06892881104583945, -4.209361470708504, -4.7111524807778755, 60.07582310034999]
-           x_init: [0.0, 0.0, 0.0]
-           loads_scale: 0.7120147186785986 
+           x_init: [0.3, 0.0, 0.175]
+           loads_scale: 0.0 
            alpha: 0.0
-           mesh_transition_start: 90.0
-           mesh_transition_end: 300.0
+           mesh_transition_start: 30.0
+           mesh_transition_end: 100.0
            
            
     post_processing:
@@ -312,8 +329,8 @@ Time_Integrators:
   - StandardTimeIntegrator:
       name: ti_1
       start_time: 0
-      time_step: 6.666666666666667e-3
-      termination_step_count: 10000
+      time_step: 6.666666666666667e-2
+      termination_step_count: 100
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
