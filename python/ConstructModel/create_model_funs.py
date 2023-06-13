@@ -58,7 +58,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
     # Calculate the spanwise position for the node of interest + distributed loads
     
     Psi,span_loc,span_frac = cutils.calc_load_dis(node_coords, quad_coords, 
-                                                  load_grid, load_val,
+                                                  load_grid*node_coords[-1, 2], load_val,
                                                   node_interest, load_directions,
                                                   refine = False)
     

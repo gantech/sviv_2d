@@ -391,6 +391,15 @@ def calc_load_dis(node_coords, quad_coords, load_span, load_val,
         load_val = load_val @ np.ones((1,3))
    
     ###################
+    # Make sure that the load span goes to the length rather than 0,1
+
+    assert False, 'Need to update this to ensure that the grid is not on the wrong scale'
+
+    print('Load Span position and x_trap position at end')
+    print([load_span[-1], x_traps[-1]])
+    
+
+    ###################
     # Scale load distribution at node to 1.0 
 
     span_loc = node_coords[node_interest, 2]
