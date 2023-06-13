@@ -24,7 +24,7 @@ import verify_utils as vutils
 #########################
 # Lookup Aero Forces from a table given conditions
 
-def aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho):
+def aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho, extrudeLength=1):
     """
     Function to lookup aerodynamic loads given reference dictionary
 
@@ -68,17 +68,17 @@ alpha = 0.0
 
 # Reference data for low angles of attack
 ref_file = 'FFA-W3-211_rey05000000.yaml'
-
+model_3dof_yaml = 'chord_3dof.yaml'
 
 initial_aoa_deg = 5 # deg
-chord = 1.0 # m
+chord = 2.8480588747143942 # m
 uinf = 70.0 # m/s
 rho = 1.225 # kg/m^3
 
 show_nalu = False
 
-load_scale = 1.0 
-print('Need to match load scale to nalu-wind')
+extrude_length = 4*chord
+print('Need to match load scale to nalu-wind, and the extrude length with it.')
 
 t0 = 0.0
 t1 = 20*20
@@ -114,6 +114,19 @@ with open(ref_file) as f:
 ref_dict = ref_data[0]['FFA-W3-211']
 
 #########################
+# Load data set for the lift/drag/moment calculations
+
+with open(model_3dof_yaml) as f:
+    model_data = list(yaml.load_all(f, Loader=SafeLoader))
+
+model_dict = model_data[0]
+
+force_transform = np.array(model_dict['force_transform_matrix']).reshape(3,3)
+
+load_scale = model_dict['loads_scale'] 
+
+
+#########################
 # Plot displacement history for quick check
 
 if show_nalu:
@@ -144,10 +157,10 @@ v0 = xdot[0, :] * 0.0
 
 dt = t[1] - t[0]
 
-Fextfun = lambda t,x,v : aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho)
+Fextfun = lambda t,x,v : aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho, extrudeLength=extrude_length)
 
 thist, xhist, vhist, ahist = hht.hht_alpha_integrate(x0, v0, Mmat, Cmat, Kmat, alpha,
-                                                     dt, Fextfun, t0, t1, load_scale=load_scale)
+                                                     dt, Fextfun, t0, t1, load_scale=load_scale, T=force_transform)
 
 #########################
 # Plot displacement history for quick check
