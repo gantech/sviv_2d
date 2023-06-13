@@ -101,3 +101,10 @@ sbatch job_submit.slurm
 
 Note that in job_submit.slurm, the array of inputs is indexed from 1 to the number of lines in the file job_list.
 
+### Verification of Implementation Details
+
+The mesh ramp can be manually checked with the runs in the folder of 'nalu_wind/cases/meshramp/'.
+
+The time ramp can be manually checked with the runs in the folder 'nalu_wind/cases/timeramp/' plus the python script TO INSERT HERE that compares the forces.dat (unscaled) against the nc file (scaled).
+
+Note that these simulations are not intended to have realistic CFD parameters and are just to check that the ramping appears to be working correctly not that the forces are correct.
