@@ -202,6 +202,35 @@ def construct_IEA15MW_chord(bd_yaml, out_3dof, angle_attack, node_interest=7):
                    pitch_axis_grid, pitch_axis_val,
                    chord_grid, chord_val)
 
+def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
+    """
+    Construct a 3 DOF model of a beam with a constant rectangular cross section.
+    
+    This function defines inputs to construct_3dof for the specific turbine. 
+    See that function for input documentation. 
+    """
+
+    # chord calculation grid.
+    chord_grid = [0.0, 1.0]    
+    chord_val  = [2.0, 2.0]
+
+    # Load distribution grid    
+    load_grid = np.array(chord_grid)
+    load_val  = np.array(chord_val)
+
+    # Pitch axis offset grid
+    pitch_axis_grid = [0.0, 1.0]     
+    pitch_axis_val  = [0.0, 0.0]
+
+    twist_grid = np.array([0.0, 1.0])
+    twist_val = np.array([0.0, 0.0])
+
+    construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
+                   load_grid, load_val, 
+                   twist_grid, twist_val,
+                   pitch_axis_grid, pitch_axis_val,
+                   chord_grid, chord_val)
+
 
 if __name__=="__main__":
 
@@ -210,5 +239,8 @@ if __name__=="__main__":
     construct_IEA15MW_chord(bd_yaml, 'new_chord_3dof.yaml', 50, node_interest=7)
 
 
+    # bd_rect = '../bd_driver_rect.BD.sum.yaml'
+    # construct_rect(bd_rect, 'rect_3dof', 0.0, node_interest=7)
 
+    construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa5_3dof.yaml', 5.0, node_interest=7)
 
