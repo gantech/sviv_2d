@@ -242,4 +242,5 @@ if __name__=="__main__":
     # bd_rect = '../bd_driver_rect.BD.sum.yaml'
     # construct_rect(bd_rect, 'rect_3dof', 0.0, node_interest=7)
 
+    construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa5_3dof.yaml', 5.0, node_interest=7)
 

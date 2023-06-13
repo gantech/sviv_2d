@@ -68,29 +68,25 @@ alpha = 0.0
 
 # Reference data for low angles of attack
 ref_file = 'FFA-W3-211_rey05000000.yaml'
-model_3dof_yaml = 'chord_3dof.yaml'
+model_3dof_yaml = 'IEA15_aoa5_3dof.yaml'
 
-initial_aoa_deg = 5 # deg
-chord = 2.8480588747143942 # m
 uinf = 70.0 # m/s
 rho = 1.225 # kg/m^3
 
 show_nalu = False
 
-extrude_length = 4*chord
-print('Need to match load scale to nalu-wind, and the extrude length with it.')
+extrude_multiple = 4.0 # number of chord lengths multiplied later.
 
 t0 = 0.0
 t1 = 20*20
 
 reynolds = 5.0e6 
 
-#########################
-# Work out what the nalu-wind inputs should be to match re
 
-viscosity = rho * uinf * chord / reynolds
+# These parameters cannot be set manually. They need to be updated in the 3DOF model, so are read from that output.
+# initial_aoa_deg = 5 # deg
+# chord = 2.8480588747143942 # m
 
-print('Input Viscosity should be : {}'.format(viscosity))
 
 
 #########################
@@ -121,10 +117,21 @@ with open(model_3dof_yaml) as f:
 
 model_dict = model_data[0]
 
+
+Mmat = np.array(model_dict['mass_matrix']).reshape(3,3)
+Kmat = np.array(model_dict['stiffness_matrix']).reshape(3,3)
+Cmat = np.array(model_dict['damping_matrix']).reshape(3,3)
+
 force_transform = np.array(model_dict['force_transform_matrix']).reshape(3,3)
 
 load_scale = model_dict['loads_scale'] 
 
+chord = model_dict['chord_length']
+
+extrude_length = extrude_multiple*chord
+
+initial_aoa_deg = model_dict['angle']
+print('Initial Angle of Attack: ' + str(initial_aoa_deg) + ' [deg]')
 
 #########################
 # Plot displacement history for quick check
@@ -144,10 +151,6 @@ if show_nalu:
 
 #########################
 # Load Parameters to verify
-
-Mmat = np.array(df['mass_matrix'][:])
-Kmat = np.array(df['stiffness_matrix'][:])
-Cmat = np.array(df['damping_matrix'][:])
 
 x0 = x[0, :] * 0.0
 v0 = xdot[0, :] * 0.0
@@ -187,3 +190,9 @@ plt.close()
 # 
 # print('RMS Diff for NALU v. python  HHT Alpha: ' + str(rms_hht_diff.tolist()))
 
+#########################
+# Work out what the nalu-wind inputs should be to match re
+
+viscosity = rho * uinf * chord / reynolds
+
+print('Input Viscosity should be : {}'.format(viscosity))
