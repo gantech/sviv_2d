@@ -62,18 +62,17 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
                                                   node_interest, load_directions,
                                                   refine = False)
     
-
     ########
     # Interpolate values to span location
 
-    initial_twist = np.interp(span_frac, twist_grid, twist_val)
+    initial_twist = np.interp(span_frac, twist_grid, twist_val, left=np.nan, right=np.nan)
 
     # convert initial twist to degrees
     initial_twist = initial_twist * 180 / np.pi
 
-    pitch_axis = np.interp(span_frac, pitch_axis_grid, pitch_axis_val)
+    pitch_axis = np.interp(span_frac, pitch_axis_grid, pitch_axis_val, left=np.nan, right=np.nan)
 
-    chord_length = np.interp(span_frac, chord_grid, chord_val)
+    chord_length = np.interp(span_frac, chord_grid, chord_val, left=np.nan, right=np.nan)
     # print(chord_length)
 
     # Dimensional airfoil with depth of 4 * chord_length

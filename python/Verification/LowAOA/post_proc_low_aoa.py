@@ -43,9 +43,9 @@ def aero_lookup(ref_dict, x, v, initial_aoa_deg, chord, uinf, rho, extrudeLength
 
     aoa = -x[-1]*180/np.pi + initial_aoa_deg
 
-    cl = np.interp(aoa, ref_dict['aoa'], ref_dict['cl'])
-    cd = np.interp(aoa, ref_dict['aoa'], ref_dict['cd'])
-    cm = np.interp(aoa, ref_dict['aoa'], ref_dict['cm'])
+    cl = np.interp(aoa, ref_dict['aoa'], ref_dict['cl'], left=np.nan, right=np.nan)
+    cd = np.interp(aoa, ref_dict['aoa'], ref_dict['cd'], left=np.nan, right=np.nan)
+    cm = np.interp(aoa, ref_dict['aoa'], ref_dict['cm'], left=np.nan, right=np.nan)
 
     # Aero forces ignoring velocity of airfoil
     lift   = 0.5 * rho * uinf * uinf * cl * chord
