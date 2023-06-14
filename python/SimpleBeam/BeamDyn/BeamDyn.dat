@@ -1,0 +1,211 @@
+---------	BEAMDYN	with	OpenFAST	INPUT	FILE	-------------------------------------------																																																																																																															
+Generated	with	AeroElasticSE	FAST	driver																																																																																																																	
+----------------------	SIMULATION	CONTROL	--------------------------------------																																																																																																																		
+FALSE	Echo	-	Echo	input	data	to	<RootName>.ech	(flag)																																																																																																													
+FALSE	QuasiStaticInit	-	Use	quasistatic	pre-conditioning	with	centripetal	accelerations	in	initialization	(flag)	[dynamic	solve	only]																																																																																																							
+0	rhoinf	-	Numerical	damping	parameter	for	generalized-alpha	integrator																																																																																																													
+2	quadrature	-	Quadrature	method:	1=Gaussian;	2=Trapezoidal	(switch)																																																																																																														
+10	refine	-	Refinement	factor	for	trapezoidal	quadrature	(-).	DEFAULT	=	1	[used	only	when	quadrature=2]																																																																																																						
+1	n_fact	-	Factorization	frequency	(-).	DEFAULT	=	5																																																																																																													
+DEFAULT	DTBeam	-	Time	step	size	(s).																																																																																																															
+50	load_retries	-	Number	of	factored	load	retries	before	quitting	the	aimulation																																																																																																										
+1000	NRMax	-	Max	number	of	iterations	in	Newton-Ralphson	algorithm	(-).	DEFAULT	=	10																																																																																																								
+1.0D-5	stop_tol	-	Tolerance	for	stopping	criterion	(-)																																																																																																														
+DEFAULT	tngt_stf_fd	-	Flag	to	use	finite	differenced	tangent	stiffness	matrix	(-)																																																																																																										
+DEFAULT	tngt_stf_comp	-	Flag	to	compare	analytical	finite	differenced	tangent	stiffness	matrix	(-)																																																																																																									
+DEFAULT	tngt_stf_pert	-	perturbation	size	for	finite	differencing	(-)																																																																																																													
+DEFAULT	tngt_stf_difftol	-	Maximum	allowable	relative	difference	between	analytical	and	fd	tangent	stiffness	(-)																																																																																																								
+TRUE	RotStates	-	Orient	states	in	the	rotating	frame	during	linearization?	(flag)	[used	only	when	linearizing]																																																																																																						
+----------------------	GEOMETRY	PARAMETER	--------------------------------------																																																																																																																		
+1	member_total	-	Total	number	of	members	(-)																																																																																																														
+50	kp_total	-	Total	number	of	key	points	(-)	[must	be	at	least	3]																																																																																																								
+1	50	-	Member	number;	Number	of	key	points	in	this	member																																																																																																										
+	kp_xr	kp_yr	kp_zr	initial_twist																																																																																																																	
+	(m)	(m)	(m)	(deg)																																																																																																																	
+	0.0000E+00	0.0000E+00	0.0000E+00	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.0408E+00	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.0816E+00	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.1224E+00	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.1633E+00	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.0204E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.2245E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.4286E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.6327E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.8367E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.0408E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.2449E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.4490E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.6531E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	2.8571E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	3.0612E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	3.2653E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	3.4694E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	3.6735E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	3.8776E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.0816E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.2857E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.4898E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.6939E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	4.8980E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	5.1020E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	5.3061E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	5.5102E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	5.7143E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	5.9184E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.1224E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.3265E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.5306E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.7347E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	6.9388E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	7.1429E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	7.3469E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	7.5510E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	7.7551E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	7.9592E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.1633E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.3673E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.5714E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.7755E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	8.9796E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	9.1837E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	9.3878E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	9.5918E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	9.7959E+01	0.0000E+00																																																																																																																	
+	0.0000E+00	0.0000E+00	1.0000E+02	0.0000E+00																																																																																																																	
+----------------------	MESH	PARAMETER	------------------------------------------																																																																																																																		
+8	order_elem	-	Order	of	interpolation	(basis)	function	(-)																																																																																																													
+----------------------	MATERIAL	PARAMETER	--------------------------------------																																																																																																																		
+StiffCarbon_BeamDyn_Blade.dat	BldFile	-	Name	of	file	containing	properties	for	blade	(quoted	string)																																																																																																										
+----------------------	PITCH	ACTUATOR	PARAMETERS	-------------------------------																																																																																																																	
+FALSE	UsePitchAct	-	Whether	a	pitch	actuator	should	be	used	(flag)																																																																																																											
+200	PitchJ	-	Pitch	actuator	inertia	(kg-m^2)	[used	only	when	UsePitchAct	is	true]																																																																																																									
+20000000	PitchK	-	Pitch	actuator	stiffness	(kg-m^2/s^2)	[used	only	when	UsePitchAct	is	true]																																																																																																									
+500000	PitchC	-	Pitch	actuator	damping	(kg-m^2/s)	[used	only	when	UsePitchAct	is	true]																																																																																																									
+----------------------	OUTPUTS	-------------------------------------------------																																																																																																																			
+TRUE	SumPrint	-	Print	summary	data	to	<RootName>.sum	(flag)																																																																																																													
+ES10.3E2	OutFmt	-	Format	used	for	text	tabular	output,	excluding	the	time	channel.																																																																																																									
+9	NNodeOuts	-	Number	of	nodes	to	output	to	file	[0	-	9]	(-)																																																																																																								
+1,	2,	3,	4,	5,	6,	7,	8,	9	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	OutNd	-	Nodes	whose	values	will	be	output	(-)	
+	OutList	-	The	next	line(s)	contains	a	list	of	output	parameters.	See	OutListParameters.xlsx	for	a	listing	of	available	output	channels,	(-)																																																																																																
+N1Fxl																																																																																																																					
+N1Fyl																																																																																																																					
+N1Fzl																																																																																																																					
+N1Mxl																																																																																																																					
+N1Myl																																																																																																																					
+N1Mzl																																																																																																																					
+N1RDxr																																																																																																																					
+N1RDyr																																																																																																																					
+N1RDzr																																																																																																																					
+N1TDxr																																																																																																																					
+N1TDyr																																																																																																																					
+N1TDzr																																																																																																																					
+N2Fxl																																																																																																																					
+N2Fyl																																																																																																																					
+N2Fzl																																																																																																																					
+N2Mxl																																																																																																																					
+N2Myl																																																																																																																					
+N2Mzl																																																																																																																					
+N2RDxr																																																																																																																					
+N2RDyr																																																																																																																					
+N2RDzr																																																																																																																					
+N2TDxr																																																																																																																					
+N2TDyr																																																																																																																					
+N2TDzr																																																																																																																					
+N3Fxl																																																																																																																					
+N3Fyl																																																																																																																					
+N3Fzl																																																																																																																					
+N3Mxl																																																																																																																					
+N3Myl																																																																																																																					
+N3Mzl																																																																																																																					
+N3RDxr																																																																																																																					
+N3RDyr																																																																																																																					
+N3RDzr																																																																																																																					
+N3TDxr																																																																																																																					
+N3TDyr																																																																																																																					
+N3TDzr																																																																																																																					
+N4Fxl																																																																																																																					
+N4Fyl																																																																																																																					
+N4Fzl																																																																																																																					
+N4Mxl																																																																																																																					
+N4Myl																																																																																																																					
+N4Mzl																																																																																																																					
+N4RDxr																																																																																																																					
+N4RDyr																																																																																																																					
+N4RDzr																																																																																																																					
+N4TDxr																																																																																																																					
+N4TDyr																																																																																																																					
+N4TDzr																																																																																																																					
+N5Fxl																																																																																																																					
+N5Fyl																																																																																																																					
+N5Fzl																																																																																																																					
+N5Mxl																																																																																																																					
+N5Myl																																																																																																																					
+N5Mzl																																																																																																																					
+N5RDxr																																																																																																																					
+N5RDyr																																																																																																																					
+N5RDzr																																																																																																																					
+N5TDxr																																																																																																																					
+N5TDyr																																																																																																																					
+N5TDzr																																																																																																																					
+N6Fxl																																																																																																																					
+N6Fyl																																																																																																																					
+N6Fzl																																																																																																																					
+N6Mxl																																																																																																																					
+N6Myl																																																																																																																					
+N6Mzl																																																																																																																					
+N6RDxr																																																																																																																					
+N6RDyr																																																																																																																					
+N6RDzr																																																																																																																					
+N6TDxr																																																																																																																					
+N6TDyr																																																																																																																					
+N6TDzr																																																																																																																					
+N7Fxl																																																																																																																					
+N7Fyl																																																																																																																					
+N7Fzl																																																																																																																					
+N7Mxl																																																																																																																					
+N7Myl																																																																																																																					
+N7Mzl																																																																																																																					
+N7RDxr																																																																																																																					
+N7RDyr																																																																																																																					
+N7RDzr																																																																																																																					
+N7TDxr																																																																																																																					
+N7TDyr																																																																																																																					
+N7TDzr																																																																																																																					
+N8Fxl																																																																																																																					
+N8Fyl																																																																																																																					
+N8Fzl																																																																																																																					
+N8Mxl																																																																																																																					
+N8Myl																																																																																																																					
+N8Mzl																																																																																																																					
+N8RDxr																																																																																																																					
+N8RDyr																																																																																																																					
+N8RDzr																																																																																																																					
+N8TDxr																																																																																																																					
+N8TDyr																																																																																																																					
+N8TDzr																																																																																																																					
+N9Fxl																																																																																																																					
+N9Fyl																																																																																																																					
+N9Fzl																																																																																																																					
+N9Mxl																																																																																																																					
+N9Myl																																																																																																																					
+N9Mzl																																																																																																																					
+N9RDxr																																																																																																																					
+N9RDyr																																																																																																																					
+N9RDzr																																																																																																																					
+N9TDxr																																																																																																																					
+N9TDyr																																																																																																																					
+N9TDzr																																																																																																																					
+RootFxr																																																																																																																					
+RootFyr																																																																																																																					
+RootFzr																																																																																																																					
+RootMxr																																																																																																																					
+RootMyr																																																																																																																					
+RootMzr																																																																																																																					
+TipRDxr																																																																																																																					
+TipRDyr																																																																																																																					
+TipRDzr																																																																																																																					
+TipTDxr																																																																																																																					
+TipTDyr																																																																																																																					
+TipTDzr																																																																																																																					
+END	of	input	file	(the	word	END	must	appear	in	the	first	3	columns	of	this	last	OutList	line)---------------------------------------------------------------------------------------																																																																																																			
+																																																																																																																					

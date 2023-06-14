@@ -68,6 +68,10 @@ plt.plot(time, x[:, 2]*180/np.pi, label='theta [deg]')
 plt.xlim((time[0], time[-1]))
 plt.ylabel('Displacement')
 
+
+if np.any(np.isnan(x)):
+    plt.ylim((-30, 30))
+
 plt.legend()
 
 plt.savefig('xhist.png')
@@ -85,12 +89,17 @@ axs[0].plot(time, forces[:, 1], label='Fy')
 axs[0].set_xlim((time[0], time[-1]))
 axs[0].set_ylabel('Force')
 
+if np.any(np.isnan(x)):
+    axs[0].set_ylim((-1e6, 1e6))
+
 axs[0].legend()
 
 axs[1].plot(time, forces[:, 2], label='Moment')
 axs[1].set_xlim((time[0], time[-1]))
 axs[1].set_ylabel('Moment')
 
+if np.any(np.isnan(x)):
+    axs[1].set_ylim((-1e6, 1e6))
 
 axs[1].legend()
 

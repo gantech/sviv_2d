@@ -480,6 +480,30 @@ def plot_nodal_field(nodes, vals, filename, title='', ylabel='', xlabel='Span Po
 
     return
 
+def interpolate_nodal_field(nodes, vals, Npoints=1000):
+    """
+    Construct a plot of some nodal value over
+    the length of the blade
+
+    inputs:
+      nodes - nodal coordinates
+      vals - values of the field of interest at nodes
+      filename - filename to save output as
+      title - title to put on plot
+    """
+    
+    polys = construct_shape_funs(nodes)
+
+    x_vals = np.linspace(nodes[0], nodes[-1], Npoints)
+
+    y_vals = np.zeros_like(x_vals)
+
+    # Evaluate interpolating polynomials
+    for i in range(nodes.shape[0]):
+        y_vals += polys[i](x_vals) * vals[i]
+
+    return x_vals, y_vals
+
 def transform_mats(Mlocal, Klocal, Clocal, TlocalCFD, initial_twist, angle_attack):
     """
     Rotates Mlocal, Klocal, Clocal to the coordinate system for CFD

@@ -12,6 +12,8 @@ Goal - plot the following together:
 import numpy as np
 import yaml
 
+import matplotlib.pyplot as plt
+
 import sys
 sys.path.append('..')
 import construct_utils as cutils
@@ -61,10 +63,84 @@ x_traps, int_mat_trap = cutils.construct_trap_int_mat(node_coords, quad_coords)
 
 quad_load = np.interp(x_traps, load_span*x_traps[-1], load_val, left=np.nan, right=np.nan)
 
-print(x_traps)
-print(quad_load)
+# print(x_traps)
+# print(quad_load)
+
+# Scale quad load to get a reasonable load distribution magnitude
+quad_load = 100*quad_load
+
+#########################################
+# Nodal forces from the distributed load
+
+# Nodal load in only one direction
+F_dir = int_mat_trap @ quad_load
+
+dof_vec = np.zeros(6)
+dof_vec[0] = 1.0 # apply the load in direction 0
+
+Ftot = np.kron(F_dir, dof_vec)
+Fbc = Ftot[6:]
+
+# print(Fbc)
+
+x_phys = np.linalg.solve(Kbc, Fbc)
 
 
+#########################################
+# Project the displacement onto the mode shape
+
+x_mode_proj = eigvecs[:, 0]*(eigvecs[:, 0] @ (Mbc @ x_phys))
+
+#########################################
+# Project Load onto modes and then calculate the modal displacement
+
+modal_load = eigvecs[:, 0] @ Fbc
+modal_amp = modal_load / eigvals[0]
+
+x_modal_force = modal_amp * eigvecs[:, 0]
 
 
+#########################################
+# Plot the modal displacements for the three cases using polynomial interp
 
+nodes = node_coords[:, 2]
+
+# Physical displacements
+nodal_phys = np.hstack(([0], x_phys[0::6]))
+span_pos,disp_phys = cutils.interpolate_nodal_field(nodes, nodal_phys)
+
+# Projected onto the first mode
+nodal_proj = np.hstack(([0], x_mode_proj[0::6]))
+span_pos,disp_proj = cutils.interpolate_nodal_field(nodes, nodal_proj)
+
+# Modal Load 
+nodal_modal_f = np.hstack(([0], x_modal_force[0::6]))
+span_pos,disp_modal_f = cutils.interpolate_nodal_field(nodes, nodal_modal_f)
+
+#### Plotting
+plt.plot(span_pos, disp_phys, label='Static Displacement')
+#plt.plot(nodes, nodal_phys, 'o', label='Static Displacement')
+
+plt.plot(span_pos, disp_proj, '--', label='Projected onto Mode')
+
+plt.plot(span_pos, disp_modal_f, ':', label='From Modal Force')
+
+plt.xlabel('Span Position')
+plt.ylabel('Displacement [m]')
+
+plt.legend()
+
+plt.savefig('StaticModeDisp.png')
+
+plt.close()
+
+#########################################
+
+print('Nodal Location:')
+print(nodes[node_interest])
+
+print('Tip Displacement / Nodal Displacement [Mode Shape]')
+print(nodal_proj[-1] / nodal_proj[node_interest])
+
+print('\nTip Displacement / Nodal Displacement [Mode Shape]')
+print(nodal_proj[node_interest] / nodal_proj[-1])
