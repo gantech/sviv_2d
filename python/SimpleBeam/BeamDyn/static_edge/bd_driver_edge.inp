@@ -39,7 +39,7 @@ T             GlbRotBladeT0 - Reference orientation for BeamDyn calculations is 
           1   NumPointLoads - Number of point loads along blade
 Non-dim blade-span eta   Fx          Fy            Fz           Mx           My           Mz
 (-)                      (N)         (N)           (N)          (N-m)        (N-m)        (N-m)
-1.0                    10000.0        0.0           0.0          0.0           0.0          0.0
+1.0                      0.0       10000.0        0.0           0.0          0.0           0.0   
 ---------------------- PRIMARY INPUT FILE --------------------------------------
 "../BeamDynStatic.dat"    InputFile - Name of the primary BeamDyn input file
 ----- Output Settings -------------------------------------------------------------------
