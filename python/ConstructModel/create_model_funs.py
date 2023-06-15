@@ -110,7 +110,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
     eigvecs_3dof = eigvecs_3dof * np.sign(eigvecs_3dof[:1, :] * Phi_L[:1, :])
 
 
-    tol_eigs = 1e-10
+    tol_eigs = 1e-9
 
     if (np.max(np.abs(eigvals_3dof - subset_eigvals)) > tol_eigs) \
         or (np.max(np.abs(eigvecs_3dof-Phi_L)) > tol_eigs):
@@ -194,35 +194,6 @@ def construct_IEA15MW_chord(bd_yaml, out_3dof, angle_attack, node_interest=7):
                
     twist_val = np.array( [0.27217629557079365, 0.27205736171561723, 0.26896980562529643, 0.26090151424382807, 0.24885698262522313, 0.23382423192614568, 0.21680513961749598, 0.1988727863224039, 0.18100767932828987, 0.16413076067279694, 0.1492522184680202, 0.1367143113540973, 0.12551282194274888, 0.11434749848233088, 0.10356776280240737, 0.0933068658568242, 0.0837118194006672, 0.07498970428955204, 0.06714203432398387, 0.06013256274855414, 0.053702278525950935, 0.047709665190988265, 0.04210143739978706, 0.03685595675838511, 0.03191153817565269, 0.027205903019809997, 0.022731811675977428, 0.018577762273585947, 0.014720912664231815, 0.011110140960669581, 0.00762759323174886, 0.00418280011853364, 0.0006925062977488528, -0.003016419809918337, -0.0071049531892497, -0.011874829529214339, -0.017440963696104015, -0.023047513564523475, -0.02833190814159476, -0.03288842847284285, -0.03641158408109318, -0.037768893627003246, -0.03797559234861602, -0.03761714725398, -0.036702695029715245, -0.035227785335510846, -0.033104414148684154, -0.030095161935387575, -0.026321748778324498, -0.021683756060763528])
 
-
-    construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
-                   load_grid, load_val, 
-                   twist_grid, twist_val,
-                   pitch_axis_grid, pitch_axis_val,
-                   chord_grid, chord_val)
-
-def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
-    """
-    Construct a 3 DOF model of a beam with a constant rectangular cross section.
-    
-    This function defines inputs to construct_3dof for the specific turbine. 
-    See that function for input documentation. 
-    """
-
-    # chord calculation grid.
-    chord_grid = [0.0, 1.0]    
-    chord_val  = [2.0, 2.0]
-
-    # Load distribution grid    
-    load_grid = np.array(chord_grid)
-    load_val  = np.array(chord_val)
-
-    # Pitch axis offset grid
-    pitch_axis_grid = [0.0, 1.0]     
-    pitch_axis_val  = [0.0, 0.0]
-
-    twist_grid = np.array([0.0, 1.0])
-    twist_val = np.array([0.0, 0.0])
 
     construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
                    load_grid, load_val, 

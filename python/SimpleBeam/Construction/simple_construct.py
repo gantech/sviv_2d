@@ -37,7 +37,7 @@ def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
                    twist_grid, twist_val,
                    pitch_axis_grid, pitch_axis_val,
                    chord_grid, chord_val,
-                   mode_indices=[0,1,5])
+                   mode_indices=[0,1,3])
 
 
 
@@ -45,7 +45,7 @@ if __name__=="__main__":
 
     bd_yaml = '../BeamDyn/bd_simple_driver.BD.sum.yaml'
 
-    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=6)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=4)
 
 
     Mmat, Kmat, node_coords, quad_coords = cutils.load_M_K_nodes(bd_yaml)
