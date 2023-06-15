@@ -45,7 +45,7 @@ if __name__=="__main__":
 
     bd_yaml = '../BeamDyn/bd_simple_driver.BD.sum.yaml'
 
-    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=7)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=6)
 
 
     Mmat, Kmat, node_coords, quad_coords = cutils.load_M_K_nodes(bd_yaml)
@@ -54,8 +54,8 @@ if __name__=="__main__":
 
     eigvals,eigvecs = cutils.modal_analysis(Kbc, Mbc)
 
-    # print('Mode shapes - at tip - verifies the mode indices for flap,edge,twist')
-    # print(eigvecs[-6:, :6])
+    print('Mode shapes - at tip - verifies the mode indices for flap,edge,twist')
+    print(eigvecs[-6:, :14])
 
     print('\nFrequencies [Hz]')
     print(np.sqrt(eigvals) / 2/ np.pi)

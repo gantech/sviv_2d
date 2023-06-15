@@ -73,7 +73,7 @@ TRUE	RotStates	-	Orient	states	in	the	rotating	frame	during	linearization?	(flag
 	0.0000E+00	0.0000E+00	9.7959E+01	0.0000E+00																																																																																																																	
 	0.0000E+00	0.0000E+00	1.0000E+02	0.0000E+00																																																																																																																	
 ----------------------	MESH	PARAMETER	------------------------------------------																																																																																																																		
-10	order_elem	-	Order	of	interpolation	(basis)	function	(-)																																																																																																													
+6	order_elem	-	Order	of	interpolation	(basis)	function	(-)																																																																																																													
 ----------------------	MATERIAL	PARAMETER	--------------------------------------																																																																																																																		
 StiffCarbon_BeamDyn_Blade.dat	BldFile	-	Name	of	file	containing	properties	for	blade	(quoted	string)																																																																																																										
 ----------------------	PITCH	ACTUATOR	PARAMETERS	-------------------------------																																																																																																																	
