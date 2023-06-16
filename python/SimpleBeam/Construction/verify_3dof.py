@@ -12,11 +12,11 @@ from scipy.linalg import eigh
 ############################
 # User Inputs
 
-# print('\nUniform Load Distribution:')
-# yamlfile = 'SimpleBeam_3DOF_AOA5.yaml'
+print('\nUniform Load Distribution:')
+yamlfile = 'SimpleBeam_3DOF_AOA5.yaml'
 
-print('\nTriangle Load Distribution:')
-yamlfile = 'SimpleBeam_3DOF_AOA5_triangle.yaml'
+# print('\nTriangle Load Distribution:')
+# yamlfile = 'SimpleBeam_3DOF_AOA5_triangle.yaml'
 
 # print('\nRoot Triangle Load Distribution:')
 # yamlfile = 'SimpleBeam_3DOF_AOA5_root_triangle.yaml'

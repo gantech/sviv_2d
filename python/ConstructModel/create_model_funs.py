@@ -214,3 +214,4 @@ if __name__=="__main__":
 
     construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa5_3dof.yaml', 5.0, node_interest=7)
 
+    construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa0_3dof.yaml', 0.0, node_interest=7)
