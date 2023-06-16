@@ -285,6 +285,8 @@ realms:
            alpha: 0.0
            mesh_transition_start: 90.0
            mesh_transition_end: 300.0
+           load_transition_start: 0.2
+           load_transition_end: 0.8
            
            
     post_processing:
