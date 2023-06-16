@@ -49,8 +49,9 @@ if __name__=="__main__":
     load_grid = np.array([0.0, 1.0])
     load_val  = np.array([0.0, 1.0])
     construct_rect(bd_yaml, 'SimpleBeam_3DOF_AOA5_triangle.yaml', 5.0, node_interest=4, load_grid=load_grid, load_val=load_val)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF_triangle.yaml', 0.0, node_interest=4, load_grid=load_grid, load_val=load_val)
 
-    # Triangle Load distribution case
+    # Triangle Load distribution case, root is high point
     load_grid = np.array([0.0, 1.0])
     load_val  = np.array([1.0, 0.0])
     construct_rect(bd_yaml, 'SimpleBeam_3DOF_AOA5_root_triangle.yaml', 5.0, node_interest=4, load_grid=load_grid, load_val=load_val)
