@@ -25,7 +25,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
       bd_yaml - BeamDyn summary file from a dynamic analysis to get M, K matrices
       node_interest - node of interest 0 is the root. Indices [0,10] for 10th order elem
       out_3dof - filename for the yaml output of the 3 DOF model
-      angle_attack - angle of attack for the final blade and model (transform to CFD coords)
+      angle_attack - angle of attack for the final blade and model (transform to CFD coords) [deg]
       load_grid - grid of points for load distribution. Loads in one direction get scaled
                    across the blade, but only for loads in that direction. Fraction of span.
       load_val - values of load distribution at grid
