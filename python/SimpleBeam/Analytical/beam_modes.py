@@ -58,6 +58,16 @@ def unif_modal_tors_loading(L, rotJ, rho):
 
     return val
 
+def triangle_modal_tors_loading(L, rotJ, rho):
+    """
+    Calculates the modal loading for the torsion mode
+    Applies a triangular load proportional to the spanwise position
+    """
+    
+    val = 4 * L**2 / (np.pi**2) * np.sqrt(2 / L / rotJ / rho)
+
+    return val
+
 def torsion_freq(inertia, stiffness, L):
     """
     Calculate the torsion frequency of the first torsion mode
@@ -65,9 +75,9 @@ def torsion_freq(inertia, stiffness, L):
 
     omega = 0.5 * np.pi/ L * np.sqrt(stiffness / inertia)
 
-    print('Torsional Inputs')
-    print('stiffness: {}'.format(stiffness))
-    print('inertia: {}'.format(inertia))
+    # print('Torsional Inputs')
+    # print('stiffness: {}'.format(stiffness))
+    # print('inertia: {}'.format(inertia))
 
     return omega
 
@@ -181,7 +191,7 @@ if __name__=="__main__":
     xplot = np.linspace(0, L, 200) 
     phi_norm = mass_norm_tors_modes(xplot, L, rotJ, rho)
     
-    integral = np.trapz(phi_norm**2 * rotJ*density, x=xplot)
+    integral = np.trapz(phi_norm**2 * rotJ*rho, x=xplot)
     print('Mass norm check of analytical torsion modes (should be 1): {}'.format(integral))
 
     #########
@@ -241,3 +251,12 @@ if __name__=="__main__":
     print('Analytical modal loading: {}'.format(force_analytic))
 
     print('\n\nThese outputs miss some coordinate changes that are automatically for even 0 aoa for cfd v. beamdyn coordinates.')
+
+
+    # Verify the twist force transformation entry for the triangular load
+    triang_load = triangle_modal_tors_loading(L, rotJ, rho) / span_pos # with 1 at spanwise position
+    phi_twist_n = mass_norm_tors_modes(span_frac*L, L, rotJ, rho)
+
+    print('\nTwist Force Transform Matrix Entry (triangle load proportional to z): {}'.format(triang_load / phi_twist_n ))
+    
+
