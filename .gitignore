@@ -12,3 +12,16 @@ __pycache__/
 # BeamDyn Files
 *.BD.ech
 *.sum.yaml
+
+# BeamDyn Linear Runs
+OpenFAST/BeamDyn/linear_regime/flap
+OpenFAST/BeamDyn/linear_regime/edge
+OpenFAST/BeamDyn/linear_regime/twist
+
+# Nalu Wind runs
+nalu_wind/nalu_runs*/*
+*log
+*.nc
+*.e.*
+out.*
+*.exo

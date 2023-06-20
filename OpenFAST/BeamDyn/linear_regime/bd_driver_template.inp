@@ -25,7 +25,7 @@ T             GlbRotBladeT0 - Reference orientation for BeamDyn calculations is 
           0   RootVel(6)    - Component of angular velocity vector of the beam root about Z axis (rad/s)
 ---------------------- APPLIED FORCE ----------------------------------
           0   DistrLoad(1)  - Component of distributed force vector along X direction (N/m)
-      25000   DistrLoad(2)  - Component of distributed force vector along Y direction (N/m)
+          0   DistrLoad(2)  - Component of distributed force vector along Y direction (N/m)
           0   DistrLoad(3)  - Component of distributed force vector along Z direction (N/m)
           0   DistrLoad(4)  - Component of distributed moment vector along X direction (N-m/m)
           0   DistrLoad(5)  - Component of distributed moment vector along Y direction (N-m/m)

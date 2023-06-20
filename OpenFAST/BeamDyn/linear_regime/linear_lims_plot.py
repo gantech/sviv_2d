@@ -14,6 +14,10 @@ from pyFAST.input_output import FASTOutputFile
 
 import matplotlib.pyplot as plt
 
+# import matplotlib as mpl
+# mpl.rc('text', usetex=True)
+
+
 ############
 # Define Parameters of the Search and Load
 
@@ -66,17 +70,43 @@ for case_ind in range(len(top_folders)):
 ############
 # Plot Results
 
+plt.style.use('seaborn-v0_8-colorblind') 
+
+disp_convert = [1, 1, 180/np.pi]
+
+label_names = ['Flap [m]', 'Edge [m]', 'Twist [deg]']
+
+max_y = 0.0
+min_y = 0.0
+
+min_x = 0.0
+
 for case_ind in range(len(top_folders)):
-    plt.plot(load_all[case_ind], disp_all[case_ind], '.', label=top_folders[case_ind] + ' ' + disp_keys[case_ind])
 
-    lin_disp = disp_all[case_ind][0] / load_all[case_ind][0]*load_all[case_ind]
+    p = plt.plot(load_all[case_ind], disp_all[case_ind]*disp_convert[case_ind],
+              'o', label=label_names[case_ind],
+              markersize=6, fillstyle='none')
 
-    plt.plot(load_all[case_ind], lin_disp, '-', label=top_folders[case_ind] + ' ' + disp_keys[case_ind])
+    max_y = np.maximum((disp_all[case_ind]*disp_convert[case_ind]).max(), max_y)
+    min_y = np.minimum((disp_all[case_ind]*disp_convert[case_ind]).min(), min_y)
 
+    minind = np.argmin(np.abs(load_all[case_ind]))
+    lin_disp = disp_all[case_ind][minind] / load_all[case_ind][minind]*load_all[case_ind]
+
+    plt.plot(load_all[case_ind], lin_disp*disp_convert[case_ind], 
+              '-', label='Linear ' + label_names[case_ind], color=p[0].get_color())
+
+    max_y = np.maximum((lin_disp*disp_convert[case_ind]).max(), max_y)
+    min_y = np.minimum((lin_disp*disp_convert[case_ind]).min(), min_y)
+
+    min_x = np.minimum(load_all[case_ind].min(), min_x)
 
 plt.legend()
 plt.xlabel('Load [N/m or Nm/m]')
-plt.ylabel('Tip Displacement [m or rad]')
+plt.ylabel('Tip Displacement [m or deg]')
+
+plt.xlim((min_x*1.05, load_all[0][-1]*1.05)) 
+plt.ylim((min_y*1.05, max_y*1.05))
 
 plt.savefig('check_linear.png')
 plt.close()
