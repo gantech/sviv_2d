@@ -16,11 +16,14 @@ filename = 'bd_driver_template.inp' # Template file name
 bd_name = 'bd_driver.inp' # BeamDyn input for the specific case has this name in the given folder.
 
 
-top_folders = ['flap', 'edge', 'twist']
+top_folders = ['flap', 'edge', 'twist', 'flaptwist', 'edgetwist']
+use_extra_twist = [False, False, False, True, True]
 
-load_keys = ['DistrLoad(1)', 'DistrLoad(2)', 'DistrLoad(6)']
+load_keys = ['DistrLoad(1)', 'DistrLoad(2)', 'DistrLoad(6)', 'DistrLoad(1)', 'DistrLoad(2)']
 
 load_levels = np.array([-2.5e4, -2e4, -1.5e4, -1e4, -.5e4, -100, 100, .5e4, 1e4, 1.5e4, 2.0e4, 2.5e4])
+
+extra_twist = 1.0e4
 
 # Loop over top level folders for load directions
 for case_ind in range(len(top_folders)):
@@ -40,6 +43,9 @@ for case_ind in range(len(top_folders)):
         # Load Template
         f = FASTInputFile(filename)
         f[load_keys[case_ind]] = load
+
+        if use_extra_twist[case_ind]:
+            f[load_keys[2]] = extra_twist
 
         f.write(file_path)
 
