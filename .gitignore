@@ -17,6 +17,8 @@ __pycache__/
 OpenFAST/BeamDyn/linear_regime/flap
 OpenFAST/BeamDyn/linear_regime/edge
 OpenFAST/BeamDyn/linear_regime/twist
+OpenFAST/BeamDyn/linear_regime/flaptwist
+OpenFAST/BeamDyn/linear_regime/edgetwist
 
 # Nalu Wind runs
 nalu_wind/nalu_runs*/*

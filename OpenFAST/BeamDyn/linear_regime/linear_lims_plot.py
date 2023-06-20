@@ -21,20 +21,22 @@ import matplotlib.pyplot as plt
 ############
 # Define Parameters of the Search and Load
 
+# # All cases considered
+# top_folders = ['flap', 'edge', 'twist', 'flaptwist', 'edgetwist']
 
+# Consider just the 3 cases with a single loading
 top_folders = ['flap', 'edge', 'twist']
 
 output_file = 'bd_driver.out'
 
-disp_keys = ['TipTDxr_[m]', 'TipTDyr_[m]', 'TipRDzr_[-]'] # add keys for edge and twist here.
-
+disp_keys = ['TipTDxr_[m]', 'TipTDyr_[m]', 'TipRDzr_[-]', 'TipTDxr_[m]', 'TipTDyr_[m]'] 
 
 
 ############
 # Start loop over directories loading data
 
-load_all = 3 * [None]
-disp_all = 3 * [None]
+load_all = len(top_folders) * [None]
+disp_all = len(top_folders) * [None]
 
 for case_ind in range(len(top_folders)):
 
@@ -54,6 +56,8 @@ for case_ind in range(len(top_folders)):
         case_load[path_ind] = float(curr_path.parts[-1][4:])
     
         filename = os.path.join(curr_path, output_file)
+
+        # print(filename)
         df = FASTOutputFile(filename).toDataFrame()
 
         case_disp[path_ind] = df[disp_keys[case_ind]].to_numpy()[-1]
@@ -72,9 +76,9 @@ for case_ind in range(len(top_folders)):
 
 plt.style.use('seaborn-v0_8-colorblind') 
 
-disp_convert = [1, 1, 180/np.pi]
+disp_convert = [1, 1, 180/np.pi, 1, 1]
 
-label_names = ['Flap [m]', 'Edge [m]', 'Twist [deg]']
+label_names = ['Flap [m]', 'Edge [m]', 'Twist [deg]', 'Flap [m]', 'Edge [m]']
 
 max_y = 0.0
 min_y = 0.0
@@ -90,8 +94,13 @@ for case_ind in range(len(top_folders)):
     max_y = np.maximum((disp_all[case_ind]*disp_convert[case_ind]).max(), max_y)
     min_y = np.minimum((disp_all[case_ind]*disp_convert[case_ind]).min(), min_y)
 
-    minind = np.argmin(np.abs(load_all[case_ind]))
-    lin_disp = disp_all[case_ind][minind] / load_all[case_ind][minind]*load_all[case_ind]
+    minind_pos = np.argmin(np.abs(load_all[case_ind] - 100))
+    minind_neg = np.argmin(np.abs(load_all[case_ind] + 100))
+
+    flexibility = (disp_all[case_ind][minind_pos] - disp_all[case_ind][minind_neg]) \
+                    / (load_all[case_ind][minind_pos] - load_all[case_ind][minind_neg])
+
+    lin_disp = flexibility*load_all[case_ind]
 
     plt.plot(load_all[case_ind], lin_disp*disp_convert[case_ind], 
               '-', label='Linear ' + label_names[case_ind], color=p[0].get_color())
