@@ -143,6 +143,12 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
         sys.exit()
 
     ########
+    # Calculate ratios of primary motions between Phi_L and Phi_G
+    Phi_L_tip = np.vstack((Phi_G[-6, :], Phi_G[-5, :], Phi_G[-1, :]))
+
+    tip_ratio = np.diag(Phi_L_tip) / np.diag(Phi_L)
+
+    ########
     # Write out the yaml file for the updated structure. 
 
     with open(out_3dof, 'w') as f:
@@ -164,6 +170,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
         f.write('chord_length: {}\n'.format(chord_length))
         f.write('span_fraction: {}\n'.format(span_frac))
         f.write('phi_matrix : ' + str(eigvecs_3dof.reshape(-1).tolist()) + '# mode shape matrix for reference \n')
+        f.write('tip_per_cross : ' + str(tip_ratio.tolist()) + '# for reference tip displacement/cross section for flap,edge,twist for those modes respectively. \n')
 
     return
 
