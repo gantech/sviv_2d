@@ -9,7 +9,7 @@ import construct_utils as cutils
 
 from scipy.linalg import eigh
 
-def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
+def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7, load_grid=np.array([0.0, 1.0]), load_val=np.array([4.0, 4.0])):
     """
     Construct a 3 DOF model of a beam with a constant rectangular cross section.
     
@@ -20,10 +20,6 @@ def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
     # chord calculation grid.
     chord_grid = [0.0, 1.0]    
     chord_val  = [4.0, 4.0]
-
-    # Load distribution grid    
-    load_grid = np.array(chord_grid)
-    load_val  = np.array(chord_val)
 
     # Pitch axis offset grid
     pitch_axis_grid = [0.0, 1.0]     
@@ -37,7 +33,7 @@ def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
                    twist_grid, twist_val,
                    pitch_axis_grid, pitch_axis_val,
                    chord_grid, chord_val,
-                   mode_indices=[0,1,5])
+                   mode_indices=[0,1,3])
 
 
 
@@ -45,8 +41,22 @@ if __name__=="__main__":
 
     bd_yaml = '../BeamDyn/bd_simple_driver.BD.sum.yaml'
 
-    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=6)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF.yaml', 0.0, node_interest=4)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF_AOA5.yaml', 5.0, node_interest=4)
 
+
+    # Triangle Load distribution case
+    load_grid = np.array([0.0, 1.0])
+    load_val  = np.array([0.0, 1.0])
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF_AOA5_triangle.yaml', 5.0, node_interest=4, load_grid=load_grid, load_val=load_val)
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF_triangle.yaml', 0.0, node_interest=4, load_grid=load_grid, load_val=load_val)
+
+    # Triangle Load distribution case, root is high point
+    load_grid = np.array([0.0, 1.0])
+    load_val  = np.array([1.0, 0.0])
+    construct_rect(bd_yaml, 'SimpleBeam_3DOF_AOA5_root_triangle.yaml', 5.0, node_interest=4, load_grid=load_grid, load_val=load_val)
+
+    print('\nCalculations based on BeamDyn Matrices prior to 3 DOF reduction:')
 
     Mmat, Kmat, node_coords, quad_coords = cutils.load_M_K_nodes(bd_yaml)
     Mbc = Mmat[6:, 6:]

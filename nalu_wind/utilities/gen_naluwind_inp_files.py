@@ -124,6 +124,15 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     tfile['Time_Integrators'][0]['StandardTimeIntegrator']['time_step'] = float(chord_sim/sim_vel * dtflowthrough)
 
 
+    ### Delayed Start for loads with ramp
+
+    load_ramp_flows_start = 10 # start ramp up after 10 flow through times
+    load_ramp_flows_end = 11 #End ramp up of loads after 11 flow through times
+
+    tfile['realms'][0]['mesh_motion'][0]['motion'][0]['load_transition_start'] = float(load_ramp_flows_start*chord_sim/sim_vel)
+    tfile['realms'][0]['mesh_motion'][0]['motion'][0]['load_transition_end'] = float(load_ramp_flows_end*chord_sim/sim_vel)
+
+
     ### More general settings
     tfile['realms'][0]['mesh'] = str(Path(mesh_file).absolute())
     tfile['realms'][0]['output']['output_data_base_name'] = 'results/{}.e'.format(af_name)
@@ -167,5 +176,8 @@ if __name__=="__main__":
     # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.723555, 0.75801, 3.6792, 3.8836, 4.2924, 4.4968], run_folder='nalu_runs_2') 
 
     # Corrected B.C. for AOA rotation.
-    gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801, 3.6792, 3.8836, 4.08731274, 4.2924, 4.4968], run_folder='nalu_runs_3') 
+    # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801, 3.6792, 3.8836, 4.08731274, 4.2924, 4.4968], run_folder='nalu_runs_3') 
+
+    # Updated to have ramp of aero loads after 10 flow throughs.
+    gen_ffaw3211_cases(freq=[4.08731274], run_folder='ramp_nalu') 
 

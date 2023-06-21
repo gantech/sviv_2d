@@ -25,7 +25,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
       bd_yaml - BeamDyn summary file from a dynamic analysis to get M, K matrices
       node_interest - node of interest 0 is the root. Indices [0,10] for 10th order elem
       out_3dof - filename for the yaml output of the 3 DOF model
-      angle_attack - angle of attack for the final blade and model (transform to CFD coords)
+      angle_attack - angle of attack for the final blade and model (transform to CFD coords) [deg]
       load_grid - grid of points for load distribution. Loads in one direction get scaled
                    across the blade, but only for loads in that direction. Fraction of span.
       load_val - values of load distribution at grid
@@ -110,7 +110,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
     eigvecs_3dof = eigvecs_3dof * np.sign(eigvecs_3dof[:1, :] * Phi_L[:1, :])
 
 
-    tol_eigs = 1e-10
+    tol_eigs = 1e-9
 
     if (np.max(np.abs(eigvals_3dof - subset_eigvals)) > tol_eigs) \
         or (np.max(np.abs(eigvecs_3dof-Phi_L)) > tol_eigs):
@@ -143,6 +143,12 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
         sys.exit()
 
     ########
+    # Calculate ratios of primary motions between Phi_L and Phi_G
+    Phi_L_tip = np.vstack((Phi_G[-6, :], Phi_G[-5, :], Phi_G[-1, :]))
+
+    tip_ratio = np.diag(Phi_L_tip) / np.diag(Phi_L)
+
+    ########
     # Write out the yaml file for the updated structure. 
 
     with open(out_3dof, 'w') as f:
@@ -164,6 +170,7 @@ def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
         f.write('chord_length: {}\n'.format(chord_length))
         f.write('span_fraction: {}\n'.format(span_frac))
         f.write('phi_matrix : ' + str(eigvecs_3dof.reshape(-1).tolist()) + '# mode shape matrix for reference \n')
+        f.write('tip_per_cross : ' + str(tip_ratio.tolist()) + '# for reference tip displacement/cross section for flap,edge,twist for those modes respectively. \n')
 
     return
 
@@ -201,35 +208,6 @@ def construct_IEA15MW_chord(bd_yaml, out_3dof, angle_attack, node_interest=7):
                    pitch_axis_grid, pitch_axis_val,
                    chord_grid, chord_val)
 
-def construct_rect(bd_yaml, out_3dof, angle_attack, node_interest=7):
-    """
-    Construct a 3 DOF model of a beam with a constant rectangular cross section.
-    
-    This function defines inputs to construct_3dof for the specific turbine. 
-    See that function for input documentation. 
-    """
-
-    # chord calculation grid.
-    chord_grid = [0.0, 1.0]    
-    chord_val  = [2.0, 2.0]
-
-    # Load distribution grid    
-    load_grid = np.array(chord_grid)
-    load_val  = np.array(chord_val)
-
-    # Pitch axis offset grid
-    pitch_axis_grid = [0.0, 1.0]     
-    pitch_axis_val  = [0.0, 0.0]
-
-    twist_grid = np.array([0.0, 1.0])
-    twist_val = np.array([0.0, 0.0])
-
-    construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
-                   load_grid, load_val, 
-                   twist_grid, twist_val,
-                   pitch_axis_grid, pitch_axis_val,
-                   chord_grid, chord_val)
-
 
 if __name__=="__main__":
 
@@ -243,3 +221,4 @@ if __name__=="__main__":
 
     construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa5_3dof.yaml', 5.0, node_interest=7)
 
+    construct_IEA15MW_chord(bd_yaml, 'IEA15_aoa0_3dof.yaml', 0.0, node_interest=7)

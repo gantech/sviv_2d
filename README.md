@@ -86,6 +86,18 @@ source copy_bd_outs.sh
 
 3. Run the python script "python/RotationChecks/rot_compare.py". This script indicates that displaying the top section and applying an identical moment at the half span results in translation of the tip. Therefore, should not need to add any translation due to rotation about an offset axis to the Nalu wind simulations. Some error in the comparisons here, likely because moving the top cross section changes the lower stiffness properties due to the global shape functions. 
 
+### BeamDyn Linear Regime Plot
+
+The following generates a figure comparing BeamDyn to the low amplitude linearization of BeamDyn results.
+```
+cd OpenFAST/BeamDyn/linear_regime
+python gen_bd_lin_check.py
+source run_bd_lin.sh  # Assumes that BeamDyn driver is loaded
+python linear_lims_plot.py
+```
+These commands generate the figure 'check_linear.png'.
+
+
 ## Nalu Wind Runs
 
 To generate inputs:
