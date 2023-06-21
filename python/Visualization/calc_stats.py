@@ -6,9 +6,10 @@ Functions for processing smd runs to output statistics without plotting everythi
 import numpy as np
 import netCDF4 as nc
 import yaml
+from yaml.loader import SafeLoader 
 
 
-def calc_nc_sum(filename, nominal_freq, dict):
+def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0):
     """
     Calculated summary statistics for an nc file and returns them
     """
@@ -20,7 +21,7 @@ def calc_nc_sum(filename, nominal_freq, dict):
     x = np.array(data['x'][:])
     xdot = np.array(data['xdot'][:])
     
-    forces = np.array(data['f'][:]) 
+    forces = (force_trans @ np.array(data['f'][:]).T ).T
 
     # Initialize values to calculate over 
     directions = ['X', 'Y', 'Theta']
@@ -33,6 +34,10 @@ def calc_nc_sum(filename, nominal_freq, dict):
 
     data_list = [x, forces]
     data_list_name = ['Disp', 'F']
+
+    create_append_dict(dict, 'struct_ind', struct_ind)
+    create_append_dict(dict, 'aoa', aoa)
+
 
     # Calculate lots of different statistics
     for dir_ind in range(len(directions)):
@@ -78,9 +83,17 @@ if __name__=="__main__":
 
     dict = {} # just initialize an empty dictionary
 
+    ##### Load T matrxi from specific 3 DOF model
+    yaml3dof = './chord_3dof.yaml'
+
+    with open(yaml3dof) as f:
+        struct_data = list(yaml.load_all(f, Loader=SafeLoader))
+    Tmat = np.array(struct_data[0]['force_transform_matrix']).reshape(3,3)
+
+    # second argument here is the nominal frequency based on the folder name
     # run the processing function
-    calc_nc_sum(filename, 0.7, dict)
-    calc_nc_sum(filename, 0.7, dict)
+    calc_nc_sum(filename, 10, dict, force_trans=Tmat)
+    calc_nc_sum(filename, 0.7, dict, force_trans=Tmat)
 
     # print the outputs to screen
     print(dict)
