@@ -8,9 +8,11 @@ import yaml
 from yaml.loader import SafeLoader 
 
 from pathlib import Path
+import os
+import numpy as np
 
 import sys
-sys.path.append('../python/Visualization/calc_stats.py')
+sys.path.append('../python/Visualization/')
 
 import calc_stats as cstats
 
@@ -54,7 +56,7 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             # Actually calculate the response statistics here:
             path_file_nc = os.path.join(freq_folder, ncfilename)
 
-            calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, struct_ind=struct_ind)
+            cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, struct_ind=struct_ind)
 
     # Save the output to a file
     output = os.path.join(run_folder, output_name)
@@ -66,5 +68,5 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
 if __name__=="__main__":
 
     # Call functios to do the post processing
-    collect_folders()
+    collect_folders(run_folder='nalu_runs_2/ffaw3211')
 

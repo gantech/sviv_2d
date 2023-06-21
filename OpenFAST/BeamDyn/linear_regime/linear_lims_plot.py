@@ -76,6 +76,7 @@ for case_ind in range(len(top_folders)):
 
 plt.style.use('seaborn-v0_8-colorblind') 
 
+angle_convert = [False, False, True, False, False]
 disp_convert = [1, 1, 180/np.pi, 1, 1]
 
 label_names = ['Flap [m]', 'Edge [m]', 'Twist [deg]', 'Flap [m]', 'Edge [m]']
@@ -87,26 +88,34 @@ min_x = 0.0
 
 for case_ind in range(len(top_folders)):
 
-    p = plt.plot(load_all[case_ind], disp_all[case_ind]*disp_convert[case_ind],
+    disp_plot = disp_all[case_ind]
+
+    if angle_convert[case_ind]:
+        disp_plot = 4*np.arctan(disp_plot / 4)
+
+    disp_plot = disp_plot*disp_convert[case_ind]
+
+
+    p = plt.plot(load_all[case_ind], disp_plot,
               'o', label=label_names[case_ind],
               markersize=6, fillstyle='none')
 
-    max_y = np.maximum((disp_all[case_ind]*disp_convert[case_ind]).max(), max_y)
-    min_y = np.minimum((disp_all[case_ind]*disp_convert[case_ind]).min(), min_y)
+    max_y = np.maximum((disp_plot).max(), max_y)
+    min_y = np.minimum((disp_plot).min(), min_y)
 
     minind_pos = np.argmin(np.abs(load_all[case_ind] - 100))
     minind_neg = np.argmin(np.abs(load_all[case_ind] + 100))
 
-    flexibility = (disp_all[case_ind][minind_pos] - disp_all[case_ind][minind_neg]) \
+    flexibility = (disp_plot[minind_pos] - disp_plot[minind_neg]) \
                     / (load_all[case_ind][minind_pos] - load_all[case_ind][minind_neg])
 
     lin_disp = flexibility*load_all[case_ind]
 
-    plt.plot(load_all[case_ind], lin_disp*disp_convert[case_ind], 
+    plt.plot(load_all[case_ind], lin_disp, 
               '-', label='Linear ' + label_names[case_ind], color=p[0].get_color())
 
-    max_y = np.maximum((lin_disp*disp_convert[case_ind]).max(), max_y)
-    min_y = np.minimum((lin_disp*disp_convert[case_ind]).min(), min_y)
+    max_y = np.maximum((lin_disp).max(), max_y)
+    min_y = np.minimum((lin_disp).min(), min_y)
 
     min_x = np.minimum(load_all[case_ind].min(), min_x)
 
