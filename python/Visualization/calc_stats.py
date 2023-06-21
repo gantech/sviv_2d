@@ -78,13 +78,13 @@ def create_append_dict(dict, key, val):
 if __name__=="__main__":
     
     # Load the nc file
-    filename = 'af_smd_deflloads.nc'
-    output = 'stats.yaml'
+    filename = './single_results/af_smd_deflloads.nc'
+    output = './single_results/stats.yaml'
 
     dict = {} # just initialize an empty dictionary
 
     ##### Load T matrxi from specific 3 DOF model
-    yaml3dof = './chord_3dof.yaml'
+    yaml3dof = './single_results/chord_3dof.yaml'
 
     with open(yaml3dof) as f:
         struct_data = list(yaml.load_all(f, Loader=SafeLoader))
