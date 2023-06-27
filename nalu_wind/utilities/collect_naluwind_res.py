@@ -19,7 +19,10 @@ import calc_stats as cstats
 
 
 def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml', copy_nc_folder='./collect_nc'):
-
+    """
+    Run folder should be a relative path, otherwise the copying will probably do something weird. 
+    copy_nc_folder - should work as an absolute path
+    """
 
     yaml3dof = 'chord_3dof.yaml'
     ncfilename = 'af_smd_deflloads.nc'
@@ -38,6 +41,11 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
 
         # Load yaml for this structure
         path_3dof = os.path.join(struct, yaml3dof)
+
+        # Copy the yaml file for later analysis to a folder that will be saved
+        copy_path_file_3dof = os.path.join(copy_nc_folder, path_3dof)
+        Path(os.path.join(copy_nc_folder, struct)).mkdir(parents=True, exist_ok=True)
+        os.system('cp {} {}'.format(path_3dof, copy_path_file_3dof))
 
         # Load the yaml
         with open(path_3dof) as f:
