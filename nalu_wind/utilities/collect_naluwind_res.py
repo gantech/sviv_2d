@@ -18,7 +18,7 @@ import calc_stats as cstats
 
 
 
-def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml'):
+def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml', copy_nc_folder='./collect_nc'):
 
 
     yaml3dof = 'chord_3dof.yaml'
@@ -56,6 +56,12 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             # Actually calculate the response statistics here:
             path_file_nc = os.path.join(freq_folder, ncfilename)
 
+            # Copy the nc file for later analysis to a folder that will be saved
+            copy_path_file_nc = os.path.join(copy_nc_folder, path_file_nc)
+            Path(copy_path_file_nc).mkdir(parents=True, exist_ok=True)
+            os.system('cp {} {}'.format(path_file_nc, copy_path_file_nc))
+
+            # Calculate some stats now and add to dictionary
             cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, struct_ind=struct_ind)
 
     # Save the output to a file

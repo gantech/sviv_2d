@@ -179,5 +179,8 @@ if __name__=="__main__":
     # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801, 3.6792, 3.8836, 4.08731274, 4.2924, 4.4968], run_folder='nalu_runs_3') 
 
     # Updated to have ramp of aero loads after 10 flow throughs.
-    gen_ffaw3211_cases(freq=[4.08731274], run_folder='ramp_nalu') 
+    # gen_ffaw3211_cases(freq=[4.08731274], run_folder='ramp_nalu') 
 
+    # Updated B.C. and mesh deformation flag, ramp in time, updated 3 DOF.
+    # gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4')
+    gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4_short')

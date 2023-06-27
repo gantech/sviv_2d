@@ -113,6 +113,18 @@ sbatch job_submit.slurm
 
 Note that in job_submit.slurm, the array of inputs is indexed from 1 to the number of lines in the file job_list.
 
+Running prescribed motion tests:
+```
+cd nalu_wind
+python utilities/prescribe_gen.py
+cd prescribe_runs
+mkdir job_list
+cd job_list
+find .. -name amp_* | sort -n > list_of_cases
+split -d -l 3 list_of_cases list_of_cases_
+sbatch --array=0-7 prescribe.slurm
+```
+
 ### Verification of Implementation Details
 
 The mesh ramp can be manually checked with the runs in the folder of 'nalu_wind/cases/meshramp/'.
