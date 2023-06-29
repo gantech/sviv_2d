@@ -19,8 +19,11 @@ import calc_stats as cstats
 import peak_filter_fit as pff
 
 
-def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml'):
-
+def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml', copy_nc_folder='./collect_nc'):
+    """
+    Run folder should be a relative path, otherwise the copying will probably do something weird. 
+    copy_nc_folder - should work as an absolute path
+    """
 
     yaml3dof = 'chord_3dof.yaml'
     ncfilename = 'af_smd_deflloads.nc'
@@ -40,6 +43,14 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
         # Load yaml for this structure
         path_3dof = os.path.join(struct, yaml3dof)
 
+        # Copy the yaml file for later analysis to a folder that will be saved
+        copy_path_file_3dof = os.path.join(copy_nc_folder, path_3dof)
+        Path(os.path.join(copy_nc_folder, struct)).mkdir(parents=True, exist_ok=True)
+
+        print(path_3dof)
+        print(copy_path_file_3dof)
+        os.system('cp {} {}'.format(path_3dof, copy_path_file_3dof))
+
         # Load the yaml
         with open(path_3dof) as f:
             struct_data = list(yaml.load_all(f, Loader=SafeLoader))
@@ -58,6 +69,12 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             # Actually calculate the response statistics here:
             path_file_nc = os.path.join(freq_folder, ncfilename)
 
+            # Copy the nc file for later analysis to a folder that will be saved
+            copy_path_file_nc = os.path.join(copy_nc_folder, freq_folder)
+            Path(copy_path_file_nc).mkdir(parents=True, exist_ok=True)
+            os.system('cp {} {}'.format(path_file_nc, copy_path_file_nc))
+
+            # Calculate some stats now and add to dictionary
             cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, 
                                struct_ind=struct_ind, mode_shapes=mode_shapes)
 
