@@ -45,6 +45,9 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
         # Copy the yaml file for later analysis to a folder that will be saved
         copy_path_file_3dof = os.path.join(copy_nc_folder, path_3dof)
         Path(os.path.join(copy_nc_folder, struct)).mkdir(parents=True, exist_ok=True)
+
+        print(path_3dof)
+        print(copy_path_file_3dof)
         os.system('cp {} {}'.format(path_3dof, copy_path_file_3dof))
 
         # Load the yaml
@@ -65,7 +68,7 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             path_file_nc = os.path.join(freq_folder, ncfilename)
 
             # Copy the nc file for later analysis to a folder that will be saved
-            copy_path_file_nc = os.path.join(copy_nc_folder, path_file_nc)
+            copy_path_file_nc = os.path.join(copy_nc_folder, freq_folder)
             Path(copy_path_file_nc).mkdir(parents=True, exist_ok=True)
             os.system('cp {} {}'.format(path_file_nc, copy_path_file_nc))
 
