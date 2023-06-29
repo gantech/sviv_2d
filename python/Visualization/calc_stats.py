@@ -8,8 +8,94 @@ import netCDF4 as nc
 import yaml
 from yaml.loader import SafeLoader 
 
+import sys
+sys.path.append('../PFF')
+import peak_filter_fit as pff
 
-def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0):
+
+def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
+                half_bandwidth_frac=0.2, tstart=10, remove_end=7, reportnum=20):
+    """
+    Function to conduct PFF analysis on nc file data
+
+    Inputs:
+      t - time series
+      x - physical coordinates, displacements
+      forces - physical coordinates (after conversion to 3 DOF model)
+      mode_shapes - 3x3 matrix of mode shapes. Columns are modes=[Flap, Edge, Twist], rows are
+                    flap, edge, twist contributions of the given mode. 
+
+      tstart - start of time analysis, probably want to eliminate the first several cycles
+      remove_end - remove a number of points off the end of the pff analysis, 
+                   for multiharmonic signals this is needed to eliminate filtering end effects
+      reportnum - number of values from PFF to report
+      
+
+    Outputs: 
+      - Various values to save summarizing PFF results
+    """
+
+    if np.isnan(x).any():
+        create_append_dict(dict,  'flap_mode_amp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict,  'edge_mode_amp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict, 'twist_mode_amp', (np.ones(reportnum)*np.nan).tolist())
+
+        create_append_dict(dict,  'flap_mode_damp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict,  'edge_mode_damp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict, 'twist_mode_damp', (np.ones(reportnum)*np.nan).tolist())
+
+        create_append_dict(dict,  'flap_mode_freq', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict,  'edge_mode_freq', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict, 'twist_mode_freq', (np.ones(reportnum)*np.nan).tolist())
+
+        create_append_dict(dict,  'flap_mode_f_amp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict,  'edge_mode_f_amp', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict, 'twist_mode_f_amp', (np.ones(reportnum)*np.nan).tolist())
+
+        create_append_dict(dict,  'flap_mode_f_freq', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict,  'edge_mode_f_freq', (np.ones(reportnum)*np.nan).tolist())
+        create_append_dict(dict, 'twist_mode_f_freq', (np.ones(reportnum)*np.nan).tolist())
+
+    else:    
+    
+        # Convert to the modal domain
+        modal_q = (mode_shapes @ x.T).T
+        modal_f = (mode_shapes @ forces.T).T
+    
+        freq_rad_s_q, damp_frac_crit_q, report_t_q, report_amp_q, intermediate_data_q = \
+               pff.pff_analysis(t, modal_q, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
+    
+    
+        freq_rad_s_f, damp_frac_crit_f, report_t_f, report_amp_f, intermediate_data_f = \
+                  pff.pff_analysis(t, modal_f, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
+    
+    
+        create_append_dict(dict, 'flap_mode_amp', report_amp_q[0][-reportnum:].tolist())
+        create_append_dict(dict, 'edge_mode_amp', report_amp_q[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_amp', report_amp_q[2][-reportnum:].tolist())
+
+        create_append_dict(dict,  'flap_mode_damp', damp_frac_crit_q[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_damp', damp_frac_crit_q[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_damp', damp_frac_crit_q[2][-reportnum:].tolist())
+
+        create_append_dict(dict,  'flap_mode_freq', freq_rad_s_q[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_freq', freq_rad_s_q[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_freq', freq_rad_s_q[2][-reportnum:].tolist())
+
+        create_append_dict(dict,  'flap_mode_f_amp', report_amp_f[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_f_amp', report_amp_f[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_f_amp', report_amp_f[2][-reportnum:].tolist())
+
+        create_append_dict(dict,  'flap_mode_f_freq', freq_rad_s_f[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_f_freq', freq_rad_s_f[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_f_freq', freq_rad_s_f[2][-reportnum:].tolist())
+
+    print('Several inputs for PFF analysis need to be decided.')
+
+
+
+
+def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0, mode_shapes=np.eye(3)):
     """
     Calculated summary statistics for an nc file and returns them
     """
@@ -64,6 +150,8 @@ def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, s
     # Add inputs to the dictionary
     create_append_dict(dict, 'Nom_Freq', nominal_freq)
     create_append_dict(dict, 'Nsteps', time.shape[0])
+
+    pff_summary(time, x, forces, mode_shapes, nominal_freq, dict)
 
 def create_append_dict(dict, key, val):
     """

@@ -13,9 +13,10 @@ import numpy as np
 
 import sys
 sys.path.append('../python/Visualization/')
+sys.path.append('../python/PFF')
 
 import calc_stats as cstats
-
+import peak_filter_fit as pff
 
 
 def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats.yaml'):
@@ -43,6 +44,7 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
         with open(path_3dof) as f:
             struct_data = list(yaml.load_all(f, Loader=SafeLoader))
         Tmat = np.array(struct_data[0]['force_transform_matrix']).reshape(3,3)
+        mode_shapes = np.array(struct_data[0]['phi_matrix']).reshape(3,3)
         aoa = struct_data[0]['angle']
 
         # Identify frequency runs for this structure
@@ -56,7 +58,8 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             # Actually calculate the response statistics here:
             path_file_nc = os.path.join(freq_folder, ncfilename)
 
-            cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, struct_ind=struct_ind)
+            cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, 
+                               struct_ind=struct_ind, mode_shapes=mode_shapes)
 
     # Save the output to a file
     output = os.path.join(run_folder, output_name)
