@@ -4,7 +4,7 @@ Script for processing naluwind outputs and collecting results into a yaml file
 Assumes for folder path that this script is called from the top level of nalu-wind folder
 """
 
-import yaml
+import yaml, glob
 from yaml.loader import SafeLoader 
 
 from pathlib import Path
@@ -27,6 +27,7 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
 
     yaml3dof = 'chord_3dof.yaml'
     ncfilename = 'af_smd_deflloads.nc'
+    input_name = '*.yaml'
 
     # Create Dictionary / Initialization
     dict = {}
@@ -74,9 +75,17 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
             Path(copy_path_file_nc).mkdir(parents=True, exist_ok=True)
             os.system('cp {} {}'.format(path_file_nc, copy_path_file_nc))
 
+            path_file_input = os.path.join(freq_folder, input_name)
+            os.system('cp {} {}'.format(path_file_input, copy_path_file_nc))
+
+            # Pull velocity from the template input
+            with open(glob.glob(path_file_input)[0]) as f:
+                tfile = yaml.load(f,Loader=yaml.UnsafeLoader)
+            velocity = tfile['realms'][0]['boundary_conditions'][1]['inflow_user_data']['velocity'][0]
+
             # Calculate some stats now and add to dictionary
             cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, 
-                               struct_ind=struct_ind, mode_shapes=mode_shapes)
+                               struct_ind=struct_ind, mode_shapes=mode_shapes, velocity=velocity)
 
     # Save the output to a file
     output = os.path.join(run_folder, output_name)
