@@ -95,7 +95,8 @@ def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
 
 
 
-def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0, mode_shapes=np.eye(3)):
+def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0, 
+                mode_shapes=np.eye(3), velocity=-1e12):
     """
     Calculated summary statistics for an nc file and returns them
     """
@@ -123,6 +124,7 @@ def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, s
 
     create_append_dict(dict, 'struct_ind', struct_ind)
     create_append_dict(dict, 'aoa', aoa)
+    create_append_dict(dict, 'velocity', velocity)
 
 
     # Calculate lots of different statistics
