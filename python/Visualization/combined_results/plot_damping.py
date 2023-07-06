@@ -31,6 +31,23 @@ def load_data(collected_data):
 
     return data_dict, freq_sort_inds
 
+def lin_pred_amp(data_dict, freq_sort_inds, mode_index):
+    """
+    Calculate a linear prediction of the amplitude based on the aerodynamic forcing amplitude
+    """
+
+    mode_name_list = ['flap', 'edge', 'twist']
+    mode_name = mode_name_list[mode_index]
+
+    # forcing frequency
+    freq_list = np.array(data_dict[mode_name + '_mode_f_freq'])[freq_sort_inds, :]
+    amp_list  = np.array(data_dict[mode_name + '_mode_f_amp' ])[freq_sort_inds, :]
+
+    freq = np.median(freq_list, axis=1)
+    amp  = np.median(np.abs(amp_list), axis=1)
+
+    print(freq)
+    print(amp)
 
 def plot_amp(data_dict, freq_sort_inds, mode_index, amp_units='m'):
     """
@@ -154,7 +171,7 @@ def plot_freq(data_dict, freq_sort_inds, mode_index, amp_units='m'):
                  markersize=ms, color=color)
 
     plt.xlabel('Velocity [m/s]')
-    plt.ylabel('Damping Fraction Critical')
+    plt.ylabel('Frequency [Hz]')
 
     plt.ylim((min_freq-0.01, max_freq+0.01))
 
@@ -187,6 +204,7 @@ if __name__=="__main__":
     plot_amp(data_dict, freq_sort_inds, 1,  amp_units='m')
     plot_amp(data_dict, freq_sort_inds, 2, amp_units='rad')
 
+    lin_pred_amp(data_dict, freq_sort_inds, 1)
 
     plot_damp(data_dict, freq_sort_inds, 0,  amp_units='m')
     plot_damp(data_dict, freq_sort_inds, 1,  amp_units='m')

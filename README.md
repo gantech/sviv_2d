@@ -113,7 +113,7 @@ sbatch job_submit.slurm
 
 Note that in job_submit.slurm, the array of inputs is indexed from 1 to the number of lines in the file job_list.
 
-Running prescribed motion tests:
+Running prescribed motion tests (this probably doesn't actually work):
 ```
 cd nalu_wind
 python utilities/prescribe_gen.py
@@ -123,6 +123,20 @@ cd job_list
 find .. -name amp_* | sort -n > list_of_cases
 split -d -l 3 list_of_cases list_of_cases_
 sbatch --array=0-7 prescribe.slurm
+```
+
+### Collecting Nalu Wind results:
+
+```
+cd nalu_wind
+python utilities/collect_naluwind_res.py 
+```
+This copies all of the input files and nc results files to a new folder and does summary calculations. The summary calculations are placed in "nalu_runs/ffaw3211/ffaw3211_stats.yaml" or an equivalent file path for runs in different folders. 
+Summary plots can then be generated with the following:
+```
+cd ../python/Visualization/combined_results
+cp ../../../nalu_wind/nalu_runs_2/ffaw3211/ffaw3211_stats.yaml .
+python plot_damping.py
 ```
 
 ### Verification of Implementation Details

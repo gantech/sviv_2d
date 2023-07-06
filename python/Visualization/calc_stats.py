@@ -14,7 +14,7 @@ import peak_filter_fit as pff
 
 
 def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
-                half_bandwidth_frac=0.2, tstart=10, remove_end=7, reportnum=20):
+                half_bandwidth_frac=0.05, tstart=10, remove_end=7, reportnum=20):
     """
     Function to conduct PFF analysis on nc file data
 
