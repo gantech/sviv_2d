@@ -59,7 +59,7 @@ def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
     else:    
     
         # Convert to the modal domain
-        modal_q = (mode_shapes @ x.T).T
+        modal_q = (np.linalg.inv(mode_shapes) @ x.T).T # use inv of modes to convert to modal domain.
         modal_f = (mode_shapes @ forces.T).T
     
         freq_rad_s_q, damp_frac_crit_q, report_t_q, report_amp_q, intermediate_data_q = \
@@ -126,6 +126,14 @@ def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, s
     create_append_dict(dict, 'aoa', aoa)
     create_append_dict(dict, 'velocity', velocity)
 
+    # Rotate the mode shape back to zero deg AOA and save
+    aoa_rad = aoa * np.pi/180.0
+    zeroaoa_mode = np.array([[np.sin(aoa_rad), np.cos(aoa_rad), 0], 
+                             [np.cos(aoa_rad), -np.sin(aoa_rad), 0], 
+                             [0,0,-1]]).T \
+                   @ mode_shapes
+
+    create_append_dict(dict, 'modeshapes_local', zeroaoa_mode.reshape(-1).tolist())
 
     # Calculate lots of different statistics
     for dir_ind in range(len(directions)):
