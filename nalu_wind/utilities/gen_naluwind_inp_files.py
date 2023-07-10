@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/template/chord_3dof.yaml', run_folder='nalu_runs', 
-                 template="nalu_inputs/template/airfoil_osc.yaml", nominal_St=0.16, nominal_visc=1e-5, nflow_throughs=160, dtflowthrough=0.01):
+                 template="nalu_inputs/template/airfoil_osc.yaml", nominal_St=0.16, nominal_visc=1e-5, nflow_throughs=160, dtflowthrough=0.01, dt=None):
     """Generate a nalu input file for simulation of flow past an airfoil
     using k-w-SST turbulence model
 
@@ -119,9 +119,12 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
 
     ### Set time step information based on velocity.
 
-    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['termination_step_count'] = int(nflow_throughs/dtflowthrough)
+    if dt is None: 
+        dt = chord_sim/sim_vel * dtflowthrough
 
-    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['time_step'] = float(chord_sim/sim_vel * dtflowthrough)
+    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['termination_step_count'] = int(nflow_throughs*chord_nominal/dt)
+
+    tfile['Time_Integrators'][0]['StandardTimeIntegrator']['time_step'] = float(dt)
 
 
     ### Delayed Start for loads with ramp
@@ -146,7 +149,7 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     yaml.dump(tfile, open(run_folder+'/{}/structure_{:d}/freq_{:.5f}/{}_freq_{}.yaml'.format(
               af_name, mech_ind, freq, af_name, freq),'w'), default_flow_style=False)
 
-def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', template="nalu_inputs/template/airfoil_osc.yaml"):
+def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', template="nalu_inputs/template/airfoil_osc.yaml", mesh_name=None, dt=None):
     """Generate FSI cases for the FFAW3211 airfoil
 
     Args:
@@ -160,12 +163,13 @@ def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['n
 
     """
 
-    # mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled.exo'  # This mesh is improperly rotated B.C.
-    mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled_aoa50.exo' # 50 deg AOA mesh
+    if mesh_name is None:
+        # mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled.exo'  # This mesh is improperly rotated B.C.
+        mesh_name = '/projects/sviv/ganeshv/sviv_2d/nalu_inputs/grids/ffaw3211_3d_scaled_aoa50.exo' # 50 deg AOA mesh
 
     for fre in freq:
         for mech_ind in range(len(mech_model)):
-            gen_fsi_case('ffaw3211', mesh_name, fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St=0.16, nominal_visc=1e-5)
+            gen_fsi_case('ffaw3211', mesh_name, fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St=0.16, nominal_visc=1e-5, dt=dt)
 
 
 if __name__=="__main__":
@@ -184,3 +188,9 @@ if __name__=="__main__":
     # Updated B.C. and mesh deformation flag, ramp in time, updated 3 DOF.
     # gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4')
     gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4_short')
+
+
+    # several corrections of bugs from various states
+    mesh_2d = '/lustre/eaglefs/projects/sviv/ganeshv/sviv_2d/cases/af_2d/ffaw3211_3d_scaled_aoa50_4.exo'
+    dt = 1e-3
+    gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801], run_folder='nalu_runs_2d', mesh_name=mesh_2d, dt=dt) 
