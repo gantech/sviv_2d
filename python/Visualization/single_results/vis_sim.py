@@ -55,7 +55,7 @@ Cmat = np.array(data['damping_matrix'][:])
 eigvals,eigvecs = eigh(Kmat,Mmat, subset_by_index=[0, Mmat.shape[0]-1])
 
 qhist = (eigvecs.T @ Mmat @ x.T).T
-fqhist = (eigvecs.T @ Mmat @ forces.T).T
+fqhist = (eigvecs.T @ forces.T).T
 
 #########################################
 # Plot Time Series of Displacements
@@ -81,12 +81,14 @@ plt.close()
 #########################################
 # Plot Time Series of Forces
 
+xlim_set = (time[0], time[-1])
+# xlim_set = (120, time[-1])
 
 fig, axs = plt.subplots(2)
 
 axs[0].plot(time, forces[:, 0], label='Fx')
 axs[0].plot(time, forces[:, 1], label='Fy')
-axs[0].set_xlim((time[0], time[-1]))
+axs[0].set_xlim(xlim_set)
 axs[0].set_ylabel('Force')
 
 if np.any(np.isnan(x)):
@@ -95,7 +97,7 @@ if np.any(np.isnan(x)):
 axs[0].legend()
 
 axs[1].plot(time, forces[:, 2], label='Moment')
-axs[1].set_xlim((time[0], time[-1]))
+axs[1].set_xlim(xlim_set)
 axs[1].set_ylabel('Moment')
 
 if np.any(np.isnan(x)):
@@ -114,13 +116,13 @@ fig, axs = plt.subplots(2)
 
 axs[0].plot(time, qhist[:, 0], label='Flap')
 axs[0].plot(time, qhist[:, 1], label='Edge')
-axs[0].set_xlim((time[0], time[-1]))
+axs[0].set_xlim(xlim_set)
 axs[0].set_ylabel('Modal Disp')
 
 axs[0].legend()
 
 axs[1].plot(time, qhist[:, 2], label='Torsion')
-axs[1].set_xlim((time[0], time[-1]))
+axs[1].set_xlim(xlim_set)
 axs[1].set_ylabel('Model Disp')
 
 
@@ -136,11 +138,12 @@ plt.plot(time, fqhist[:, 0], label='flap mode')
 plt.plot(time, fqhist[:, 1], label='edge mode')
 plt.plot(time, fqhist[:, 2], label='torsion mode')
 
-plt.xlim((time[0], time[-1]))
+plt.xlim(xlim_set)
 plt.ylabel('Modal Force')
 
 plt.legend()
 
 plt.savefig('fqhist.png')
 plt.close()
+
 
