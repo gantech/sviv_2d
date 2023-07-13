@@ -149,7 +149,8 @@ def gen_fsi_case(af_name, mesh_file, freq, mech_ind, mech_model='nalu_inputs/tem
     yaml.dump(tfile, open(run_folder+'/{}/structure_{:d}/freq_{:.5f}/{}_freq_{}.yaml'.format(
               af_name, mech_ind, freq, af_name, freq),'w'), default_flow_style=False)
 
-def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', template="nalu_inputs/template/airfoil_osc.yaml", mesh_name=None, dt=None):
+def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['nalu_inputs/template/chord_3dof.yaml'], run_folder='nalu_runs', 
+                       template="nalu_inputs/template/airfoil_osc.yaml", mesh_name=None, dt=None, nominal_St=0.16):
     """Generate FSI cases for the FFAW3211 airfoil
 
     Args:
@@ -169,7 +170,7 @@ def gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 4.08731274], mech_model=['n
 
     for fre in freq:
         for mech_ind in range(len(mech_model)):
-            gen_fsi_case('ffaw3211', mesh_name, fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St=0.16, nominal_visc=1e-5, dt=dt)
+            gen_fsi_case('ffaw3211', mesh_name, fre, mech_ind, mech_model[mech_ind], run_folder, template, nominal_St= nominal_St, nominal_visc=1e-5, dt=dt)
 
 
 if __name__=="__main__":
@@ -187,10 +188,35 @@ if __name__=="__main__":
 
     # Updated B.C. and mesh deformation flag, ramp in time, updated 3 DOF.
     # gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4')
-    gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4_short')
+    # gen_ffaw3211_cases(freq=[0.50652718, 0.69345461, 0.723555], run_folder='nalu_runs_4_short')
 
 
-    # several corrections of bugs from various states
-    mesh_2d = '/lustre/eaglefs/projects/sviv/ganeshv/sviv_2d/cases/af_2d/ffaw3211_3d_scaled_aoa50_4.exo'
+    # # several corrections of bugs from various states - used the wrong load scale for the mesh size.
+    # mesh_2d = '/lustre/eaglefs/projects/sviv/ganeshv/sviv_2d/cases/af_2d/ffaw3211_3d_scaled_aoa50_4.exo'
+    # dt = 1e-3
+    # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801], run_folder='nalu_runs_2d', mesh_name=mesh_2d, dt=dt) 
+
+
+    # # several corrections of bugs from various states
+    # mesh_2d = '/projects/sviv/ganeshv/sviv_2d/cases/af_3d/ffaw3211_3d_scaled_aoa50_4.exo'
+    # dt = 1e-3
+    # gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801], run_folder='nalu_runs_5_2d', mesh_name=mesh_2d, dt=dt) 
+
+    # Full Sweep of 2D cases, near the flap and edge modes (1440 steps / edge cycle) - 51 cases
+    mesh_2d = '/projects/sviv/ganeshv/sviv_2d/cases/af_3d/ffaw3211_3d_scaled_aoa50_4.exo'
     dt = 1e-3
-    gen_ffaw3211_cases(freq=[0.4536, 0.4788, 0.50652718, 0.5292, 0.5544, 0.59655, 0.62019, 0.654645, 0.69345461, 0.723555, 0.75801], run_folder='nalu_runs_2d', mesh_name=mesh_2d, dt=dt) 
+    gen_ffaw3211_cases(freq=[0.375, 0.385, 0.395, 0.405, 0.415, 0.425, 0.435, 0.445, 0.455,
+                             0.465, 0.475, 0.485, 0.495, 0.505, 0.515, 0.525, 0.535, 0.545,
+                             0.555, 0.565, 0.575, 0.585, 0.595, 0.605, 0.615, 0.625, 0.635,
+                             0.645, 0.655, 0.665, 0.675, 0.685, 0.695, 0.705, 0.715, 0.725,
+                             0.735, 0.745, 0.755, 0.765, 0.775, 0.785, 0.795, 0.805, 0.815,
+                             0.825, 0.835, 0.845, 0.855, 0.865, 0.875], 
+                       run_folder='nalu_runs_6_2d', mesh_name=mesh_2d, dt=dt, nominal_St=0.17) 
+
+
+    # Small sweep of 2D cases near the twist mode (using a reduced time step to maintain approximately 1440 steps per vibration cycle)
+    mesh_2d = '/projects/sviv/ganeshv/sviv_2d/cases/af_3d/ffaw3211_3d_scaled_aoa50_4.exo'
+    dt = 1.699e-4
+    gen_ffaw3211_cases(freq=[3.88265, 4.087, 4.29135], 
+                       run_folder='nalu_runs_7_2d', mesh_name=mesh_2d, dt=dt, nominal_St=0.17) 
+
