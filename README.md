@@ -25,28 +25,59 @@ BeamDyn summary file from the dynamic simulation (with no loads or displacements
 
 #### python/ConstructModel
 
-Run the script "python/ConstructModel/chord_prop_model.py" to generate a yaml file describing a 3 DOF model for the aerodynamic loads being proportional to the chord.
+Run the script "python/ConstructModel/create_model_funs.py" to generate a yaml file describing a 3 DOF model for the aerodynamic loads being proportional to the chord.
+This file also contains functions that can be called to construct models for the IEA 15MW turbine (construct_IEA15MW_chord) and a more general function (construct_3dof). 
 
-This script generates the yaml file "chord_3dof.yaml" with the mass, stiffness, damping, and force transformation matrices.
+When considering different angles of attack, new 3 DOF model should be constructed to give mass and stiffness properties along the coordinate system of the CFD simulations (use construct_IEA15MW_chord and vary the angle of attack). 
+If the CFD simulation coordinate system is fixed, then new models do not need to be constructed. 
 
-#### python/DistributedLoad
+This script generates the yaml file "chord_3dof.yaml" with the mass, stiffness, damping, and force transformation matrices. Documentation for the interpretation and use of these matrices should be found in the paper. 
+The 3 DOF matrices can be loaded from this file into python as
+```
+# Load YAML file
+with open(yamlfile) as f:
+    data = list(yaml.load_all(f, Loader=SafeLoader))
 
-Used for verifying extracted properties against BeamDyn simulations.
+dict_data = data[-1]
 
-#### python/DetermineRunSets
-
-Script for generating a list of velocities of interest. Script also creates a plot to visualize what coverage of the frequency response for a linear system with constant external force would be covered.
-
-#### python/ModalAnalysis
-
-The script "load_M_K.py" does an eigenvalue analysis of the BeamDyn matrices and prints frequencies. This can be used as a sanity check. This script requires copying a yaml summary file from a dynamic BeamDyn simulation to be able to extract the mass and stiffness matrices.
-
+# Extract Matrices 
+M3dof = np.array(dict_data['mass_matrix']).reshape(3,3)
+C3dof = np.array(dict_data['damping_matrix']).reshape(3,3)
+K3dof = np.array(dict_data['stiffness_matrix']).reshape(3,3)
+T3dof = np.array(dict_data['force_transform_matrix']).reshape(3,3)
+```
 
 #### python/HHTAlpha
 
 Misc. scripts for checking HHT Alpha-method implementation for time integration. 
 
-"hht_test.py" is used for verification of the nalu-wind simulation against known lift/drag values. This file requires the .yaml file produced by constructing a model. It currently uses "chord_3dof.yaml".
+"hht_test.py" can be used for verification of the nalu-wind simulation against known lift/drag values. This file requires the .yaml file produced by constructing a model. It currently uses "chord_3dof.yaml". This file also provides an example time integration. 
+
+The script "unit_tests.py" was used to produce expected results for the Nalu-Wind unit tests.
+
+
+#### python/Visualization
+
+In the "single_results" folder, one can download a *.nc file with data from a Nalu-Wind simulation. Then the script "vis_sim.py" can be run to quickly plot time histories for displacements and forces (in both physical and modal domains). A yaml file for the 3DOF model is also needed in this folder to get the force transformation matrix so that the forces can be interpretted with the 3 DOF model. Note that if multiple angles of attack are considered, then the 3 DOF model needs to change appropriately here. Alternatively, the nc files from Nalu-Wind could be updated to include the force transformation matrix and the "vis_sim.py" file updated appropriately.  
+
+#### python/ModalAnalysis
+
+The script "load_M_K.py" does an eigenvalue analysis of the BeamDyn matrices and prints frequencies. This can be used as a sanity check. This script requires copying a yaml summary file from a dynamic BeamDyn simulation to be able to extract the mass and stiffness matrices. This script does not do any other useful cacluations. 
+
+The script "mode_shape_plot.py" produces figures to visualize the mode shapes and the load distribution. These are useful for the presentation/paper. 
+
+The script "static_modal_load.py" produces a figure comparing the displacement for a static load cases against projecting onto the first mode. Since the first mode is generally expected to be a good approximation of this bending behavior, and this is confirmed by the plots. This is a sanity check, that is not important for other details.
+
+
+#### python/PFF
+
+This folder is used for the peak finding and fitting method for system identification. By downloading an .nc file from a Nalu-Wind simulation, the script "peak_filter_fit.py" can be executed and produce a set of plots. 
+This algorithm can perform better than Hilbert Transforms for extracting damping properties from transient data. 
+
+The reference for this algorithm is:
+M. Jin, W. Chen, M.R.W. Brake, H. Song,
+Identification of Instantaneous Frequency and Damping From Transient Decay Data,
+Journal of Vibration and Acoustics, 2020.
 
 
 
@@ -86,6 +117,16 @@ source copy_bd_outs.sh
 
 3. Run the python script "python/RotationChecks/rot_compare.py". This script indicates that displaying the top section and applying an identical moment at the half span results in translation of the tip. Therefore, should not need to add any translation due to rotation about an offset axis to the Nalu wind simulations. Some error in the comparisons here, likely because moving the top cross section changes the lower stiffness properties due to the global shape functions. 
 
+#### python/SimpleBeam
+
+This directory contains information for verifying the 3DOF construction against an analytical solution. 
+
+In this directory, Analytical/beam_modes.py provides some analytical results that can be used for comparison. Inputs to this file may need to be double checked for consistency against other parts of the verification procedure.
+
+The BeamDyn folder contains BeamDyn inputs and outputs that are needed for the verification (no BeamDyn runs are needed here beyond the outputs already provided). 
+
+In the Construction folder, first run "simple_construct.py" to generate 3DOF models for different cases. Then the script "verify_3dof.py" can be used to compare generate results that can be compared to the analytical solution. Near the top of "verify_3dof.py" there are user inputs to change between 3 different cases. The analytical solutions to compare against are in an excel sheet kept elsewhere. 
+
 ### BeamDyn Linear Regime Plot
 
 The following generates a figure comparing BeamDyn to the low amplitude linearization of BeamDyn results.
@@ -113,17 +154,6 @@ sbatch job_submit.slurm
 
 Note that in job_submit.slurm, the array of inputs is indexed from 1 to the number of lines in the file job_list.
 
-Running prescribed motion tests (this probably doesn't actually work):
-```
-cd nalu_wind
-python utilities/prescribe_gen.py
-cd prescribe_runs
-mkdir job_list
-cd job_list
-find .. -name amp_* | sort -n > list_of_cases
-split -d -l 3 list_of_cases list_of_cases_
-sbatch --array=0-7 prescribe.slurm
-```
 
 ### Collecting Nalu Wind results:
 
@@ -146,3 +176,19 @@ The mesh ramp can be manually checked with the runs in the folder of 'nalu_wind/
 The time ramp can be manually checked with the runs in the folder 'nalu_wind/cases/timeramp/' plus the python script TO INSERT HERE that compares the forces.dat (unscaled) against the nc file (scaled).
 
 Note that these simulations are not intended to have realistic CFD parameters and are just to check that the ramping appears to be working correctly not that the forces are correct.
+
+## Misc Files 
+
+This section contains a brief overview of miscellaneous files that were used while developing the main functionality of this repo. This should not be important at this point. 
+
+
+
+#### python/DetermineRunSets
+
+Script for generating a list of velocities of interest. Script also creates a plot to visualize what coverage of the frequency response for a linear system with constant external force would be covered.
+
+These are probably not useful at this point. The script "freq_define.py" also calculates Reynolds numbers.
+
+#### python/Verification
+
+Scripts that could potentially be used to verify that time integration in Nalu-Wind is correct. The Unforced folder may be relevant (assuming loads_scale=0). These have not been fully used since we were still building confidence in the Nalu-Wind results from the CFD side. 

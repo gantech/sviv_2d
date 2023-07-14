@@ -142,5 +142,5 @@ print(nodes[node_interest])
 print('Tip Displacement / Nodal Displacement [Mode Shape]')
 print(nodal_proj[-1] / nodal_proj[node_interest])
 
-print('\nTip Displacement / Nodal Displacement [Mode Shape]')
+print('\nNodal Displacement / Tip Displacement [Mode Shape]')
 print(nodal_proj[node_interest] / nodal_proj[-1])

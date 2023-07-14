@@ -140,7 +140,7 @@ plt.plot(load_span*nodes[-1], load_val/load_scale)
 
 plt.xlim((0, span_pos[-1]))
 
-plt.ylabel('Load Distribution [N/m/N]')
+plt.ylabel('Load Distribution [-]')
 plt.xlabel('Spanwise Position [m]')
 
 fig.tight_layout()

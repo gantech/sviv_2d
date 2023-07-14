@@ -213,7 +213,7 @@ if __name__=="__main__":
 
     bd_yaml = '../bd_driver.BD.sum.yaml'
 
-    construct_IEA15MW_chord(bd_yaml, 'new_chord_3dof.yaml', 50, node_interest=7)
+    construct_IEA15MW_chord(bd_yaml, 'chord_3dof.yaml', 50, node_interest=7)
 
 
     # bd_rect = '../bd_driver_rect.BD.sum.yaml'
