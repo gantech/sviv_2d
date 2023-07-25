@@ -63,10 +63,12 @@ def plot_amp(data_dict, freq_sort_inds, mode_index, amp_units='m'):
 
     vel = np.array(data_dict['velocity'])[freq_sort_inds]
 
+    # for item in data_dict[mode_name + '_mode_amp']:
+    #     print(len(item))
+
     # first index correponds to a run, second to the reported sample amplitudes
     amp = np.array(data_dict[mode_name + '_mode_amp'])[freq_sort_inds, :]
 
-   
     max_amp = np.abs(amp).max()
 
     ms = 2.5
