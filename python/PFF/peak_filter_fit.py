@@ -407,6 +407,8 @@ def plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermedi
 
     fig, axs = plt.subplots(2)
 
+    # print(report_t)
+
     min_t = report_t[0][0]
     max_t = report_t[0][-1]
 
@@ -448,15 +450,33 @@ if __name__=="__main__":
 
     # Inputs
 
-    filename = 'af_smd_deflloads.nc'
+    import_flag = 1
 
-    data = nc.Dataset(filename)
-    
-    t = np.array(data['time'][:])
-    x = np.array(data['x'][:])
-    f = np.array(data['f'][:])
+    if import_flag == 0:
 
-    tstart = 10
+        filename = 'af_smd_deflloads.nc'
+
+        data = nc.Dataset(filename)
+        
+        t = np.array(data['time'][:])
+        x = np.array(data['x'][:])
+        f = np.array(data['f'][:])
+    elif import_flag == 1:
+
+        filename = 'ua_test.npz'
+
+        npzfile = np.load(filename)
+
+        x = npzfile['x']
+        f = np.copy(x)
+        t = npzfile['t']
+
+        print(x.shape)
+        print(t.shape)
+
+
+
+    tstart = 20
     nom_freq = 0.7
     half_bandwidth_frac = 0.2
 
