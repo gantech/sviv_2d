@@ -78,17 +78,17 @@ def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
         create_append_dict(dict,  'edge_mode_damp', damp_frac_crit_q[1][-reportnum:].tolist())
         create_append_dict(dict, 'twist_mode_damp', damp_frac_crit_q[2][-reportnum:].tolist())
 
-        create_append_dict(dict,  'flap_mode_freq', freq_rad_s_q[0][-reportnum:].tolist())
-        create_append_dict(dict,  'edge_mode_freq', freq_rad_s_q[1][-reportnum:].tolist())
-        create_append_dict(dict, 'twist_mode_freq', freq_rad_s_q[2][-reportnum:].tolist())
+        create_append_dict(dict,  'flap_mode_freq_rad_s', freq_rad_s_q[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_freq_rad_s', freq_rad_s_q[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_freq_rad_s', freq_rad_s_q[2][-reportnum:].tolist())
 
         create_append_dict(dict,  'flap_mode_f_amp', report_amp_f[0][-reportnum:].tolist())
         create_append_dict(dict,  'edge_mode_f_amp', report_amp_f[1][-reportnum:].tolist())
         create_append_dict(dict, 'twist_mode_f_amp', report_amp_f[2][-reportnum:].tolist())
 
-        create_append_dict(dict,  'flap_mode_f_freq', freq_rad_s_f[0][-reportnum:].tolist())
-        create_append_dict(dict,  'edge_mode_f_freq', freq_rad_s_f[1][-reportnum:].tolist())
-        create_append_dict(dict, 'twist_mode_f_freq', freq_rad_s_f[2][-reportnum:].tolist())
+        create_append_dict(dict,  'flap_mode_f_freq_rad_s', freq_rad_s_f[0][-reportnum:].tolist())
+        create_append_dict(dict,  'edge_mode_f_freq_rad_s', freq_rad_s_f[1][-reportnum:].tolist())
+        create_append_dict(dict, 'twist_mode_f_freq_rad_s', freq_rad_s_f[2][-reportnum:].tolist())
 
     print('Several inputs for PFF analysis need to be decided.')
 
@@ -96,7 +96,8 @@ def pff_summary(t, x, forces, mode_shapes, nom_freq, dict,
 
 
 def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, struct_ind=0, 
-                mode_shapes=np.eye(3), velocity=-1e12):
+                mode_shapes=np.eye(3), velocity=-1e12, 
+                half_bandwidth_frac=0.05, tstart=10, remove_end=7, reportnum=20):
     """
     Calculated summary statistics for an nc file and returns them
     """
@@ -134,6 +135,7 @@ def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, s
                    @ mode_shapes
 
     create_append_dict(dict, 'modeshapes_local', zeroaoa_mode.reshape(-1).tolist())
+    create_append_dict(dict, 'mode_shapes', mode_shapes.reshape(-1).tolist())
 
     # Calculate lots of different statistics
     for dir_ind in range(len(directions)):
@@ -161,7 +163,9 @@ def calc_nc_sum(filename, nominal_freq, dict, force_trans=np.eye(3), aoa=-310, s
     create_append_dict(dict, 'Nom_Freq', nominal_freq)
     create_append_dict(dict, 'Nsteps', time.shape[0])
 
-    pff_summary(time, x, forces, mode_shapes, nominal_freq, dict)
+    pff_summary(time, x, forces, mode_shapes, nominal_freq, dict, 
+                half_bandwidth_frac=half_bandwidth_frac, tstart=tstart,
+                remove_end=remove_end, reportnum=reportnum)
 
 def create_append_dict(dict, key, val):
     """
