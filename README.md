@@ -166,6 +166,7 @@ Summary plots can then be generated with the following:
 ```
 cd ../python/Visualization/combined_results
 cp ../../../nalu_wind/nalu_runs_2/ffaw3211/ffaw3211_stats.yaml .
+mkdir Figures
 python plot_damping.py
 ```
 
@@ -201,8 +202,7 @@ Scripts that could potentially be used to verify that time integration in Nalu-W
 cd welib/welib/airfoils/examples/
 python dynamic_stall_mhh.py
 ```
-In the main portion of the previous python script, set "verify = False". Under "if not verify:", you can set the angle of attack (regenerates a new 3 DOF at the correct angle), the velocity, simulation time, and a time to slowly increase the loads over (ramp time). The time step for the output is set to 1e-3 is the "sviv_2d" function in this file. 
-Running the file should generate figures for the time series response and the output file "ua_test.npz".
+In the main portion of the previous python script, set "verify = False". Under "if not verify:", you can set the angle of attack (regenerates a new 3 DOF at the correct angle), the velocity, simulation time, and a time to slowly increase the loads over (ramp time). The time step for the output is set to 1e-3 is the "sviv_2d" function in this file. Running the file should generate figures for the time series response and the output file "ua_test.npz".
 3. Copy the output file to do initial processing for PFF parameters (starting from the folder that contains clones of both repos):
 ```
 cd sviv_2d/python/PFF/

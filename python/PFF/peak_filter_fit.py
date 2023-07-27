@@ -451,7 +451,7 @@ if __name__=="__main__":
 
     # Inputs
 
-    import_flag = 1
+    import_flag = 0
 
     if import_flag == 0:
 
@@ -462,6 +462,12 @@ if __name__=="__main__":
         t = np.array(data['time'][:])
         x = np.array(data['x'][:])
         f = np.array(data['f'][:])
+
+        tstart = 20
+        nom_freq = 0.7
+        half_bandwidth_frac = 0.2
+        remove_end = 0
+
     elif import_flag == 1:
 
         filename = 'ua_test.npz'
@@ -475,12 +481,10 @@ if __name__=="__main__":
         print(x.shape)
         print(t.shape)
 
-
-
-    tstart = 20
-    nom_freq = 0.7
-    half_bandwidth_frac = 0.2
-    remove_end = 0
+        tstart = 20
+        nom_freq = 0.7
+        half_bandwidth_frac = 0.2
+        remove_end = 0
 
     ###############
     # Example of full process on real data
