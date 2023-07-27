@@ -5,8 +5,11 @@ File with function to create the full 3 DOF model for automation of test cases
 import numpy as np
 import yaml
 
+import os
+my_dir=os.path.dirname(__file__)
+
 import sys
-sys.path.append('..')
+sys.path.append(os.path.join(my_dir, '..'))
 import construct_utils as cutils
 
 def construct_3dof(bd_yaml, node_interest, out_3dof, angle_attack,
@@ -211,9 +214,9 @@ def construct_IEA15MW_chord(bd_yaml, out_3dof, angle_attack, node_interest=7):
 
 if __name__=="__main__":
 
-    bd_yaml = '../bd_driver.BD.sum.yaml'
+    bd_yaml = os.path.join(my_dir, '../bd_driver.BD.sum.yaml')
 
-    construct_IEA15MW_chord(bd_yaml, 'new_chord_3dof.yaml', 50, node_interest=7)
+    construct_IEA15MW_chord(bd_yaml, 'chord_3dof.yaml', 50, node_interest=7)
 
 
     # bd_rect = '../bd_driver_rect.BD.sum.yaml'

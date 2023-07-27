@@ -51,28 +51,3 @@ plt.legend()
 
 plt.savefig('./timehist.png')
 
-
-### 2nd order convergence is not exactly achieved right now. Likely because the start of the integration is not exact.
-# ##### Verify 2nd order convergence
-# 
-# t0 = 0.0
-# t1 = 5
-# dt = 0.01
-# 
-# fine_fac = 200
-# 
-# # Solution at base time step
-# thist, xhist, vhist, ahist = hht_alpha_integrate(x0, v0, M3dof, C3dof, K3dof, alpha, dt, Fextfun, t0, t1)
-# 
-# # Half Time Step
-# thist2, xhist2, vhist2, ahist2 = hht_alpha_integrate(x0, v0, M3dof, C3dof, K3dof, alpha, 0.5*dt, Fextfun, t0, t1)
-# 
-# # Reference Solution
-# thist_ref, xhist_ref, vhist_ref, ahist_ref = hht_alpha_integrate(x0, v0, M3dof, C3dof, K3dof, alpha, dt/fine_fac, Fextfun, t0, t1)
-# 
-# error_base = np.linalg.norm(xhist - xhist_ref[:, ::fine_fac]) / thist.shape[0]
-# error_half = np.linalg.norm(xhist2 - xhist_ref[:, ::int(fine_fac/2)]) / thist2.shape[0]
-# 
-# print('Error Base: {}, Error Half: {}, Reduction: {}'.format(error_base, error_half, error_base/error_half))
-# 
-# 

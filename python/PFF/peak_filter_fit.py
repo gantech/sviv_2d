@@ -336,7 +336,7 @@ def pff_analysis(t, x, nom_freq, ttrim, half_bandwidth_frac, remove_end=0):
     for col_ind in range(len(freq_rad_s)):
         mask = np.logical_and(report_t[col_ind] > tstart, report_t[col_ind] < tend)
 
-        if mask.sum() > 2 + 2*remove_end:
+        if mask.sum() > (2 + 2*remove_end):
             # one data point must be removed from each end because the finite difference
             # uses extrapolated data for the first and last point. 
 
@@ -344,6 +344,7 @@ def pff_analysis(t, x, nom_freq, ttrim, half_bandwidth_frac, remove_end=0):
             damp_frac_crit[col_ind] = damp_frac_crit[col_ind][mask][1+remove_end:-1-remove_end]
             report_t[col_ind] =             report_t[col_ind][mask][1+remove_end:-1-remove_end]
             report_amp[col_ind] =         report_amp[col_ind][mask][1+remove_end:-1-remove_end]
+
         else:  
             freq_rad_s[col_ind] = np.zeros(0) 
             damp_frac_crit[col_ind] = np.zeros(0)
@@ -407,6 +408,8 @@ def plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermedi
 
     fig, axs = plt.subplots(2)
 
+    # print(report_t)
+
     min_t = report_t[0][0]
     max_t = report_t[0][-1]
 
@@ -448,23 +451,42 @@ if __name__=="__main__":
 
     # Inputs
 
-    filename = 'af_smd_deflloads.nc'
+    import_flag = 1
 
-    data = nc.Dataset(filename)
-    
-    t = np.array(data['time'][:])
-    x = np.array(data['x'][:])
-    f = np.array(data['f'][:])
+    if import_flag == 0:
 
-    tstart = 10
+        filename = 'af_smd_deflloads.nc'
+
+        data = nc.Dataset(filename)
+        
+        t = np.array(data['time'][:])
+        x = np.array(data['x'][:])
+        f = np.array(data['f'][:])
+    elif import_flag == 1:
+
+        filename = 'ua_test.npz'
+
+        npzfile = np.load(filename)
+
+        x = npzfile['x']
+        f = np.copy(x)
+        t = npzfile['t']
+
+        print(x.shape)
+        print(t.shape)
+
+
+
+    tstart = 20
     nom_freq = 0.7
     half_bandwidth_frac = 0.2
+    remove_end = 0
 
     ###############
     # Example of full process on real data
 
     freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data = \
-         pff_analysis(t, x, nom_freq, tstart, half_bandwidth_frac)
+         pff_analysis(t, x, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
 
     plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data)
 
@@ -472,7 +494,7 @@ if __name__=="__main__":
     # run PFF on the force data to analyze how forces are changing 
 
     freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data = \
-         pff_analysis(t, f, nom_freq, tstart, half_bandwidth_frac)
+         pff_analysis(t, f, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
 
     plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data, base='_force')
 
