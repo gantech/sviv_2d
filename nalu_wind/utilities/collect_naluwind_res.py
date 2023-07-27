@@ -85,7 +85,8 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
 
             # Calculate some stats now and add to dictionary
             cstats.calc_nc_sum(path_file_nc, freq, dict, force_trans=Tmat, aoa=aoa, 
-                               struct_ind=struct_ind, mode_shapes=mode_shapes, velocity=velocity)
+                               struct_ind=struct_ind, mode_shapes=mode_shapes, velocity=velocity,
+                               half_bandwidth_frac=0.20, tstart=20, remove_end=10, reportnum=20)
 
     # Save the output to a file
     output = os.path.join(run_folder, output_name)
@@ -97,5 +98,7 @@ def collect_folders(run_folder='nalu_runs/ffaw3211', output_name='ffaw3211_stats
 if __name__=="__main__":
 
     # Call functios to do the post processing
-    collect_folders(run_folder='nalu_runs_2/ffaw3211')
+    # collect_folders(run_folder='nalu_runs_2/ffaw3211')
 
+    collect_folders(run_folder='nalu_runs_6_2d/ffaw3211')
+    collect_folders(run_folder='nalu_runs_7_2d/ffaw3211')
