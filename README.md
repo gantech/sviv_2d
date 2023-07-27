@@ -192,3 +192,48 @@ These are probably not useful at this point. The script "freq_define.py" also ca
 #### python/Verification
 
 Scripts that could potentially be used to verify that time integration in Nalu-Wind is correct. The Unforced folder may be relevant (assuming loads_scale=0). These have not been fully used since we were still building confidence in the Nalu-Wind results from the CFD side. 
+
+## Unsteady Aerodynamic Simulations
+
+1. Clone this repo and the welib repo (https://github.com/gantech/welib) into the same folder. If you clone them in other folders, you will need to modify some file paths in the code. 
+2. Run a single case to determine input parameters. 
+```
+cd welib/welib/airfoils/examples/
+python dynamic_stall_mhh.py
+```
+In the main portion of the previous python script, set "verify = False". Under "if not verify:", you can set the angle of attack (regenerates a new 3 DOF at the correct angle), the velocity, simulation time, and a time to slowly increase the loads over (ramp time). The time step for the output is set to 1e-3 is the "sviv_2d" function in this file. 
+Running the file should generate figures for the time series response and the output file "ua_test.npz".
+3. Copy the output file to do initial processing for PFF parameters (starting from the folder that contains clones of both repos):
+```
+cd sviv_2d/python/PFF/
+cp ../../../welib/welib/airfoils/examples/ua_test.npz .
+```
+4. Set appropriate parameters in "peak_filter_fit.py" (in the folder that ua_test.npz was copied to). Use "import_flag = 1" to load the npz file (for CFD simulations, you can use "import_flag = 0" to load a netcdf file and do similar analysis). 
+The main parameters that can be adjusted to get good results are: tstart (start signal processing at this time), nom_freq (nominal frequency, the peak frequency is identified close to this value, used to select frequency/mode of interest), and half_bandwidth_frac (Fraction of the peak frequency to use as the half bandwidth for the butterworth filter). 
+The most important parameter is probably "half_bandwidth_frac": a narrow enough bandwidth is needed to filter out any other modes, however the narrower the bandwidth the longer the end effects are in the time domain. 
+Lastly, you can set "remove_end" to eliminate data points from the end that are affected by end effects. This will generally be required for the automatic processing that occurs next, so this script should be used to determine what value to use. 
+5. Run the script:
+```
+python peak_filter_fit.py 
+```
+6. Look at the figures that are produced. Figures with the word "verify" in the name correspond to examples. The other figures are for the loaded data set. Specifically "freq_damp_time.png" will show the frequency/damping as a function of time. Large fluctations near the end are expected end effects. "overview_pff_dir1.png" provides the time series for a given direction (0=x, 1=y, 2=theta). In these figures, you can compare the original signal to the identified peaks (circles) to understand the end effects.
+7. Once the parameters are selected, set the parameters in "welib/welib/airfoils/examples/velocity_sweep.py" to match those selected.
+8. Run the velocity sweep test. This script currently only loops over velocity, but updates the full angle of attack information, so should be relatively easy to insert a loop over angle of attack where marked. 
+```
+python velocity_sweep.py 
+```
+9. This script will create a yaml file summarizing the different runs. Copy this yaml file to the sviv_2d repo (starting from the top level directory again)
+```
+cd sviv_2d/python/Visualization/unsteady_aero/
+cp ../../../../welib/welib/airfoils/examples/sweep_aoa50_ramp5.yaml .
+```
+10. Continuing from this folder, the results can be plotted with:
+```
+mkdir Figures
+python plot_damping.py 
+```
+11. The figures are saved into the Figures folder. 
+
+
+
+

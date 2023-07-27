@@ -336,7 +336,7 @@ def pff_analysis(t, x, nom_freq, ttrim, half_bandwidth_frac, remove_end=0):
     for col_ind in range(len(freq_rad_s)):
         mask = np.logical_and(report_t[col_ind] > tstart, report_t[col_ind] < tend)
 
-        if mask.sum() > 2 + 2*remove_end:
+        if mask.sum() > (2 + 2*remove_end):
             # one data point must be removed from each end because the finite difference
             # uses extrapolated data for the first and last point. 
 
@@ -344,6 +344,7 @@ def pff_analysis(t, x, nom_freq, ttrim, half_bandwidth_frac, remove_end=0):
             damp_frac_crit[col_ind] = damp_frac_crit[col_ind][mask][1+remove_end:-1-remove_end]
             report_t[col_ind] =             report_t[col_ind][mask][1+remove_end:-1-remove_end]
             report_amp[col_ind] =         report_amp[col_ind][mask][1+remove_end:-1-remove_end]
+
         else:  
             freq_rad_s[col_ind] = np.zeros(0) 
             damp_frac_crit[col_ind] = np.zeros(0)
@@ -479,12 +480,13 @@ if __name__=="__main__":
     tstart = 20
     nom_freq = 0.7
     half_bandwidth_frac = 0.2
+    remove_end = 0
 
     ###############
     # Example of full process on real data
 
     freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data = \
-         pff_analysis(t, x, nom_freq, tstart, half_bandwidth_frac)
+         pff_analysis(t, x, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
 
     plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data)
 
@@ -492,7 +494,7 @@ if __name__=="__main__":
     # run PFF on the force data to analyze how forces are changing 
 
     freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data = \
-         pff_analysis(t, f, nom_freq, tstart, half_bandwidth_frac)
+         pff_analysis(t, f, nom_freq, tstart, half_bandwidth_frac, remove_end=remove_end)
 
     plot_pff_results(freq_rad_s, damp_frac_crit, report_t, report_amp, intermediate_data, base='_force')
 
