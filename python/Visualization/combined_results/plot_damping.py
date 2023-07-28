@@ -70,8 +70,7 @@ def plot_amp(data_dict, mode_index, amp_units='m'):
 
     ms = 2.5
 
-    p = plt.plot(np.nan, np.nan)
-    color = p[0].get_color()
+    Nout = np.array([x.shape[0] for x in amp]).max() # use for setting how light the lightest point is
 
 
     for i in range(vel.shape[0]):
@@ -88,7 +87,7 @@ def plot_amp(data_dict, mode_index, amp_units='m'):
 
         plt.scatter(vel[i]*np.ones_like(amp[i]), np.abs(amp[i])*modal_scale, 
                  c=-(np.array(range(amp[i].shape[0]))-amp[i].shape[0]), 
-                 s=ms)
+                 s=ms, vmin=1, vmax=1.2*Nout)
 
         plt.gray()
 
@@ -126,15 +125,14 @@ def plot_damp(data_dict, mode_index, amp_units='m'):
 
     ms = 2.5
 
-    p = plt.plot(np.nan, np.nan)
-    color = p[0].get_color()
+    Nout = np.array([x.shape[0] for x in damp]).max() # use for setting how light the lightest point is
 
 
     for i in range(vel.shape[0]):
 
         plt.scatter(vel[i]*np.ones_like(damp[i]), damp[i], 
                  c=-(np.array(range(damp[i].shape[0]))-damp[i].shape[0]), 
-                 s=ms)
+                 s=ms, vmin=1, vmax=1.2*Nout)
 
     plt.xlabel('Inflow Velocity [m/s]')
     plt.ylabel('Damping Fraction Critical')
@@ -170,15 +168,14 @@ def plot_freq(data_dict, mode_index, amp_units='m'):
 
     ms = 2.5
 
-    p = plt.plot(np.nan, np.nan)
-    color = p[0].get_color()
+    Nout = np.array([x.shape[0] for x in freq]).max() # use for setting how light the lightest point is
 
 
     for i in range(vel.shape[0]):
 
         plt.scatter(vel[i]*np.ones_like(freq[i]), freq[i], 
                  c=-(np.array(range(freq[i].shape[0]))-freq[i].shape[0]), 
-                 s=ms)
+                 s=ms, vmin=1, vmax=1.2*Nout)
 
     plt.xlabel('Inflow Velocity [m/s]')
     plt.ylabel('Frequency [Hz]')
