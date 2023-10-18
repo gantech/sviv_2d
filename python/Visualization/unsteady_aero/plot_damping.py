@@ -46,7 +46,13 @@ def get_min_list(val):
 
     return min_val
 
-def plot_amp(data_dict, mode_index, amp_units='m'):
+def get_mean_list(val):
+
+    mean_val = np.array([x.mean() for x in val if x.shape[0] != 0])
+
+    return mean_val
+
+def plot_amp(data_dict, mode_index, amp_units='m', aoa=-100):
     """
     Create plot of the amplitudes from PFF analysis
 
@@ -68,7 +74,7 @@ def plot_amp(data_dict, mode_index, amp_units='m'):
 
     max_amp = get_max_list(amp)
 
-    ms = 2.5
+    ms = 2.5*4
 
     Nout = np.array([x.shape[0] for x in amp]).max() # use for setting how light the lightest point is
 
@@ -94,15 +100,17 @@ def plot_amp(data_dict, mode_index, amp_units='m'):
 
     plt.xlabel('Inflow Velocity [m/s]')
     plt.ylabel('Amplitude [{}]'.format(amp_units))
+    plt.title('Angle of Attack = {} Degrees'.format(aoa))
 
     plt.ylim((0, max_amp*1.02))
 
     plt.tight_layout()
 
-    plt.savefig('Figures/{}_amp_pff.png'.format(mode_name), dpi=300)
+    plt.savefig('Figures/aoa{}/{}_amp_pff.png'.format(aoa, mode_name), dpi=300)
+    plt.show()
     plt.close()
 
-def plot_damp(data_dict, mode_index, amp_units='m'):
+def plot_damp(data_dict, mode_index, amp_units='m', aoa=-360):
     """
     Create plot of the damping from PFF analysis
 
@@ -122,7 +130,7 @@ def plot_damp(data_dict, mode_index, amp_units='m'):
     max_damp = get_max_list(damp)
     min_damp = get_min_list(damp)
 
-    ms = 2.5
+    ms = 2.5*4
 
     Nout = np.array([x.shape[0] for x in damp]).max() # use for setting how light the lightest point is
 
@@ -134,15 +142,22 @@ def plot_damp(data_dict, mode_index, amp_units='m'):
 
     plt.xlabel('Inflow Velocity [m/s]')
     plt.ylabel('Damping Fraction Critical')
+    plt.title('Angle of Attack = {} Degrees'.format(aoa))
 
     plt.ylim((min_damp-0.01, max_damp+0.01))
 
     plt.tight_layout()
+    
+    ax = plt.gca()
+    xlim = ax.get_xlim()
+    plt.plot([xlim[0], xlim[1]], [0, 0], 'k', linewidth=1.0)
+    ax.set_xlim(xlim)
 
-    plt.savefig('Figures/{}_damp_pff.png'.format(mode_name), dpi=300)
+    plt.savefig('Figures/aoa{}/{}_damp_pff.png'.format(aoa,mode_name), dpi=300)
+    plt.show()
     plt.close()
 
-def plot_freq(data_dict, mode_index, amp_units='m'):
+def plot_freq(data_dict, mode_index, amp_units='m', aoa=-360):
     """
     Create plot of the damping from PFF analysis
 
@@ -164,7 +179,7 @@ def plot_freq(data_dict, mode_index, amp_units='m'):
     max_freq = get_max_list(freq)
     min_freq = get_min_list(freq)
 
-    ms = 2.5
+    ms = 2.5*4
 
     Nout = np.array([x.shape[0] for x in freq]).max() # use for setting how light the lightest point is
 
@@ -176,12 +191,14 @@ def plot_freq(data_dict, mode_index, amp_units='m'):
 
     plt.xlabel('Inflow Velocity [m/s]')
     plt.ylabel('Frequency [Hz]')
+    plt.title('Angle of Attack = {} Degrees'.format(aoa))
 
     plt.ylim((min_freq-0.01, max_freq+0.01))
 
     plt.tight_layout()
 
-    plt.savefig('Figures/{}_freq_pff.png'.format(mode_name), dpi=300)
+    plt.savefig('Figures/aoa{}/{}_freq_pff.png'.format(aoa, mode_name), dpi=300)
+    plt.show()
     plt.close()
 
 
@@ -192,30 +209,32 @@ if __name__=="__main__":
     ###########################
     # User inputs
     
-    # collected_data = 'initial_sweep_aoa50.yaml'
-    # collected_data = 'sweep_aoa50.yaml' # 0 ramp time
-    collected_data = 'sweep_aoa50_ramp5.yaml' # ramp over 5.0 s
-
-    plt.style.use('seaborn-v0_8-colorblind') 
-
-    ###########################
-    # Load Data
-
-    data_dict = load_data(collected_data)
-
-    ###########################
-    # Plot amplitude 
-
-    plot_amp(data_dict, 0,  amp_units='m')
-    plot_amp(data_dict, 1,  amp_units='m')
-    plot_amp(data_dict, 2, amp_units='rad')
-
-    plot_damp(data_dict, 0,  amp_units='m')
-    plot_damp(data_dict, 1,  amp_units='m')
-    plot_damp(data_dict, 2, amp_units='rad')
-
-    plot_freq(data_dict, 0,  amp_units='m')
-    plot_freq(data_dict, 1,  amp_units='m')
-    plot_freq(data_dict, 2, amp_units='rad')
+    # aoa = 30
+    for aoa in [30, 35, 40, 45, 50, 55, 60, 65]:
+        # collected_data = 'initial_sweep_aoa50.yaml'
+        # collected_data = 'sweep_aoa50.yaml' # 0 ramp time
+        collected_data = 'sweep_aoa{}_ramp5.yaml'.format(aoa) # ramp over 5.0 s
+    
+        plt.style.use('seaborn-colorblind') 
+    
+        ###########################
+        # Load Data
+    
+        data_dict = load_data(collected_data)
+    
+        ###########################
+        # Plot amplitude 
+    
+        plot_amp(data_dict, 0,  amp_units='m', aoa=aoa)
+        plot_amp(data_dict, 1,  amp_units='m', aoa=aoa)
+        plot_amp(data_dict, 2, amp_units='rad', aoa=aoa)
+    
+        plot_damp(data_dict, 0,  amp_units='m', aoa=aoa)
+        plot_damp(data_dict, 1,  amp_units='m', aoa=aoa)
+        plot_damp(data_dict, 2, amp_units='rad', aoa=aoa)
+    
+        plot_freq(data_dict, 0,  amp_units='m', aoa=aoa)
+        plot_freq(data_dict, 1,  amp_units='m', aoa=aoa)
+        plot_freq(data_dict, 2, amp_units='rad', aoa=aoa)
 
 

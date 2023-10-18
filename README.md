@@ -196,7 +196,7 @@ Scripts that could potentially be used to verify that time integration in Nalu-W
 
 ## Unsteady Aerodynamic Simulations
 
-1. Clone this repo and the welib repo (https://github.com/gantech/welib) into the same folder. If you clone them in other folders, you will need to modify some file paths in the code. 
+1. Clone this repo and the welib repo (https://github.com/gantech/welib) into the same folder. If you clone them in other folders, you will need to modify some file paths in the code. You will need to change to the sviv_2d branch of welib and follow the installation instructions on the README.md file for welib. 
 2. Run a single case to determine input parameters. 
 ```
 cd welib/welib/airfoils/examples/
